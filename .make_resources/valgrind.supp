@@ -1,0 +1,7 @@
+{
+   gcc false positive
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   obj:/lib/x86_64-linux-gnu/ld-2.31.so
+}

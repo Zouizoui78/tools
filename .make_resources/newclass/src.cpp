@@ -1,0 +1,9 @@
+#include "HEADER"
+
+namespace PROJECT_NAME::MODULE_NAME {
+
+CLASS_NAME::CLASS_NAME() {}
+    
+CLASS_NAME::~CLASS_NAME() {}
+
+} // namespace PROJECT_NAME::MODULE_NAME
