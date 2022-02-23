@@ -35,7 +35,6 @@ TEST_F(TestUDP, test_udp_listen) {
 
     usleep(5e6);
     delete udp;
-    ASSERT_FALSE(udp->is_ok());
 }
 
 } // namespace test
