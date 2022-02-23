@@ -16,6 +16,8 @@ SRC_EXT=.cpp
 upper = $(shell echo "$(1)" | tr a-z A-Z)
 lower = $(shell echo "$(1)" | tr A-Z a-z)
 
+VALGRIND_OPT = --leak-check=full --show-leak-kinds=all --trace-children=no --track-origins=yes --suppressions=$(PROJECT_ROOT)/.make_resources/valgrind.supp -s
+
 
 #===========================================================
 #===========================================================
@@ -167,10 +169,10 @@ DEPS=$(OBJ:.o=.d)
 
 OTHER=$(OS_DEFINE)
 ifeq ($(word 1, $(MAKECMDGOALS)), release)
-	OTHER+=-O2
+	OTHER+=-O2 -s
 else ifeq ($(PLATFORM),windows)
 # If cross-compiling
-	OTHER+=-O2
+	OTHER+=-O2 -s
 	COMPILER=x86_64-w64-mingw32-g++
 else
 	OTHER+=-g -D DEBUG
@@ -192,11 +194,10 @@ ifeq ($(OS),Windows_NT)
 else
 	$(LD_PATH) TEST_OUTPUTS=$(TEST_OUTPUTS) GTEST_OUTPUT="xml:$(TEST_GTEST_OUTPUT_FILE)" ./$(TEST_OUTPUT)
 endif
-
 valgrindtest: $(USEMOD) $(OUTPUT) $(TEST_OUTPUT)
 	@echo "Running tests for module $(MODULE_NAME) through valgrind"
 	@mkdir -p $(TEST_GTEST_OUTPUT_DIR)
-	$(LD_PATH) TEST_OUTPUTS=$(TEST_OUTPUTS) GTEST_OUTPUT="xml:$(TEST_GTEST_OUTPUT_FILE)" valgrind --leak-check=full --show-leak-kinds=all --trace-children=no --track-origins=yes --suppressions=$(PROJECT_ROOT)/.make_resources/valgrind.supp -s $(TEST_OUTPUT)
+	$(LD_PATH) TEST_OUTPUTS=$(TEST_OUTPUTS) GTEST_OUTPUT="xml:$(TEST_GTEST_OUTPUT_FILE)" valgrind $(VALGRIND_OPT) $(TEST_OUTPUT)
 
 else
 test:
@@ -225,7 +226,7 @@ endif
 valgrind: $(USEMOD) $(OUTPUT)
 ifeq ($(TYPE),exe)
 	@echo "Running $(OUTPUT)"
-	@$(LD_PATH) valgrind --leak-check=full --show-leak-kinds=all --trace-children=no --track-origins=yes --suppressions=$(PROJECT_ROOT)/.make_resources/valgrind.supp ./$(OUTPUT)
+	@$(LD_PATH) valgrind $(VALGRIND_OPT) ./$(OUTPUT)
 else
 	$(error "Cannot run a library")
 endif

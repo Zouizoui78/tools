@@ -49,6 +49,10 @@ UDP::~UDP() {
         _ok = false;
         logger->info("Closed socket on port {}.", ntohs(_addr.sin_port));
     }
+
+    if (_listen_buffer != nullptr) {
+        free(_listen_buffer);
+    }
 }
 
 bool UDP::is_ok() {
