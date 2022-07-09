@@ -6,18 +6,10 @@
 
 namespace tools::net {
 
-namespace udp_log {
-    static auto logger = tools::utils::new_logger("UDP");
-}
-
-using namespace udp_log;
-
-
-
 UDP::UDP(uint16_t port) {
     _socket = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
     if (_socket == -1) {
-        logger->error("Failed to create socket.");
+        spdlog::error("Failed to create socket.");
         _ok = false;
     }
 
@@ -26,14 +18,14 @@ UDP::UDP(uint16_t port) {
     _addr.sin_family = AF_INET;
 
     if (bind(_socket, reinterpret_cast<sockaddr *>(&_addr), sizeof(_addr)) != 0) {
-        logger->error("Failed to bind socket.");
+        spdlog::error("Failed to bind socket.");
         _ok = false;
     }
 
     _listen_buffer = (uint8_t *)calloc(UDP_MAX_PACKET_SIZE, sizeof(uint8_t));
 
     _ok = true;
-    logger->info("Opened socket on port {}.", port);
+    spdlog::info("Opened socket on port {}.", port);
 }
     
 UDP::~UDP() {
@@ -47,7 +39,7 @@ UDP::~UDP() {
         }
 
         _ok = false;
-        logger->info("Closed socket on port {}.", ntohs(_addr.sin_port));
+        spdlog::info("Closed socket on port {}.", ntohs(_addr.sin_port));
     }
 
     if (_listen_buffer != nullptr) {
@@ -61,12 +53,12 @@ bool UDP::is_ok() {
 
 bool UDP::start_listen(std::function<void (uint8_t *data)> callback) {
     if (!callback) {
-        logger->error("Cannot start listening, invalid callback.");
+        spdlog::error("Cannot start listening, invalid callback.");
         return false;
     }
 
     if (_listen_thread_running) {
-        logger->error("Cannot start listening, already running.");
+        spdlog::error("Cannot start listening, already running.");
         return false;
     }
 
@@ -79,7 +71,7 @@ bool UDP::start_listen(std::function<void (uint8_t *data)> callback) {
         while (_listen_thread_running) {
             int ret = recvfrom(_socket, _listen_buffer, UDP_MAX_PACKET_SIZE, 0, reinterpret_cast<sockaddr*>(&from), &fromlen);
             if (ret == -1) {
-                logger->error("Failed to receive data : {}", strerror(errno));
+                spdlog::error("Failed to receive data : {}", strerror(errno));
             }
             else {
                 _listen_callback(_listen_buffer);

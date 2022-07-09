@@ -5,12 +5,6 @@ namespace test {
 
 using namespace tools::net;
 
-namespace udp_test {
-    static auto logger = tools::utils::new_logger("UDP test");
-}
-
-using namespace udp_test;
-
 class TestUDP:   public ::testing::Test
 {
     protected:
@@ -30,7 +24,7 @@ TEST_F(TestUDP, test_udp_listen) {
     ASSERT_TRUE(udp->is_ok());
 
     udp->start_listen([](uint8_t *data) {
-        logger->info("First received byte is \"{}\".", (int)data[0]);
+        spdlog::info("First received byte is \"{}\".", (int)data[0]);
     });
 
     usleep(5e6);

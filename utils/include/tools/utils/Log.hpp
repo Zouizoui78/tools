@@ -6,10 +6,4 @@
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/sinks/daily_file_sink.h>
 
-namespace tools::utils {
-
-std::shared_ptr<spdlog::logger> new_logger(const std::string &logger_name);
-
-} // namespace tools::utils
-
 #endif // LOG

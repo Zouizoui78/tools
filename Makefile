@@ -1,19 +1,18 @@
 include project.cfg
 
 # New module target with protection against wrong syntax.
-# This targets copies .make_resources/newmod into src/<module name>.
+# This targets copies .make_resources/newmod into <module name>.
 ifeq ($(word 1, $(MAKECMDGOALS)),newmod)
 MODNAME=$(word 2, $(MAKECMDGOALS))
-MODPATH=src/$(MODNAME)
 RES=.make_resources
 newmod:
 ifeq ($(MODNAME),)
 	@echo "syntax : make newmod <module name>"
 else
 	@echo "Creating module $(MODNAME)"
-	mkdir -p $(MODPATH)/include $(MODPATH)/src
-	cp -r $(RES)/newmod/* $(MODPATH)
-	sed -i 's MODULE_NAME= MODULE_NAME=$(MODNAME) g' $(MODPATH)/module.cfg
+	mkdir -p $(MODNAME)/include $(MODNAME)/src
+	cp -r $(RES)/newmod/* $(MODNAME)
+	sed -i 's MODULE_NAME= MODULE_NAME=$(MODNAME) g' $(MODNAME)/module.cfg
 endif # MODNAME
 
 $(MODNAME):
@@ -21,23 +20,22 @@ $(MODNAME):
 
 else
 
-# TODO : Smart dependency graph building ?
-MODULES_PATH=src/*
+MODULES=$(dir $(shell find -name 'module.cfg' -not -path "./.make_resources/*"))
 
 # Build all modules.
-all: $(MODULES_PATH)
+all: $(MODULES)
 
 # Build all modules with gcc optimizations enabled.
-release: $(MODULES_PATH)
+release: $(MODULES)
 
 # Run tests for all modules.
-test: $(MODULES_PATH)
+test: $(MODULES)
 
 # Run tests through valgrind.
-valgrindtest: $(MODULES_PATH)
+valgrindtest: $(MODULES)
 
 # Actual module building target.
-$(MODULES_PATH):
+$(MODULES):
 	@$(MAKE) --directory=$@ $(MAKECMDGOALS)
 
 # Remove build directory.
@@ -46,4 +44,4 @@ clean:
 
 endif # newmod
 
-.PHONY: all release test valgrindtest clean newmod $(MODULES_PATH)
+.PHONY: all release test valgrindtest clean newmod $(MODULES)

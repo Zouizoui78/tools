@@ -1,7 +1,6 @@
 include module.cfg
 
-PROJECT_ROOT=../..
-MODULES_PATH=$(PROJECT_ROOT)/src
+PROJECT_ROOT=..
 EXTLIB=$(PROJECT_ROOT)/extlib
 include $(PROJECT_ROOT)/project.cfg
 
@@ -33,7 +32,7 @@ CLASS_NAME_UPPER=$(call upper,$(CLASS_NAME))
 HEADERS_PATH=$(INCLUDE_PATH)/$(PROJECT_NAME)/$(MODULE_NAME)
 HEADER=$(PROJECT_NAME)/$(MODULE_NAME)/$(CLASS_NAME).hpp
 HEADER_PATH=$(INCLUDE_PATH)/$(HEADER)
-SOURCE=src/$(CLASS_NAME).cpp
+SOURCE=$(CLASS_NAME).cpp
 TEST=test/Test$(CLASS_NAME).cpp
 newclass:
 ifeq ($(CLASS_NAME),)
@@ -113,7 +112,7 @@ OUTPUT:=$(BINDIR)/$(OUTPUT)
 
 # Include variables
 INCLUDEDIR=include                   # Get dependencies include path
-IFLAGS=-Iinclude -I$(EXTLIB)/include $(USEMOD:%=-I$(MODULES_PATH)/%/include)
+IFLAGS=-Iinclude -I$(EXTLIB)/include $(USEMOD:%=-I$(PROJECT_ROOT)/%/include)
 
 # Linking flags                                     # Get dependencies link flag
 LFLAGS=-L$(BINDIR) -L$(EXTLIB)/bin -L$(EXTLIB)/lib $(USEMOD:%=-l$(PROJECT_NAME)-%)
@@ -232,7 +231,7 @@ else
 endif
 
 $(USEMOD):
-	@$(MAKE) --directory=$(MODULES_PATH)/$@ $(filter-out valgrindtest test run gdb valgrind,$(MAKECMDGOALS))
+	@$(MAKE) --directory=$(PROJECT_ROOT)/$@ $(filter-out valgrindtest test run gdb valgrind,$(MAKECMDGOALS))
 
 # TODO : Cross-compil' packaging target. Unused for now.
 $(DIST): DISTDIR=$(MODULE_BUILD)/$(NAME)
