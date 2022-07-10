@@ -1,4 +1,5 @@
 #include "tools/net/UDP.hpp"
+#include "tools/utils/Log.hpp"
 
 #include <iostream>
 #include <string.h> // For strerror()
@@ -6,10 +7,12 @@
 
 namespace tools::net {
 
+static auto logger = tools::utils::new_logger("UDP");
+
 UDP::UDP(uint16_t port) {
     _socket = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
     if (_socket == -1) {
-        spdlog::error("Failed to create socket.");
+        logger->error("Failed to create UDP socket.");
         _ok = false;
     }
 
@@ -18,19 +21,19 @@ UDP::UDP(uint16_t port) {
     _addr.sin_family = AF_INET;
 
     if (bind(_socket, reinterpret_cast<sockaddr *>(&_addr), sizeof(_addr)) != 0) {
-        spdlog::error("Failed to bind socket.");
+        logger->error("Failed to bind UDP socket.");
         _ok = false;
     }
 
-    _listen_buffer = (uint8_t *)calloc(UDP_MAX_PACKET_SIZE, sizeof(uint8_t));
+    _listen_buffer = reinterpret_cast<uint8_t *>(calloc(UDP_MAX_PACKET_SIZE, sizeof(uint8_t)));
 
     _ok = true;
-    spdlog::info("Opened socket on port {}.", port);
+    logger->info("Opened UDP socket on port {}.", port);
 }
     
 UDP::~UDP() {
     if (is_ok()) {
-        shutdown(_socket, SHUT_RDWR);
+        shutdown(_socket, SHUT_RDWR); // Interrupt blocking recvfrom.
         ::close(_socket);
 
         if (_listen_thread_running) {
@@ -39,7 +42,7 @@ UDP::~UDP() {
         }
 
         _ok = false;
-        spdlog::info("Closed socket on port {}.", ntohs(_addr.sin_port));
+        logger->info("Closed UDP socket on port {}.", ntohs(_addr.sin_port));
     }
 
     if (_listen_buffer != nullptr) {
@@ -51,14 +54,14 @@ bool UDP::is_ok() {
     return _ok;
 }
 
-bool UDP::start_listen(std::function<void (uint8_t *data)> callback) {
+bool UDP::start_listen(std::function<void (uint8_t *data, size_t size)> callback) {
     if (!callback) {
-        spdlog::error("Cannot start listening, invalid callback.");
+        logger->error("Cannot start listening, invalid callback.");
         return false;
     }
 
     if (_listen_thread_running) {
-        spdlog::error("Cannot start listening, already running.");
+        logger->error("Cannot start listening, already running.");
         return false;
     }
 
@@ -69,17 +72,18 @@ bool UDP::start_listen(std::function<void (uint8_t *data)> callback) {
 
         _listen_thread_running = true;
         while (_listen_thread_running) {
-            int ret = recvfrom(_socket, _listen_buffer, UDP_MAX_PACKET_SIZE, 0, reinterpret_cast<sockaddr*>(&from), &fromlen);
-            if (ret == -1) {
-                spdlog::error("Failed to receive data : {}", strerror(errno));
+            ssize_t size = recvfrom(_socket, _listen_buffer, UDP_MAX_PACKET_SIZE, 0, reinterpret_cast<sockaddr*>(&from), &fromlen);
+            if (size == -1) {
+                logger->error("Failed to receive data : {}", strerror(errno));
             }
-            else {
-                _listen_callback(_listen_buffer);
+            else if (size > 0) {
+                _listen_callback(_listen_buffer, size);
             }
         }
     });
 
     return true;
 }
+
 
 } // namespace tools::net
