@@ -153,12 +153,7 @@ TEST_SRC=$(shell ls $(TEST_SRCDIR) | grep $(SRC_EXT))
 TEST_OBJ=$(TEST_SRC:%$(SRC_EXT)=$(TEST_OBJDIR)/%.o)
 TEST_OUTPUT=$(TEST_BINDIR)/test_$(MODULE_NAME)$(EXE_EXT)
 TEST_LFLAGS=$(filter-out -shared,$(LFLAGS)) -l:$(notdir $(OUTPUT))
-ifeq ($(OS),Windows_NT)
-	TEST_LFLAGS+=-l:libgtest_win.a
-else
-	TEST_LFLAGS+=-l:libgtest_linux.a
-endif
-TEST_LFLAGS+=-lpthread
+TEST_LFLAGS+=-lgtest -lpthread
 
 # String substitution : *.cpp => $(OBJDIR)/*.o
 OBJ=$(SRC:%$(SRC_EXT)=$(OBJDIR)/%.o)
