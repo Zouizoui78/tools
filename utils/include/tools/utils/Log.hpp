@@ -14,4 +14,4 @@ std::shared_ptr<spdlog::logger> new_logger(const std::string &logger_name);
 
 } // namespace tools::utils
 
-#endif // LOG
+#endif // LOG_HPP

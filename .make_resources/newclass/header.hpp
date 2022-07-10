@@ -13,4 +13,4 @@ class CLASS_NAME {
 
 } // namespace PROJECT_NAME::MODULE_NAME
 
-#endif // CLASS_NAME_UPPER
+#endif // CLASS_NAME_UPPER_HPP
