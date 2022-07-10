@@ -1,8 +1,6 @@
 #ifndef UDP_HPP
 #define UDP_HPP
 
-#include "tools/utils/Log.hpp"
-
 #include <sys/socket.h>
 #include <netinet/in.h> // For sockaddr_in
 #include <functional>
@@ -21,7 +19,7 @@ class UDP {
 
     bool is_ok();
 
-    bool start_listen(std::function<void (uint8_t *data)> callback);
+    bool start_listen(std::function<void (uint8_t *data, size_t size)> callback);
 
     private:
     int _socket;
@@ -31,7 +29,7 @@ class UDP {
 
     std::thread _listen_thread;
     bool _listen_thread_running = false;
-    std::function<void (uint8_t *data)> _listen_callback;
+    std::function<void (uint8_t *data, size_t size)> _listen_callback;
     uint8_t *_listen_buffer = nullptr;
 };
 
