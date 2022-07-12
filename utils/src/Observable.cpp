@@ -3,7 +3,7 @@
 
 namespace tools::utils {
 
-static auto logger = tools::utils::new_logger("Observable");
+static auto logger = new_logger("Observable");
 
 bool Observable::is_event(const std::string &event_id) {
     std::lock_guard lock(_subs_mutex);

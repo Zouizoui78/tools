@@ -3,7 +3,7 @@
 
 namespace tools::utils {
 
-static auto logger = tools::utils::new_logger("Stopwatch");
+static auto logger = new_logger("Stopwatch");
 
 Stopwatch::Stopwatch(const std::string &name) {
     _name = name;

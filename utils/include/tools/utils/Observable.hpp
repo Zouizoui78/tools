@@ -26,7 +26,7 @@ public:
  * @brief Observable implementation with a simple events mechanism.
  */
 class Observable {
-public:
+    public:
     virtual ~Observable() {}
 
     /**
@@ -73,7 +73,7 @@ public:
      */
     void notify_observers(const std::string &event_id);
 
-private:
+    private:
 
     /**
      * @brief Tell whether the given event_id exists in the map.
