@@ -8,15 +8,18 @@ using namespace tools::utils;
 class TestLog:   public ::testing::Test
 {
     protected:
-        TestLog() {}
+    TestLog() {
+        outputs_path = std::string(std::getenv("TEST_OUTPUTS"));
+    }
 
-        virtual ~TestLog() {}
+    virtual ~TestLog() {}
 
-        virtual void SetUp() {}
+    virtual void SetUp() {}
 
-        virtual void TearDown() {}
+    virtual void TearDown() {}
 
     public:
+    std::string outputs_path;
 };
 
 TEST_F(TestLog, test_name) {

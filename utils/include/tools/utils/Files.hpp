@@ -6,11 +6,7 @@
 #include <string>
 #include <vector>
 
-#include "tools/utils/Log.hpp"
-
 namespace tools::utils::files {
-
-extern std::shared_ptr<spdlog::logger> logger;
 
 /**
  * @brief Read a file and return its content as a string.
@@ -30,7 +26,6 @@ std::vector<T> read_binary_file(const std::string &path) {
 
     std::ifstream file(path, std::ios::binary);
     if (!file) {
-        logger->error("Failed to open file '{}'.", path);
         return result;
     }
 
@@ -57,7 +52,6 @@ template<typename T>
 bool write_binary_file(const std::vector<T> &data, const std::string &path) {
     std::ofstream file(path, std::ios::binary);
     if (!file) {
-        logger->error("Failed to open file '{}'.", path);
         return false;
     }
 

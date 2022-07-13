@@ -30,15 +30,18 @@ public:
 class TestObservable:   public ::testing::Test
 {
     protected:
-        TestObservable() {}
+    TestObservable() {
+        outputs_path = std::string(std::getenv("TEST_OUTPUTS"));
+    }
 
-        virtual ~TestObservable() {}
+    virtual ~TestObservable() {}
 
-        virtual void SetUp() {}
+    virtual void SetUp() {}
 
-        virtual void TearDown() {}
+    virtual void TearDown() {}
 
     public:
+    std::string outputs_path;
 };
 
 TEST_F(TestObservable, test_getters) {

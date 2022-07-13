@@ -8,15 +8,18 @@ using namespace tools::utils::time;
 class TestTime:   public ::testing::Test
 {
     protected:
-        TestTime() {}
+    TestTime() {
+        outputs_path = std::string(std::getenv("TEST_OUTPUTS"));
+    }
 
-        virtual ~TestTime() {}
+    virtual ~TestTime() {}
 
-        virtual void SetUp() {}
+    virtual void SetUp() {}
 
-        virtual void TearDown() {}
+    virtual void TearDown() {}
 
     public:
+    std::string outputs_path;
 };
 
 TEST_F(TestTime, test_str_to_time) {

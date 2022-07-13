@@ -10,15 +10,18 @@ static auto logger = new_logger("TestWorker");
 class TestWorker:   public ::testing::Test
 {
     protected:
-        TestWorker() {}
+    TestWorker() {
+        outputs_path = std::string(std::getenv("TEST_OUTPUTS"));
+    }
 
-        virtual ~TestWorker() {}
+    virtual ~TestWorker() {}
 
-        virtual void SetUp() {}
+    virtual void SetUp() {}
 
-        virtual void TearDown() {}
+    virtual void TearDown() {}
 
     public:
+    std::string outputs_path;
 };
 
 TEST_F(TestWorker, test_task) {

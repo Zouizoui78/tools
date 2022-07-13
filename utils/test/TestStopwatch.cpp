@@ -9,15 +9,18 @@ using namespace std::chrono;
 class TestStopwatch:   public ::testing::Test
 {
     protected:
-        TestStopwatch() {}
+    TestStopwatch() {
+        outputs_path = std::string(std::getenv("TEST_OUTPUTS"));
+    }
 
-        virtual ~TestStopwatch() {}
+    virtual ~TestStopwatch() {}
 
-        virtual void SetUp() {}
+    virtual void SetUp() {}
 
-        virtual void TearDown() {}
+    virtual void TearDown() {}
 
     public:
+    std::string outputs_path;
 };
 
 TEST_F(TestStopwatch, test_stopwatch) {

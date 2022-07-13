@@ -1,4 +1,5 @@
 #include "tools/utils/Files.hpp"
+#include "tools/utils/Log.hpp"
 
 namespace tools::utils::files {
 

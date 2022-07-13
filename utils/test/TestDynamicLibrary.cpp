@@ -12,15 +12,18 @@ static std::string path = "test/test_resources/dynamic_library/test.so";
 class TestDynamicLibrary:   public ::testing::Test
 {
     protected:
-        TestDynamicLibrary() {}
+    TestDynamicLibrary() {
+        outputs_path = std::string(std::getenv("TEST_OUTPUTS"));
+    }
 
-        virtual ~TestDynamicLibrary() {}
+    virtual ~TestDynamicLibrary() {}
 
-        virtual void SetUp() {}
+    virtual void SetUp() override {}
 
-        virtual void TearDown() {}
+    virtual void TearDown() override {}
 
     public:
+    std::string outputs_path;
 };
 
 TEST_F(TestDynamicLibrary, test_load_library) {
