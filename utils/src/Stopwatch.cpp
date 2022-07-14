@@ -7,18 +7,18 @@ static auto logger = new_logger("Stopwatch");
 
 Stopwatch::Stopwatch(const std::string &name) {
     _name = name;
-    _start_time_point = std::chrono::steady_clock::now();
+    reset();
 }
     
 Stopwatch::~Stopwatch() {
-    log(get_duration());
+    log_duration(get_duration());
 }
 
 double Stopwatch::get_duration() const {
     return (std::chrono::steady_clock::now() - _start_time_point).count();
 }
 
-void Stopwatch::log(double d) const {
+void Stopwatch::log_duration(double d) const {
     std::string prefix = "";
     if (!_name.empty())
         prefix = _name + " : ";
@@ -39,6 +39,10 @@ void Stopwatch::log(double d) const {
     }
     
     logger->info("{}{:.3f}{}", prefix, d, unit);
+}
+
+void Stopwatch::reset() {
+    _start_time_point = std::chrono::steady_clock::now();
 }
 
 } // namespace tools::utils

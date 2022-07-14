@@ -13,10 +13,12 @@ class Stopwatch {
 
     ~Stopwatch();
 
-    private:
-
     double get_duration() const;
-    void log(double d) const;
+    void log_duration(double d) const;
+
+    void reset();
+
+    private:
 
     std::string _name = "";
 

@@ -160,6 +160,7 @@ OBJ=$(SRC:%$(SRC_EXT)=$(OBJDIR)/%.o)
 
 # String substitution : $(OBJDIR)/*.o => $(OBJDIR)/*.d
 DEPS=$(OBJ:.o=.d)
+TEST_DEPS=$(TEST_OBJ:.o=.d)
 
 OTHER=$(OS_DEFINE)
 ifeq ($(word 1, $(MAKECMDGOALS)), release)
@@ -268,6 +269,7 @@ $(TEST_OBJDIR)/%.o: $(TEST_SRCDIR)/%$(SRC_EXT)
 # Since this rules tell how to build object files,
 # their dependencies are added to the previous rule.
 -include $(DEPS)
+-include $(TEST_DEPS)
 
 clean:
 	@rm -r $(BUILDDIR)

@@ -29,6 +29,8 @@ bool Worker::start() {
     _running = true;
     _thread = std::thread([this]() {
         while (_running) {
+            auto sleep_end = std::chrono::high_resolution_clock::now() + std::chrono::microseconds(_delay_us);
+            
             try {
                 std::lock_guard lock(_task_mutex);
                 _task();
@@ -36,12 +38,8 @@ bool Worker::start() {
                 logger->error("Failed to run callback.");
             }
 
-            auto now = std::chrono::steady_clock::now();
-            auto sleep_end = now + std::chrono::milliseconds(_delay_ms);
-
             // If the task is not stopped during sleep, keep sleeping until sleep_end.
-            while (_running && now < sleep_end) {
-                now = std::chrono::steady_clock::now();
+            while (_running && std::chrono::high_resolution_clock::now() < sleep_end) {
                 std::this_thread::sleep_for(std::chrono::microseconds(1));
             }
         }
@@ -70,8 +68,8 @@ bool Worker::set_task(std::function<void ()> task) {
     return true;
 }
 
-void Worker::set_delay_ms(uint32_t delay) {
-    _delay_ms = delay;
+void Worker::set_delay_ms(double delay_ms) {
+    _delay_us = delay_ms * 1000;
 }
 
 } // namespace tools::utils

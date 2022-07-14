@@ -46,14 +46,14 @@ class Worker {
      * @brief Set the time to wait between two executions of the task.
      * @param delay
      */
-    void set_delay_ms(uint32_t delay);
+    void set_delay_ms(double delay_ms);
 
     private:
     std::atomic<bool> _running = false;
     std::function<void ()> _task;
     std::mutex _task_mutex;
     std::thread _thread;
-    std::atomic<uint32_t> _delay_ms = 0;
+    std::atomic<double> _delay_us = 0;
 };
 
 } // namespace tools::utils

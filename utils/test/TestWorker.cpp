@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 #include "tools/utils/Worker.hpp"
 #include "tools/utils/Log.hpp"
+#include "tools/utils/Stopwatch.hpp"
 
 namespace test {
 
@@ -85,6 +86,41 @@ TEST_F(TestWorker, test_empty_callback) {
     logger->info("Error is expected here.");
     task.start();
     EXPECT_FALSE(task.is_running());
+}
+
+TEST_F(TestWorker, test_time_accuracy) {
+    int count = 0;
+    Stopwatch s("test");
+
+    double previous = 0;
+    bool first_done = false;
+    double duration = 1000.0 / 144;
+    double duration_error = duration / 100;
+
+    Worker w([&]() {
+        double d = s.get_duration();
+        double diff = (d - previous) / 1e6;
+        previous = d;
+
+        // We don't expect on first iteration because
+        // then the diff is ~0.
+        if (!first_done)
+            first_done = true;
+        else {
+            logger->info("{} ms", diff);
+            EXPECT_NEAR(diff, duration, duration_error);
+        }
+
+        ++count;
+    });
+
+    w.set_delay_ms(duration);
+    s.reset();
+    w.start();
+
+    while (count < 5) {
+        usleep(100);
+    }
 }
 
 } // namespace test
