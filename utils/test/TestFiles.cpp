@@ -35,36 +35,18 @@ TEST_F(TestFiles, test_read_text_file) {
 }
 
 TEST_F(TestFiles, test_read_binary_file) {
-    std::vector<uint8_t> content = read_binary_file<uint8_t>(path_bin);
+    std::vector<uint8_t> content = read_binary_file(path_bin);
     ASSERT_EQ(content.size(), (size_t)8);
 
     std::vector<uint8_t> test { 0x56, 0x20, 0x12, 0x78, 0x94, 0x65, 0x12, 0x30 };
     ASSERT_EQ(content, test);
-
-    std::vector<uint16_t> content2 = read_binary_file<uint16_t>(path_bin);
-    ASSERT_EQ(content2.size(), (size_t)4);
-
-    std::vector<uint16_t> test2 { 0x2056, 0x7812, 0x6594, 0x3012 };
-    ASSERT_EQ(content2, test2);
-
-    std::vector<uint32_t> content3 = read_binary_file<uint32_t>(path_bin);
-    ASSERT_EQ(content3.size(), (size_t)2);
-
-    std::vector<uint32_t> test3 { 0x78122056, 0x30126594 };
-    ASSERT_EQ(content3, test3);
-
-    std::vector<uint64_t> content4 = read_binary_file<uint64_t>(path_bin);
-    ASSERT_EQ(content4.size(), (size_t)1);
-
-    std::vector<uint64_t> test4 { 0x3012659478122056 };
-    ASSERT_EQ(content4, test4);
 }
 
 TEST_F(TestFiles, test_write_binary_file) {
-    std::vector<uint16_t> test { 0x2056, 0x7812, 0x6594, 0x3012 };
+    std::vector<uint8_t> test { 0x20, 0x56, 0x78, 0x12, 0x65, 0x94, 0x30, 0x12 };
 
     write_binary_file(test, path_tmp);
-    ASSERT_EQ(read_binary_file<uint16_t>(path_tmp), test);
+    ASSERT_EQ(read_binary_file(path_tmp), test);
 }
 
 } // namespace test

@@ -20,27 +20,7 @@ std::string read_text_file(const std::string &path);
  * @param path Path of the file to read.
  * @return vector containing the read bytes.
  */
-template<typename T>
-std::vector<T> read_binary_file(const std::string &path) {
-    std::vector<T> result;
-
-    std::ifstream file(path, std::ios::binary);
-    if (!file) {
-        return result;
-    }
-
-    auto len = std::filesystem::file_size(path);
-    uint8_t block_size = sizeof(T);
-    size_t block_n = len / block_size;
-
-    T tmp;
-    for (size_t i = 0 ; i < block_n ; ++i) {
-        file.read((char *)&tmp, block_size);
-        result.push_back(tmp);
-    }
-
-    return result;
-}
+std::vector<uint8_t> read_binary_file(const std::string &path);
 
 /**
  * @brief Write the content of the given vector into a binary file.
@@ -48,20 +28,7 @@ std::vector<T> read_binary_file(const std::string &path) {
  * @param path Path of the file to write.
  * @return true => ok ; false => error.
  */
-template<typename T>
-bool write_binary_file(const std::vector<T> &data, const std::string &path) {
-    std::ofstream file(path, std::ios::binary);
-    if (!file) {
-        return false;
-    }
-
-    uint8_t block_size = sizeof(T);
-    for (size_t i = 0 ; i < data.size() ; ++i) {
-        file.write((char *)&data[i], block_size);
-    }
-
-    return true;
-}
+bool write_binary_file(const std::vector<uint8_t> &data, const std::string &path);
 
 } // namespace tools::utils
 
