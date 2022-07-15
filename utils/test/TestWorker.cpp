@@ -94,7 +94,9 @@ TEST_F(TestWorker, test_time_accuracy) {
 
     double previous = 0;
     bool first_done = false;
-    double duration = 1000.0 / 144;
+
+    uint16_t frequency = 144;
+    double duration = 1000.0 / frequency;
     double duration_error = duration / 100;
 
     Worker w([&]() {
@@ -114,7 +116,7 @@ TEST_F(TestWorker, test_time_accuracy) {
         ++count;
     });
 
-    w.set_delay_ms(duration);
+    w.set_frequency(frequency);
     s.reset();
     w.start();
 

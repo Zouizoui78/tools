@@ -48,6 +48,13 @@ class Worker {
      */
     void set_delay_ms(double delay_ms);
 
+    /**
+     * @brief Set the frequency at which the worker runs its task. Cannot be greater than 1000. If it is, the function treats the argument as 1000.
+     * 
+     * @param frequency Worker's frequency.
+     */
+    void set_frequency(uint16_t frequency);
+
     private:
     std::atomic<bool> _running = false;
     std::function<void ()> _task;

@@ -72,4 +72,11 @@ void Worker::set_delay_ms(double delay_ms) {
     _delay_us = delay_ms * 1000;
 }
 
+void Worker::set_frequency(uint16_t frequency) {
+    if (frequency > 1000)
+        frequency = 1000;
+
+    set_delay_ms(1000.0 / frequency);
+}
+
 } // namespace tools::utils
