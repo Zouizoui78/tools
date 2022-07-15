@@ -2,11 +2,20 @@ include module.cfg
 
 PROJECT_ROOT=..
 EXTLIB=$(PROJECT_ROOT)/extlib
+EXTLIB_BIN=$(EXTLIB)/bin
+EXTLIB_LIB=$(EXTLIB)/lib
+EXTLIB_INCLUDE=$(EXTLIB)/include
+
+DISTDIR=$(PROJECT_ROOT)/dist
+DISTDIR_BIN=$(DISTDIR)/bin
+DISTDIR_LIB=$(DISTDIR)/lib
+DISTDIR_INCLUDE=$(DISTDIR)/include
+
 include $(PROJECT_ROOT)/project.cfg
 
 # USEFUL VARIABLES AND FUNCTIONS
 
-LD_PATH=LD_LIBRARY_PATH=$(BINDIR):$(EXTLIB)/bin
+LD_PATH=LD_LIBRARY_PATH=$(BINDIR):$(EXTLIB_BIN)
 
 INCLUDE_PATH=include
 HEADER_EXT=.hpp
@@ -76,7 +85,7 @@ CFLAGS=-std=c++$(CPP) -Wall -Wextra -Werror -MMD -MP
 
 # Output dirs
 BUILDDIR=$(PROJECT_ROOT)/build
-ifeq ($(word 1, $(MAKECMDGOALS)), release)
+ifeq ($(MODE), release)
 	BUILD=$(BUILDDIR)/release
 else ifeq ($(PLATFORM),windows)
 	BUILD=$(BUILDDIR)/windows
@@ -112,10 +121,10 @@ OUTPUT:=$(BINDIR)/$(OUTPUT)
 
 # Include variables
 INCLUDEDIR=include                   # Get dependencies include path
-IFLAGS=-Iinclude -I$(EXTLIB)/include $(USEMOD:%=-I$(PROJECT_ROOT)/%/include)
+IFLAGS=-Iinclude -I$(EXTLIB_INCLUDE) $(USEMOD:%=-I$(PROJECT_ROOT)/%/include)
 
 # Linking flags                                     # Get dependencies link flag
-LFLAGS=-L$(BINDIR) -L$(EXTLIB)/bin -L$(EXTLIB)/lib $(USEMOD:%=-l$(PROJECT_NAME)-%)
+LFLAGS=-L$(BINDIR) -L$(EXTLIB_BIN) -L$(EXTLIB_LIB) $(USEMOD:%=-l$(PROJECT_NAME)-%)
 
 # Often times Windows dlls have different name than their Linux equivalent
 # e.g. libcurl.so -> libcurl-x64.dll
@@ -163,7 +172,7 @@ DEPS=$(OBJ:.o=.d)
 TEST_DEPS=$(TEST_OBJ:.o=.d)
 
 OTHER=$(OS_DEFINE)
-ifeq ($(word 1, $(MAKECMDGOALS)), release)
+ifeq ($(MODE), release)
 	OTHER+=-O2 -s
 else ifeq ($(PLATFORM),windows)
 # If cross-compiling
@@ -178,7 +187,6 @@ ifeq ($(TYPE),lib)
 endif
 
 all: $(USEMOD) $(OUTPUT)
-release: $(USEMOD) $(OUTPUT)
 
 ifeq ($(TYPE),lib)
 ifdef T
@@ -232,16 +240,16 @@ endif
 $(USEMOD):
 	@$(MAKE) --directory=$(PROJECT_ROOT)/$@ $(filter-out valgrindtest test run gdb valgrind,$(MAKECMDGOALS))
 
-# TODO : Cross-compil' packaging target. Unused for now.
-$(DIST): DISTDIR=$(MODULE_BUILD)/$(NAME)
-$(DIST): $(OUTPUT)
+dist: $(USEMOD) $(OUTPUT)
 	@mkdir -p $(DISTDIR)
-	@echo Preparing dist directory...
-	@cp $(OUTPUT) $(DISTDIR)/
-	@cp -r res $(DISTDIR)/
-	@cp extlib/bin/* $(DISTDIR)
-	@echo Compressing dist directory...
-	@cd $(MODULE_BUILD) && zip -r $(NAME).zip $(NAME) > /dev/null
+	@echo Copying $(OUTPUT) to $(DISTDIR)/bin...
+	@cp $(OUTPUT) $(DISTDIR)
+	@echo Copying extlibs to $(DISTDIR)...
+	@if [ -d "$(EXTLIB_BIN)" ]; then cp $(EXTLIB_BIN)/* $(DISTDIR_BIN); fi
+	@if [ -d "$(EXTLIB_LIB)" ]; then cp $(EXTLIB_LIB)/* $(DISTDIR_LIB); fi
+	@if [ -d "$(EXTLIB_INCLUDE)" ]; then cp $(EXTLIB_INCLUDE)/* $(DISTDIR_INCLUDE); fi
+	#@echo Compressing dist directory...
+	#@cd $(MODULE_BUILD) && zip -r $(NAME).zip $(NAME) > /dev/null
 
 $(OUTPUT): $(OBJ)
 # $@ : Target name
@@ -274,4 +282,7 @@ $(TEST_OBJDIR)/%.o: $(TEST_SRCDIR)/%$(SRC_EXT)
 clean:
 	@rm -r $(BUILDDIR)
 
-.PHONY: all release run gdb test clean valgrind valgrindtest newclass $(USEMOD)
+distclean:
+	@rm -r $(DISTDIR)
+
+.PHONY: all dist run gdb test clean distclean valgrind valgrindtest newclass $(USEMOD)
