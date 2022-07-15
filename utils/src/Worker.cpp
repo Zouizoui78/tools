@@ -29,7 +29,7 @@ bool Worker::start() {
     _running = true;
     _thread = std::thread([this]() {
         while (_running) {
-            auto sleep_end = std::chrono::high_resolution_clock::now() + std::chrono::microseconds(_delay_us);
+            auto sleep_end = std::chrono::steady_clock::now() + std::chrono::microseconds(_delay_us);
             
             try {
                 std::lock_guard lock(_task_mutex);
@@ -39,7 +39,7 @@ bool Worker::start() {
             }
 
             // If the task is not stopped during sleep, keep sleeping until sleep_end.
-            while (_running && std::chrono::high_resolution_clock::now() < sleep_end) {
+            while (_running && std::chrono::steady_clock::now() < sleep_end) {
                 std::this_thread::sleep_for(std::chrono::microseconds(1));
             }
         }
