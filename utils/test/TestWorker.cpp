@@ -114,15 +114,14 @@ TEST_F(TestWorker, test_time_accuracy) {
         }
 
         ++count;
-    });
+
+        if (count == 5)
+            w.stop();
+    }, false);
 
     w.set_frequency(frequency);
     s.reset();
     w.start();
-
-    while (count < 5) {
-        usleep(100);
-    }
 }
 
 } // namespace test

@@ -16,7 +16,7 @@ class Worker {
     public:
     
     Worker();
-    Worker(std::function<void ()> task);
+    Worker(std::function<void ()> task, bool threaded = true);
     ~Worker();
 
     /**
@@ -56,10 +56,13 @@ class Worker {
     void set_frequency(uint16_t frequency);
 
     private:
+    void task_wrapper();
+
     std::atomic<bool> _running = false;
     std::function<void ()> _task;
     std::mutex _task_mutex;
     std::thread _thread;
+    bool _threaded;
     std::atomic<double> _delay_us = 0;
 };
 

@@ -7,8 +7,9 @@ static auto logger = new_logger("Worker");
 
 Worker::Worker() {}
 
-Worker::Worker(std::function<void ()> task) {
+Worker::Worker(std::function<void ()> task, bool threaded) {
     _task = task;
+    _threaded = threaded;
 }
 
 Worker::~Worker() {
@@ -27,35 +28,46 @@ bool Worker::start() {
     }
 
     _running = true;
-    _thread = std::thread([this]() {
-        while (_running) {
-            auto sleep_end = std::chrono::steady_clock::now() + std::chrono::microseconds(_delay_us);
-            
-            try {
-                std::lock_guard lock(_task_mutex);
-                _task();
-            } catch (const std::bad_function_call &e) {
-                logger->error("Failed to run callback.");
-            }
 
-            // If the task is not stopped during sleep, keep sleeping until sleep_end.
-            while (_running && std::chrono::steady_clock::now() < sleep_end) {
-                std::this_thread::sleep_for(std::chrono::microseconds(1));
-            }
-        }
-    });
+    if (_threaded)
+        _thread = std::thread([this]() {
+            task_wrapper();
+        });
+    else
+        task_wrapper();
+
     return true;
 }
 
 void Worker::stop() {
     if (_running) {
         _running = false;
-        _thread.join();
+
+        if (_threaded)
+            _thread.join();
     }
 }
 
 bool Worker::is_running() {
     return _running;
+}
+
+void Worker::task_wrapper() {
+    while (_running) {
+        auto sleep_end = std::chrono::steady_clock::now() + std::chrono::microseconds(_delay_us);
+        
+        try {
+            std::lock_guard lock(_task_mutex);
+            _task();
+        } catch (const std::bad_function_call &e) {
+            logger->error("Failed to run callback.");
+        }
+
+        // If the task is not stopped during sleep, keep sleeping until sleep_end.
+        while (_running && std::chrono::steady_clock::now() < sleep_end) {
+            std::this_thread::sleep_for(std::chrono::microseconds(1));
+        }
+    }
 }
 
 bool Worker::set_task(std::function<void ()> task) {
