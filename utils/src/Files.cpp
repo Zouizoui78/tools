@@ -10,7 +10,10 @@ std::string read_text_file(const std::string &path) {
     if (file.is_open()) {
         std::stringstream content;
         content << file.rdbuf();
-        return content.str();
+        std::string ret = content.str();
+        if (ret.back() == '\n')
+            ret.pop_back();
+        return ret;
     }
     else {
         logger->error("Failed to open file {}.", path);
