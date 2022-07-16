@@ -54,7 +54,12 @@ bool Worker::is_running() {
 
 void Worker::task_wrapper() {
     while (_running) {
-        auto sleep_end = std::chrono::steady_clock::now() + std::chrono::microseconds(_delay_us);
+        std::chrono::steady_clock::time_point sleep_end;
+
+        if (!_high_precision)
+            sleep_end = std::chrono::steady_clock::now() + std::chrono::microseconds(_sleep_delay_us);
+
+        auto wait_end = std::chrono::steady_clock::now() + std::chrono::microseconds(_delay_us);
         
         try {
             std::lock_guard lock(_task_mutex);
@@ -64,9 +69,16 @@ void Worker::task_wrapper() {
         }
 
         // If the task is not stopped during sleep, keep sleeping until sleep_end.
-        while (_running && std::chrono::steady_clock::now() < sleep_end) {
+        // We don't sleep for the whole wait duration
+        // to avoid loosing time because of
+        // the OS' scheduler.
+        while (!_high_precision && _running && std::chrono::steady_clock::now() < sleep_end) {
             std::this_thread::sleep_for(std::chrono::microseconds(1));
         }
+
+        // Now we "actively wait" until
+        // the end of the wait time.
+        while (_running && std::chrono::steady_clock::now() < wait_end);
     }
 }
 
@@ -82,13 +94,19 @@ bool Worker::set_task(std::function<void ()> task) {
 
 void Worker::set_delay_ms(double delay_ms) {
     _delay_us = delay_ms * 1000;
+    _sleep_delay_us = _delay_us * 0.9;
 }
 
-void Worker::set_frequency(uint16_t frequency) {
-    if (frequency > 1000)
-        frequency = 1000;
-
+void Worker::set_frequency(uint32_t frequency) {
+    if (frequency > 1e6) {
+        logger->warn("Trying to set frequency to {}, which is to high. Setting frequency to the maximum (1MHz).", frequency);
+        frequency = 1e6;
+    }
     set_delay_ms(1000.0 / frequency);
+}
+
+void Worker::set_high_precision(bool high_precison) {
+    _high_precision = high_precison;
 }
 
 } // namespace tools::utils

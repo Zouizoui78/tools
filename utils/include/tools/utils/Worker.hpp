@@ -49,11 +49,18 @@ class Worker {
     void set_delay_ms(double delay_ms);
 
     /**
-     * @brief Set the frequency at which the worker runs its task. Cannot be greater than 1000. If it is, the function treats the argument as 1000.
+     * @brief Set the frequency at which the worker runs its task. Cannot be greater than 1MHz. If it is, the function treats the argument as 1MHz.
      * 
      * @param frequency Worker's frequency.
      */
-    void set_frequency(uint16_t frequency);
+    void set_frequency(uint32_t frequency);
+
+    /**
+     * @brief Tell the worker to schedule its task with a high precision, most likely consuming 100% of its cpu core's time.
+     * 
+     * @param high_precision 
+     */
+    void set_high_precision(bool high_precision);
 
     private:
     void task_wrapper();
@@ -64,6 +71,9 @@ class Worker {
     std::thread _thread;
     bool _threaded;
     std::atomic<double> _delay_us = 0;
+    std::atomic<double> _sleep_delay_us = 0;
+
+    std::atomic<bool> _high_precision = false;
 };
 
 } // namespace tools::utils

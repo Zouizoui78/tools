@@ -95,7 +95,7 @@ TEST_F(TestWorker, test_time_accuracy) {
     double previous = 0;
     bool first_done = false;
 
-    uint16_t frequency = 144;
+    uint32_t frequency = 1000;
     double duration = 1000.0 / frequency;
     double duration_error = duration / 100;
 
