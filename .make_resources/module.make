@@ -216,7 +216,7 @@ endif
 run: $(USEMOD) $(OUTPUT)
 ifeq ($(TYPE),exe)
 	@echo "Running $(OUTPUT)"
-	@$(LD_PATH) ./$(OUTPUT)
+	@$(LD_PATH) ./$(OUTPUT) $(ARGS)
 else
 	$(error "Cannot run a library")
 endif
@@ -224,7 +224,7 @@ endif
 gdb: $(USEMOD) $(OUTPUT)
 ifeq ($(TYPE),exe)
 	@echo "Running $(OUTPUT)"
-	@$(LD_PATH) gdb ./$(OUTPUT)
+	@$(LD_PATH) gdb ./$(OUTPUT) $(ARGS)
 else
 	$(error "Cannot run a library")
 endif
@@ -232,7 +232,7 @@ endif
 valgrind: $(USEMOD) $(OUTPUT)
 ifeq ($(TYPE),exe)
 	@echo "Running $(OUTPUT)"
-	@$(LD_PATH) valgrind $(VALGRIND_OPT) ./$(OUTPUT)
+	@$(LD_PATH) valgrind $(VALGRIND_OPT) ./$(OUTPUT) $(ARGS)
 else
 	$(error "Cannot run a library")
 endif
