@@ -14,16 +14,17 @@ Stopwatch::~Stopwatch() {
     log_duration(get_duration());
 }
 
-double Stopwatch::get_duration() const {
+uint64_t Stopwatch::get_duration() const {
     return (std::chrono::steady_clock::now() - _start_time_point).count();
 }
 
-void Stopwatch::log_duration(double d) const {
+void Stopwatch::log_duration(uint64_t duration) const {
     std::string prefix = "";
     if (!_name.empty())
         prefix = _name + " : ";
 
     std::string unit = " ns";
+    double d = duration;
 
     if (d > 1e9) {
         d /= 1e9;
