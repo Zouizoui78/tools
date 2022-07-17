@@ -33,6 +33,7 @@ std::vector<uint8_t> read_binary_file(const std::string &path) {
     auto len = std::filesystem::file_size(path);
     uint8_t block_size = sizeof(uint8_t);
     size_t block_n = len / block_size;
+    logger->debug("Reading {} bytes from '{}'", block_n, path);
 
     uint8_t tmp;
     for (size_t i = 0 ; i < block_n ; ++i) {
