@@ -2,10 +2,12 @@
 #include "tools/sdl/InputMapper.hpp"
 
 #include "tools/utils/Files.hpp"
+#include "tools/utils/Log.hpp"
 
 namespace test {
 
 using namespace tools::sdl;
+static auto logger = tools::utils::new_logger("TestInputMapper");
 
 class TestInputMapper:   public ::testing::Test
 {
@@ -25,9 +27,11 @@ class TestInputMapper:   public ::testing::Test
 };
 
 TEST_F(TestInputMapper, test_add_remove_mapping) {
+    logger->info("Errors are expected in this test.");
     InputMapper mapper;
     ASSERT_TRUE(mapper.add_mapping("a", 17));
     ASSERT_FALSE(mapper.add_mapping("a", 45));
+    ASSERT_FALSE(mapper.add_mapping(SDL_KeyCode::SDLK_a, 45));
     ASSERT_EQ(mapper.map_key("a"), 17);
 
     ASSERT_TRUE(mapper.add_mapping("b", 32));
@@ -41,8 +45,6 @@ TEST_F(TestInputMapper, test_json_map) {
     json j = json::parse(tools::utils::files::read_text_file("test/test_resources/InputMapper/test_map.json"));
 
     ASSERT_TRUE(mapper.set_map(j));
-    ASSERT_FALSE(mapper.add_mapping("a", 44));
-
     ASSERT_EQ(mapper.map_key("a"), 1);
     ASSERT_EQ(mapper.map_key("z"), 3);
     ASSERT_EQ(mapper.map_key("e"), 67);
