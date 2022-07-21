@@ -44,7 +44,7 @@ bool Renderer::init() {
         _screen_height / 2 - _height / 2,
         _width,
         _height,
-        0
+        SDL_WINDOW_RESIZABLE
     // #ifdef WINDOWS
     //     SDL_WINDOW_BORDERLESS
     // #elif defined(DEBUG)
