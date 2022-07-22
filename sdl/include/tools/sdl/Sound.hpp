@@ -75,10 +75,7 @@ class Square : public ASound {
 
     private:
 
-    void update_sampling_duty_cycle();
-
     double _duty_cycle = 0.5;
-    uint32_t _sampling_duty_cycle = 0;
 };
 
 class SoundPlayer {
@@ -104,7 +101,6 @@ class SoundPlayer {
 
     uint32_t _sample_n = 0;
     bool _is_audio_initialized = false;
-    SDL_AudioDeviceID _device_id = 0;
 };
 
 } // namespace tools::sdl

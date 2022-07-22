@@ -1,8 +1,6 @@
 #include "tools/sdl/Sound.hpp"
 #include "tools/utils/Log.hpp"
 
-#include "tools/utils/Stopwatch.hpp"
-
 namespace tools::sdl {
 
 static auto logger = tools::utils::new_logger("Sound");
@@ -29,7 +27,7 @@ void ASound::set_frequency(double frequency) {
     if (frequency <= 0)
         return;
     _frequency = frequency;
-    _period = 1 / frequency;
+    _period = 1.0 / frequency;
     _sampling_period = SOUND_SAMPLING_RATE / _frequency;
 }
 
@@ -51,6 +49,7 @@ void Sinus::set_frequency(double frequency) {
     _freq_mult = 2.0 * std::numbers::pi * frequency;
 }
 
+
 Square::Square() {}
 
 Square::~Square() {}
@@ -63,16 +62,14 @@ int16_t Square::synthesize(SoundSynthesisData data) const {
 
 void Square::set_frequency(double frequency) {
     ASound::set_frequency(frequency);
-    update_sampling_duty_cycle();
+}
+
+double Square::get_duty_cycle() const {
+    return _duty_cycle;
 }
 
 void Square::set_duty_cycle(double duty_cycle) {
     _duty_cycle = duty_cycle;
-    update_sampling_duty_cycle();
-}
-
-void Square::update_sampling_duty_cycle() {
-    _sampling_duty_cycle = _sampling_period * _duty_cycle;
 }
 
 /////////////////////////////////////
@@ -85,8 +82,12 @@ SoundPlayer::SoundPlayer() {
 }
 
 SoundPlayer::~SoundPlayer() {
-    if (is_initialized())
-        SDL_CloseAudioDevice(_device_id);
+    if (is_initialized()) {
+        SDL_CloseAudio();
+        SDL_QuitSubSystem(SDL_INIT_AUDIO);
+        _is_audio_initialized = false;
+        logger->info("SDL audio subsystem cleaned up.");
+    }
 }
 
 bool SoundPlayer::init() {
@@ -96,11 +97,11 @@ bool SoundPlayer::init() {
     }
     
     SDL_AudioSpec desired;
-    desired.freq = SOUND_SAMPLING_RATE; // number of samples per second
-    desired.format = AUDIO_S16SYS; // sample type (here: here: signed short i.e. 16 bit)
-    desired.channels = 1; // only one channel
+    desired.freq = SOUND_SAMPLING_RATE;
+    desired.format = AUDIO_S16SYS;
+    desired.channels = 1; // mono
     desired.samples = 2048; // buffer-size
-    desired.callback = sdl_callback; // function SDL calls periodically to refill the buffer
+    desired.callback = sdl_callback; // called periodically by SDL to refill the buffer
     desired.userdata = this;
 
     SDL_AudioSpec obtained;

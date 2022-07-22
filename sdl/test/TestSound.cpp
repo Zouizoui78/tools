@@ -52,7 +52,7 @@ TEST_F(TestSound, test_square) {
     ASSERT_TRUE(player.is_initialized());
 
     Square square;
-    square.set_frequency(440);
+    square.set_frequency(261.63);
     player.add_sound(&square);
 
     player.play();
