@@ -173,10 +173,10 @@ TEST_DEPS=$(TEST_OBJ:.o=.d)
 
 OTHER=$(OS_DEFINE)
 ifeq ($(MODE), release)
-	OTHER+=-O2 -s
+	OTHER+=-O3 -s
 else ifeq ($(PLATFORM),windows)
 # If cross-compiling
-	OTHER+=-O2 -s
+	OTHER+=-O3 -s
 	COMPILER=x86_64-w64-mingw32-g++
 else
 	OTHER+=-g -D DEBUG
