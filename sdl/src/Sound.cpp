@@ -55,13 +55,12 @@ Square::Square() {}
 Square::~Square() {}
 
 int16_t Square::synthesize(SoundSynthesisData data) const {
-    double whole, frac;
-    frac = ::modf((double)data.sample_n / _sampling_period, &whole);
-    return frac > _duty_cycle ? -_amplitude_mult : _amplitude_mult;
+    return (data.sample_n % _sampling_period) >= _sampling_duty_cycle ? -_amplitude_mult : _amplitude_mult;
 }
 
 void Square::set_frequency(double frequency) {
     ASound::set_frequency(frequency);
+    update_sampling_duty_cycle();
 }
 
 double Square::get_duty_cycle() const {
@@ -70,6 +69,11 @@ double Square::get_duty_cycle() const {
 
 void Square::set_duty_cycle(double duty_cycle) {
     _duty_cycle = duty_cycle;
+    update_sampling_duty_cycle();
+}
+
+void Square::update_sampling_duty_cycle() {
+    _sampling_duty_cycle = _sampling_period * _duty_cycle;
 }
 
 /////////////////////////////////////

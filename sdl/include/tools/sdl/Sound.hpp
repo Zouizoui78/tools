@@ -75,7 +75,10 @@ class Square : public ASound {
 
     private:
 
+    void update_sampling_duty_cycle();
+
     double _duty_cycle = 0.5;
+    uint32_t _sampling_duty_cycle = 1;
 };
 
 class SoundPlayer {
