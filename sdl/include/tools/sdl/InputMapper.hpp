@@ -21,7 +21,8 @@ class InputMapper {
     bool remove_mapping(SDL_Keycode key);
     bool remove_mapping(const std::string &key);
 
-    bool set_map(const json &map);
+    bool load_map(const json &map);
+    bool load_map(const std::string &json_path);
 
     int map_key(SDL_Keycode key);
     int map_key(const std::string &key);

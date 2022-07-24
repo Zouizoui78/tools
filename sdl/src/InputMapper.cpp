@@ -1,4 +1,6 @@
 #include "tools/sdl/InputMapper.hpp"
+
+#include "tools/utils/Files.hpp"
 #include "tools/utils/Log.hpp"
 
 namespace tools::sdl {
@@ -45,7 +47,7 @@ bool InputMapper::remove_mapping(const std::string &key) {
     return remove_mapping(sdl_key);
 }
 
-bool InputMapper::set_map(const json &map) {
+bool InputMapper::load_map(const json &map) {
     bool success = true;
     for (const auto &e : map.items()) {
         SDL_Keycode key = SDL_GetKeyFromName(e.key().c_str());
@@ -57,6 +59,23 @@ bool InputMapper::set_map(const json &map) {
             success = false;
     }
     return success;
+}
+
+bool InputMapper::load_map(const std::string &json_path) {
+    std::string content = tools::utils::files::read_text_file(json_path);
+    if (content.empty())
+        return false;
+    
+    json j;
+    try {
+        j = json::parse(content);
+    }
+    catch (const nlohmann::detail::parse_error &e) {
+        logger->error("Failed to parse input map json '{}' : {}", json_path, e.what());
+        return false;
+    }
+
+    return load_map(j);
 }
 
 int InputMapper::map_key(SDL_Keycode key) {
