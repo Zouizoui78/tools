@@ -35,12 +35,12 @@ class ASound {
 
     protected:
 
-    double _volume = 1;
-    double _amplitude_mult = SOUND_AMPLITUDE;
+    double _volume;
+    double _amplitude_mult;
 
-    double _frequency = 1;
-    double _period = 1;
-    uint32_t _sampling_period = 1;
+    double _frequency;
+    double _period;
+    uint32_t _sampling_period;
 };
 
 class Sinus : public ASound {
@@ -55,6 +55,8 @@ class Sinus : public ASound {
     virtual void set_frequency(double frequency) override;
 
     private:
+
+    void update_freq_mult();
 
     double _freq_mult = 0;
 };

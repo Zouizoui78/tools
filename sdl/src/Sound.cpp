@@ -6,7 +6,10 @@ namespace tools::sdl {
 static auto logger = tools::utils::new_logger("Sound");
 
 // Default waveform implementations
-ASound::ASound() {}
+ASound::ASound() {
+    set_volume(1);
+    set_frequency(440);
+}
     
 ASound::~ASound() {}
 
@@ -36,7 +39,9 @@ double ASound::get_period() const {
 }
 
 
-Sinus::Sinus() {}
+Sinus::Sinus() : ASound() {
+    update_freq_mult();
+}
 
 Sinus::~Sinus() {}
 
@@ -46,11 +51,17 @@ int16_t Sinus::synthesize(SoundSynthesisData data) const {
 
 void Sinus::set_frequency(double frequency) {
     ASound::set_frequency(frequency);
-    _freq_mult = 2.0 * std::numbers::pi * frequency;
+    update_freq_mult();
+}
+
+void Sinus::update_freq_mult() {
+    _freq_mult = 2.0 * std::numbers::pi * _frequency;
 }
 
 
-Square::Square() {}
+Square::Square() : ASound() {
+    update_sampling_duty_cycle();
+}
 
 Square::~Square() {}
 

@@ -26,6 +26,16 @@ class TestSound:   public ::testing::Test
     std::string outputs_path;
 };
 
+TEST_F(TestSound, test_init) {
+    Sinus sin;
+    EXPECT_EQ(sin.get_volume(), 1);
+    EXPECT_EQ(sin.get_frequency(), 440);
+    EXPECT_EQ(sin.get_period(), 1.0/440);
+
+    Square square;
+    EXPECT_EQ(square.get_duty_cycle(), 0.5);
+}
+
 TEST_F(TestSound, test_sinus) {
     SoundPlayer player;
     ASSERT_TRUE(player.is_initialized());
@@ -72,7 +82,6 @@ TEST_F(TestSound, test_square) {
 TEST_F(TestSound, test_duty_cycle) {
     SoundPlayer player;
     Square square;
-    square.set_frequency(440);
     square.set_duty_cycle(0.25);
     player.add_sound(&square);
     player.play();
@@ -80,6 +89,36 @@ TEST_F(TestSound, test_duty_cycle) {
     square.set_duty_cycle(0.75);
     usleep(1e6);
 }
+
+TEST_F(TestSound, test_setting_changes) {
+    SoundPlayer player;
+    ASSERT_TRUE(player.is_initialized());
+
+    double la = 440;
+    double si = 494;
+
+    Square sound;
+    player.add_sound(&sound);
+    player.play();
+    for (int i = 0 ; i < 5 ; i++) {
+        if (sound.get_frequency() == la)
+            sound.set_frequency(si);
+        else
+            sound.set_frequency(la);
+        usleep(400e3);
+    }
+    for (int i = 0 ; i < 3 ; i++) {
+        if (i == 0)
+            sound.set_duty_cycle(0.125);
+        else if (i == 1)
+            sound.set_duty_cycle(0.25);
+        else if (i == 2)
+            sound.set_duty_cycle(0.5);
+        else {
+            sound.set_duty_cycle(0.75);
+        }
+        usleep(400e3);
+    }
 }
 
 } // namespace test
