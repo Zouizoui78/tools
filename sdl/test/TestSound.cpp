@@ -38,6 +38,8 @@ TEST_F(TestSound, test_sinus) {
         Sinus *sin = new Sinus;
         sin->set_frequency(440 * (i * 2 + 1));
         sin->set_volume(1.0 / (i * 2 + 1));
+        logger->info(440 * (i * 2 + 1));
+        logger->info(1.0 / (i * 2 + 1));
         player.add_sound(sin);
         sounds.push_back(sin);
         usleep(1500e3);
@@ -62,6 +64,7 @@ TEST_F(TestSound, test_square) {
             square.set_duty_cycle(0.125);
         else
             square.set_duty_cycle(0.125 * i * 2);
+        logger->info("Duty cycle = {}", square.get_duty_cycle());
         usleep(1500e3);
     }
 }
@@ -73,9 +76,10 @@ TEST_F(TestSound, test_duty_cycle) {
     square.set_duty_cycle(0.25);
     player.add_sound(&square);
     player.play();
-    usleep(1500e3);
+    usleep(1e6);
     square.set_duty_cycle(0.75);
-    usleep(1500e3);
+    usleep(1e6);
+}
 }
 
 } // namespace test
