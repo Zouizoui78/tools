@@ -52,11 +52,14 @@ TEST_F(TestSound, test_sinus) {
         logger->info(1.0 / (i * 2 + 1));
         player.add_sound(sin);
         sounds.push_back(sin);
-        usleep(1500e3);
+        usleep(1e6);
     }
 
-    for (auto sound : sounds)
+    player.pause();
+    for (auto sound : sounds) {
+        ASSERT_TRUE(player.remove_sound(sound));
         delete sound;
+    }
 }
 
 TEST_F(TestSound, test_square) {

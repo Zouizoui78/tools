@@ -89,10 +89,24 @@ class SoundPlayer {
     SoundPlayer();
     ~SoundPlayer();
 
-    bool init();
     bool is_initialized();
 
+    /**
+     * @brief Add a sound to be played when play() is called.
+     * 
+     * @param sound sound to register.
+     * @return true No error.
+     * @return false Sound already registered.
+     */
     bool add_sound(ASound *sound);
+
+    /**
+     * @brief Remove a sound from the registered sounds vector.
+     * 
+     * @param sound Sound to remove.
+     * @return true No error.
+     * @return false Sound not found in vector.
+     */
     bool remove_sound(ASound *sound);
 
     void play();
@@ -101,6 +115,8 @@ class SoundPlayer {
     private:
 
     static void sdl_callback(void *instance, uint8_t *raw_buffer, int bytes);
+
+    bool init();
 
     std::vector<ASound *> _sounds;
 
