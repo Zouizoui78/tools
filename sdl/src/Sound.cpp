@@ -152,14 +152,14 @@ bool SoundPlayer::remove_sound(ASound *sound) {
 }
 
 void SoundPlayer::sdl_callback(void *instance, uint8_t *raw_buffer, int bytes) {
-    SoundPlayer *player = (SoundPlayer *)(instance);
-    int16_t *buffer = (int16_t *)raw_buffer;
+    SoundPlayer *player = static_cast<SoundPlayer *>(instance);
+    int16_t *buffer = reinterpret_cast<int16_t *>(raw_buffer);
 
     uint32_t len = bytes / sizeof(int16_t);
     uint8_t sounds_n = player->_sounds.size();
     
     for (uint32_t i = 0 ; i < len ; i++) {
-        double time = (double)player->_sample_n / SOUND_SAMPLING_RATE;
+        double time = static_cast<double>(player->_sample_n) / SOUND_SAMPLING_RATE;
 
         buffer[i] = 0;
         for (uint8_t sounds_i = 0 ; sounds_i < sounds_n ; sounds_i++) {

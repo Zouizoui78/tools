@@ -37,7 +37,7 @@ std::vector<uint8_t> read_binary_file(const std::string &path) {
 
     uint8_t tmp;
     for (size_t i = 0 ; i < block_n ; ++i) {
-        file.read((char *)&tmp, block_size);
+        file.read(reinterpret_cast<char *>(&tmp), block_size);
         result.push_back(tmp);
     }
 
@@ -53,7 +53,7 @@ bool write_binary_file(const std::vector<uint8_t> &data, const std::string &path
 
     uint8_t block_size = sizeof(uint8_t);
     for (size_t i = 0 ; i < data.size() ; ++i) {
-        file.write((char *)&data[i], block_size);
+        file.write(reinterpret_cast<const char *>(&data[i]), block_size);
     }
 
     return true;

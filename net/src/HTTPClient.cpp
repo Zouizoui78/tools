@@ -179,7 +179,8 @@ bool HTTPClient::async_request (
         // Here we simply make a synchronous request in the new thread.
         bool res = sync_request(reply, url, headers, post_data);
 
-        if (res) callback(reply);
+        if (res)
+            callback(reply);
 
         // Mark this thread as done.
         {
@@ -251,7 +252,7 @@ bool HTTPClient::set_easy_handle_opt(
         return false;
     }
 
-    res = curl_easy_setopt(handle, CURLOPT_WRITEDATA, (void *)&reply);
+    res = curl_easy_setopt(handle, CURLOPT_WRITEDATA, static_cast<const void *>(&reply));
     if (res) {
         logger->error("Failed to set easy handle callback object.");
         return false;

@@ -27,7 +27,7 @@ TEST_F(TestUDP, test_udp_listen) {
     UDP udp(5000);
     ASSERT_TRUE(udp.is_ok());
 
-    const char *data = "test_data";
+    const char *test_data = "test_data";
     char received[10];
 
     bool callback_called = false;
@@ -36,7 +36,7 @@ TEST_F(TestUDP, test_udp_listen) {
         callback_called = true;
         received_bytes = size;
 
-        strcpy(received, (char *)data);
+        strcpy(received, reinterpret_cast<char *>(data));
         logger->info("Received {} bytes : {}", size, received);
     });
 
@@ -47,7 +47,7 @@ TEST_F(TestUDP, test_udp_listen) {
     addr_in.sin_family = AF_INET;
     sockaddr *addr = reinterpret_cast<sockaddr *>(&addr_in);
 
-    int res = sendto(s, data, strlen(data) + 1, 0, addr, sizeof(addr_in));
+    int res = sendto(s, test_data, strlen(test_data) + 1, 0, addr, sizeof(addr_in));
 
     usleep(1e3);
 
@@ -56,7 +56,7 @@ TEST_F(TestUDP, test_udp_listen) {
 
     size_t expected_size = 10;
     ASSERT_EQ(received_bytes, expected_size);
-    ASSERT_EQ(strcmp(data, received), 0);
+    ASSERT_EQ(strcmp(test_data, received), 0);
 }
 
 } // namespace test

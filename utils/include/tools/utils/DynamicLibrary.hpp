@@ -38,9 +38,9 @@ class DynamicLibrary {
     template <typename R, typename ... Targs>
     R (*get_function(const std::string &function_name))(Targs ...) {
     #ifdef WINDOWS
-        return (R (*)(Targs ...))GetProcAddress(_lib_instance, function_name.c_str());
+        return reinterpret_cast<R (*)(Targs ...)>(GetProcAddress(_lib_instance, function_name.c_str()));
     #else
-        return (R (*)(Targs ...))dlsym(_lib_instance, function_name.c_str());
+        return reinterpret_cast<R (*)(Targs ...)>(dlsym(_lib_instance, function_name.c_str()));
     #endif
     }
 
