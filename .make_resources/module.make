@@ -186,13 +186,13 @@ ifeq ($(TYPE),lib)
 	OTHER+=-fPIC
 endif
 
-all: $(USEMOD) $(OUTPUT)
+all: $(OUTPUT)
 
 ifeq ($(TYPE),lib)
 ifdef T
 FILTER=GTEST_FILTER=*$(T)*
 endif
-test: $(USEMOD) $(OUTPUT) $(TEST_OUTPUT)
+test: $(TEST_OUTPUT)
 	@echo "Running tests for module $(MODULE_NAME)"
 	@mkdir -p $(TEST_GTEST_OUTPUT_DIR)
 ifeq ($(OS),Windows_NT)
@@ -200,7 +200,7 @@ ifeq ($(OS),Windows_NT)
 else
 	$(LD_PATH) TEST_OUTPUTS=$(TEST_OUTPUTS) GTEST_OUTPUT="xml:$(TEST_GTEST_OUTPUT_FILE)" $(FILTER) ./$(TEST_OUTPUT)
 endif
-valgrindtest: $(USEMOD) $(OUTPUT) $(TEST_OUTPUT)
+valgrindtest: $(TEST_OUTPUT)
 	@echo "Running tests for module $(MODULE_NAME) through valgrind"
 	@mkdir -p $(TEST_GTEST_OUTPUT_DIR)
 	$(LD_PATH) TEST_OUTPUTS=$(TEST_OUTPUTS) GTEST_OUTPUT="xml:$(TEST_GTEST_OUTPUT_FILE)" $(FILTER) valgrind $(VALGRIND_OPT) $(TEST_OUTPUT)
@@ -213,7 +213,7 @@ valgrindtest:
 	@echo "Cannot test an executable"
 endif
 
-run: $(USEMOD) $(OUTPUT)
+run: $(OUTPUT)
 ifeq ($(TYPE),exe)
 	@echo "Running $(OUTPUT)"
 	@$(LD_PATH) ./$(OUTPUT) $(ARGS)
@@ -221,7 +221,7 @@ else
 	$(error "Cannot run a library")
 endif
 
-gdb: $(USEMOD) $(OUTPUT)
+gdb: $(OUTPUT)
 ifeq ($(TYPE),exe)
 	@echo "Running $(OUTPUT)"
 	@$(LD_PATH) gdb ./$(OUTPUT) $(ARGS)
@@ -229,7 +229,7 @@ else
 	$(error "Cannot run a library")
 endif
 
-valgrind: $(USEMOD) $(OUTPUT)
+valgrind: $(OUTPUT)
 ifeq ($(TYPE),exe)
 	@echo "Running $(OUTPUT)"
 	@$(LD_PATH) valgrind $(VALGRIND_OPT) ./$(OUTPUT) $(ARGS)
@@ -240,7 +240,7 @@ endif
 $(USEMOD):
 	@$(MAKE) --directory=$(PROJECT_ROOT)/$@ $(filter-out valgrindtest test run gdb valgrind,$(MAKECMDGOALS))
 
-dist: $(USEMOD) $(OUTPUT)
+dist: $(OUTPUT)
 	@mkdir -p $(DISTDIR)
 	@echo Copying $(OUTPUT) to $(DISTDIR)/bin...
 	@cp $(OUTPUT) $(DISTDIR)
@@ -251,7 +251,7 @@ dist: $(USEMOD) $(OUTPUT)
 	#@echo Compressing dist directory...
 	#@cd $(MODULE_BUILD) && zip -r $(NAME).zip $(NAME) > /dev/null
 
-$(OUTPUT): $(OBJ)
+$(OUTPUT): $(USEMOD) $(OBJ)
 # $@ : Target name
 	@echo "Linking $@"
 	@mkdir -p $(BINDIR)
@@ -263,7 +263,7 @@ $(OBJDIR)/%.o: $(SRCDIR)/%$(SRC_EXT)
 	@mkdir -p $(OBJDIR)
 	@$(COMPILER) $(CFLAGS) $(IFLAGS) -o $@ -c $< $(OTHER)
 
-$(TEST_OUTPUT): $(TEST_OBJ)
+$(TEST_OUTPUT): $(USEMOD) $(OUTPUT) $(TEST_OBJ)
 	@echo "Linking $@"
 	@mkdir -p $(TEST_BINDIR)
 	@$(LD_PATH) $(COMPILER) -o $(TEST_OUTPUT) $(TEST_OBJ) $(TEST_LFLAGS) $(OTHER)
