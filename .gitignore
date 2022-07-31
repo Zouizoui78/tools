@@ -3,5 +3,6 @@ build
 tmp
 dist
 logs
+extlib
 
 vgcore*
