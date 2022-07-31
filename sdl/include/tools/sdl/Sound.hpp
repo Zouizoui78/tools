@@ -9,7 +9,7 @@
 namespace tools::sdl {
 
 constexpr uint32_t SOUND_SAMPLING_RATE = 44100;
-constexpr uint32_t SOUND_AMPLITUDE = 10000;
+constexpr uint32_t SOUND_AMPLITUDE = 1000;
 
 struct SoundSynthesisData {
     uint32_t sample_n;

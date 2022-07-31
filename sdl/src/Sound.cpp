@@ -156,14 +156,12 @@ void SoundPlayer::sdl_callback(void *instance, uint8_t *raw_buffer, int bytes) {
     int16_t *buffer = reinterpret_cast<int16_t *>(raw_buffer);
 
     uint32_t len = bytes / sizeof(int16_t);
-    uint8_t sounds_n = player->_sounds.size();
-    
     for (uint32_t i = 0 ; i < len ; i++) {
         double time = static_cast<double>(player->_sample_n) / SOUND_SAMPLING_RATE;
 
         buffer[i] = 0;
-        for (uint8_t sounds_i = 0 ; sounds_i < sounds_n ; sounds_i++) {
-            buffer[i] += player->_sounds[sounds_i]->synthesize(SoundSynthesisData(player->_sample_n, time));
+        for (ASound *sound : player->_sounds) {
+            buffer[i] += sound->synthesize(SoundSynthesisData(player->_sample_n, time));
         }
 
         player->_sample_n++;

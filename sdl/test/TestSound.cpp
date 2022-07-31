@@ -110,7 +110,7 @@ TEST_F(TestSound, test_setting_changes) {
             sound.set_frequency(la);
         usleep(400e3);
     }
-    for (int i = 0 ; i < 3 ; i++) {
+    for (int i = 0 ; i < 4 ; i++) {
         if (i == 0)
             sound.set_duty_cycle(0.125);
         else if (i == 1)
