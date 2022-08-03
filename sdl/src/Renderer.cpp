@@ -5,21 +5,47 @@ namespace tools::sdl {
 
 static auto logger = tools::utils::new_logger("Renderer");
 
-Renderer::Renderer() {}
+std::atomic<bool> Renderer::_sdl_initialized = false;
+std::atomic<uint8_t> Renderer::_instances_count = 0;
+
+bool Renderer::sdl_init() {
+    logger->info("SDL init.");
+    bool ret = true;
+    if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS) < 0) {
+        logger->error("Failed to initialize SDL.");
+        ret = false;
+    }
+    _sdl_initialized = ret;
+    return ret;
+}
+
+void Renderer::sdl_cleanup() {
+    logger->info("SDL cleanup.");
+    SDL_Quit();
+    _sdl_initialized = false;
+}
+
+Renderer::Renderer() {
+    _width = 640;
+    _height = 320;
+    init();
+}
 
 Renderer::Renderer(const std::string &title, int width, int height) {
     _window_title = title;
     _width = width;
     _height = height;
+    init();
 }
 
-Renderer::~Renderer() {}
+Renderer::~Renderer() {
+    if (_initialized)
+        stop();
+}
 
 bool Renderer::init() {
-    if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS) < 0) {
-        logger->error("Failed to initialize SDL.");
-        return false;
-    }
+    if (_instances_count == 0)
+        sdl_init();
 
     if(TTF_Init() != 0) {
         logger->error("Failed to initialize TTF.");
@@ -72,12 +98,23 @@ bool Renderer::init() {
 
     logger->info("Width = {}, height = {}", get_width(), get_height());
 
+    _instances_count++;
+    logger->debug("{} renderer instance(s).", _instances_count);
+
     logger->info("Init done.");
+    _initialized = true;
     return true;
 }
 
 void Renderer::stop() {
-    SDL_Quit();
+    SDL_QuitSubSystem(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
+    _initialized = false;
+
+    _instances_count--;
+    logger->debug("{} renderer instance(s).", _instances_count);
+    if (_instances_count == 0) {
+        sdl_cleanup();
+    }
 }
 
 void Renderer::refresh() {

@@ -1,9 +1,11 @@
 #ifndef RENDERER_HPP
 #define RENDERER_HPP
 
+#include <atomic>
+#include <string>
+
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
-#include <string>
 
 namespace tools::sdl {
 
@@ -15,20 +17,8 @@ class Renderer
     public:
 
     Renderer();
-    Renderer(const std::string &title, int width = -1, int height = -1);
+    Renderer(const std::string &title, int width = 640, int height = 320);
     ~Renderer();
-
-    /**
-     * @brief Renderer initialization.
-     * 
-     * @return Ok or not.
-     */
-    bool init();
-
-    /**
-     * @brief Renderer stop.
-     */
-    void stop();
 
     /**
      * @brief Render current back buffer.
@@ -188,8 +178,27 @@ class Renderer
 
     private:
 
-    int _width = 640;
-    int _height = 320;
+    /**
+     * @brief Renderer initialization.
+     * 
+     * @return Ok or not.
+     */
+    bool init();
+
+    /**
+     * @brief Renderer stop.
+     */
+    void stop();
+
+    static bool sdl_init();
+    static void sdl_cleanup();
+    static std::atomic<bool> _sdl_initialized;
+    static std::atomic<uint8_t> _instances_count;
+
+    bool _initialized = false;
+
+    int _width;
+    int _height;
     int _screen_width = 0;
     int _screen_height = 0;
 

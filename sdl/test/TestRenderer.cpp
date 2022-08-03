@@ -29,7 +29,6 @@ class TestRenderer:   public ::testing::Test
 
 TEST_F(TestRenderer, test_window) {
     Renderer r;
-    r.init();
 
     SDL_Rect rect { 100, 100, 100, 100 };
 
@@ -58,7 +57,43 @@ TEST_F(TestRenderer, test_window) {
     });
 
     w.start();
-    r.stop();
+    t.join();
+}
+
+TEST_F(TestRenderer, test_multiple_windows) {
+    Renderer r("test"), r2("test2");
+
+    r.set_draw_color(255, 0, 0);
+    r2.set_draw_color(0, 255, 0);
+
+    SDL_Rect rect { 100, 100, 100, 100 };
+
+    r.draw_rectangle(&rect, true);
+    r2.draw_rectangle(&rect, true);
+
+    r.refresh();
+    r2.refresh();
+
+    SDL_Event event;
+    tools::utils::Worker w([&]() {
+        while (SDL_PollEvent(&event)) {
+            if (event.window.event == SDL_WINDOWEVENT_CLOSE) {
+                w.stop();
+            }
+        }
+    }, false);
+
+    w.set_frequency(10);
+
+    std::cout << "Do you see a red square in a black window and a green square in a second window ? (y/n)" << std::endl;
+    std::thread t([&]() {
+        char c;
+        std::cin >> c;
+        EXPECT_EQ(c, 'y');
+        w.stop();
+    });
+
+    w.start();
     t.join();
 }
 

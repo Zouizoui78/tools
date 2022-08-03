@@ -119,6 +119,9 @@ else
 endif
 OUTPUT:=$(BINDIR)/$(OUTPUT)
 
+# .so deps
+USEMOD_DEPS=$(USEMOD:%=$(BINDIR)/lib$(PROJECT_NAME)-%$(LIB_EXT))
+
 # Include variables
 INCLUDEDIR=include                   # Get dependencies include path
 IFLAGS=-Iinclude -I$(EXTLIB_INCLUDE) $(USEMOD:%=-I$(PROJECT_ROOT)/%/include)
@@ -237,7 +240,7 @@ else
 	$(error "Cannot run a library")
 endif
 
-$(USEMOD):
+$(USEMOD_DEPS):
 	@$(MAKE) --directory=$(PROJECT_ROOT)/$@ $(filter-out valgrindtest test run gdb valgrind,$(MAKECMDGOALS))
 
 dist: $(OUTPUT)
@@ -251,7 +254,7 @@ dist: $(OUTPUT)
 	#@echo Compressing dist directory...
 	#@cd $(MODULE_BUILD) && zip -r $(NAME).zip $(NAME) > /dev/null
 
-$(OUTPUT): $(USEMOD) $(OBJ)
+$(OUTPUT): $(USEMOD_DEPS) $(OBJ)
 # $@ : Target name
 	@echo "Linking $@"
 	@mkdir -p $(BINDIR)
@@ -263,7 +266,7 @@ $(OBJDIR)/%.o: $(SRCDIR)/%$(SRC_EXT)
 	@mkdir -p $(OBJDIR)
 	@$(COMPILER) $(CFLAGS) $(IFLAGS) -o $@ -c $< $(OTHER)
 
-$(TEST_OUTPUT): $(USEMOD) $(OUTPUT) $(TEST_OBJ)
+$(TEST_OUTPUT): $(USEMOD_DEPS) $(OUTPUT) $(TEST_OBJ)
 	@echo "Linking $@"
 	@mkdir -p $(TEST_BINDIR)
 	@$(LD_PATH) $(COMPILER) -o $(TEST_OUTPUT) $(TEST_OBJ) $(TEST_LFLAGS) $(OTHER)
@@ -285,4 +288,4 @@ clean:
 distclean:
 	@rm -r $(DISTDIR)
 
-.PHONY: all dist run gdb test clean distclean valgrind valgrindtest newclass $(USEMOD)
+.PHONY: all dist run gdb test clean distclean valgrind valgrindtest newclass
