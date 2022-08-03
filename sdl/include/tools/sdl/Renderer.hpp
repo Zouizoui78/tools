@@ -37,6 +37,9 @@ class Renderer
     void set_height(int height);
     void set_size(int width, int height);
 
+    void set_position(int x, int y);
+    void center();
+
     int get_width() { return _width; }
 
     int get_height() { return _height; }

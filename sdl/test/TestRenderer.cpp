@@ -63,6 +63,9 @@ TEST_F(TestRenderer, test_window) {
 TEST_F(TestRenderer, test_multiple_windows) {
     Renderer r("test"), r2("test2");
 
+    r.set_position(SDL_WINDOWPOS_CENTERED, 300);
+    r2.set_position(SDL_WINDOWPOS_CENTERED, 700);
+
     r.set_draw_color(255, 0, 0);
     r2.set_draw_color(0, 255, 0);
 

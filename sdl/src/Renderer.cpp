@@ -66,18 +66,11 @@ bool Renderer::init() {
 
     _window = SDL_CreateWindow(
         _window_title.c_str(),
-        _screen_width / 2 - _width / 2,
-        _screen_height / 2 - _height / 2,
+        SDL_WINDOWPOS_CENTERED,
+        SDL_WINDOWPOS_CENTERED,
         _width,
         _height,
         SDL_WINDOW_RESIZABLE
-    // #ifdef WINDOWS
-    //     SDL_WINDOW_BORDERLESS
-    // #elif defined(DEBUG)
-    //     SDL_WINDOW_BORDERLESS
-    // #else
-    //     SDL_WINDOW_FULLSCREEN
-    // #endif
     );
 
     if(_window == nullptr) {
@@ -140,6 +133,14 @@ void Renderer::set_height(int height) {
 void Renderer::set_size(int width, int height) {
     _width = width;
     _height = height;
+}
+
+void Renderer::set_position(int x, int y) {
+    SDL_SetWindowPosition(_window, x, y);
+}
+
+void Renderer::center() {
+    SDL_SetWindowPosition(_window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
 }
 
 SDL_Texture* Renderer::get_render_target() {
