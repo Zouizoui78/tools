@@ -1,14 +1,14 @@
-#include "tools/sdl/Renderer.hpp"
+#include "tools/sdl/Window.hpp"
 #include "tools/utils/Log.hpp"
 
 namespace tools::sdl {
 
-static auto logger = tools::utils::new_logger("Renderer");
+static auto logger = tools::utils::new_logger("Window");
 
-std::atomic<bool> Renderer::_sdl_initialized = false;
-std::atomic<uint8_t> Renderer::_instances_count = 0;
+std::atomic<bool> Window::_sdl_initialized = false;
+std::atomic<uint8_t> Window::_instances_count = 0;
 
-bool Renderer::sdl_init() {
+bool Window::sdl_init() {
     logger->info("SDL init.");
     bool ret = true;
     if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS) < 0) {
@@ -19,31 +19,31 @@ bool Renderer::sdl_init() {
     return ret;
 }
 
-void Renderer::sdl_cleanup() {
+void Window::sdl_cleanup() {
     logger->info("SDL cleanup.");
     SDL_Quit();
     _sdl_initialized = false;
 }
 
-Renderer::Renderer() {
+Window::Window() {
     _width = 640;
     _height = 320;
     init();
 }
 
-Renderer::Renderer(const std::string &title, int width, int height) {
+Window::Window(const std::string &title, int width, int height) {
     _window_title = title;
     _width = width;
     _height = height;
     init();
 }
 
-Renderer::~Renderer() {
+Window::~Window() {
     if (_initialized)
         stop();
 }
 
-bool Renderer::init() {
+bool Window::init() {
     if (_instances_count == 0)
         sdl_init();
 
@@ -99,7 +99,7 @@ bool Renderer::init() {
     return true;
 }
 
-void Renderer::stop() {
+void Window::stop() {
     SDL_QuitSubSystem(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
     _initialized = false;
 
@@ -110,11 +110,11 @@ void Renderer::stop() {
     }
 }
 
-void Renderer::refresh() {
+void Window::refresh() {
     SDL_RenderPresent(_renderer);
 }
 
-bool Renderer::clear() {
+bool Window::clear() {
     if(SDL_RenderClear(_renderer) == -1) {
         logger->error("Failed to clear renderer.");
         return false;
@@ -122,32 +122,32 @@ bool Renderer::clear() {
     return true;
 }
 
-void Renderer::set_width(int width) {
+void Window::set_width(int width) {
     _width = width;
 }
 
-void Renderer::set_height(int height) {
+void Window::set_height(int height) {
     _height = height;
 }
 
-void Renderer::set_size(int width, int height) {
+void Window::set_size(int width, int height) {
     _width = width;
     _height = height;
 }
 
-void Renderer::set_position(int x, int y) {
+void Window::set_position(int x, int y) {
     SDL_SetWindowPosition(_window, x, y);
 }
 
-void Renderer::center() {
+void Window::center() {
     SDL_SetWindowPosition(_window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
 }
 
-SDL_Texture* Renderer::get_render_target() {
+SDL_Texture* Window::get_render_target() {
     return SDL_GetRenderTarget(_renderer);
 }
 
-bool Renderer::set_render_target(SDL_Texture* dst) {
+bool Window::set_render_target(SDL_Texture* dst) {
     if(SDL_SetRenderTarget(_renderer, dst) == -1) {
         logger->error("Failed to set rendering target.");
         return false;
@@ -155,7 +155,7 @@ bool Renderer::set_render_target(SDL_Texture* dst) {
     return true;
 }
 
-bool Renderer::set_viewport(SDL_Rect* rect) {
+bool Window::set_viewport(SDL_Rect* rect) {
     if(rect == nullptr) {
         logger->error("Cannot set viewport, nullptr.");
         return false;
@@ -170,11 +170,11 @@ bool Renderer::set_viewport(SDL_Rect* rect) {
     return true;
 }
 
-bool Renderer::set_draw_color(SDL_Color& color) {
+bool Window::set_draw_color(SDL_Color& color) {
     return set_draw_color(color.r, color.g, color.b, color.a);   
 }
 
-bool Renderer::set_draw_color(uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
+bool Window::set_draw_color(uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
     if(SDL_SetRenderDrawColor(
         _renderer,
         r,
@@ -189,7 +189,7 @@ bool Renderer::set_draw_color(uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
     return true; 
 }
 
-TTF_Font* Renderer::load_font(std::string font_path, int size) {
+TTF_Font* Window::load_font(std::string font_path, int size) {
     if(font_path.empty()) {
         logger->error("Cannot load font, empty path.");
         return nullptr;
@@ -203,7 +203,7 @@ TTF_Font* Renderer::load_font(std::string font_path, int size) {
     return font;
 }
 
-SDL_Texture* Renderer::load_image(std::string img_path) {
+SDL_Texture* Window::load_image(std::string img_path) {
     if(img_path.empty()) {
         logger->error("Cannot load image, empty path.");
         return nullptr;
@@ -225,7 +225,7 @@ SDL_Texture* Renderer::load_image(std::string img_path) {
     return texture;
 }
 
-SDL_Texture* Renderer::load_text(
+SDL_Texture* Window::load_text(
     std::string text,
     SDL_Color color,
     TTF_Font* font
@@ -258,7 +258,7 @@ SDL_Texture* Renderer::load_text(
     return texture;
 }
 
-bool Renderer::render_texture(SDL_Texture* texture, SDL_Rect* dst, SDL_Rect* portion) {
+bool Window::render_texture(SDL_Texture* texture, SDL_Rect* dst, SDL_Rect* portion) {
     if(texture == nullptr) {
         logger->error("Cannot render texture, nullptr.");
         return false;
@@ -271,7 +271,7 @@ bool Renderer::render_texture(SDL_Texture* texture, SDL_Rect* dst, SDL_Rect* por
     return true;
 }
 
-bool Renderer::crop_texture(SDL_Texture* src, SDL_Texture*& dst, SDL_Rect* rect) {
+bool Window::crop_texture(SDL_Texture* src, SDL_Texture*& dst, SDL_Rect* rect) {
     if(src == nullptr) {
         logger->error("Cannot crop texture, source = nullptr.");
         return false;
@@ -302,7 +302,7 @@ bool Renderer::crop_texture(SDL_Texture* src, SDL_Texture*& dst, SDL_Rect* rect)
     return true;
 }
 
-bool Renderer::get_screen_size() {
+bool Window::get_screen_size() {
     SDL_DisplayMode mode = SDL_DisplayMode();
     if(SDL_GetDesktopDisplayMode(0, &mode) == -1) {
         logger->error("Failed to get display information.");
@@ -313,7 +313,7 @@ bool Renderer::get_screen_size() {
     return true;
 }
 
-SDL_Texture* Renderer::surface_to_texture(SDL_Surface* surface) {
+SDL_Texture* Window::surface_to_texture(SDL_Surface* surface) {
     if(surface == nullptr) {
         logger->error("Cannot create texture from surface, nullptr.");
         return nullptr;
@@ -329,7 +329,7 @@ SDL_Texture* Renderer::surface_to_texture(SDL_Surface* surface) {
     return texture;
 }
 
-bool Renderer::render_to_texture(SDL_Texture* src, SDL_Texture* dst, SDL_Rect* dstRect) {
+bool Window::render_to_texture(SDL_Texture* src, SDL_Texture* dst, SDL_Rect* dstRect) {
     // Backup rendering target.
     SDL_Texture* target = this->get_render_target();
 
@@ -353,11 +353,11 @@ bool Renderer::render_to_texture(SDL_Texture* src, SDL_Texture* dst, SDL_Rect* d
     return true;
 }
 
-SDL_Texture* Renderer::create_blank_render_target(int width, int height) {
+SDL_Texture* Window::create_blank_render_target(int width, int height) {
     return SDL_CreateTexture(_renderer, SDL_GetWindowPixelFormat(_window), SDL_TEXTUREACCESS_TARGET, width, height);
 }
 
-bool Renderer::draw_rectangle(SDL_Rect* rect, bool fill) {
+bool Window::draw_rectangle(SDL_Rect* rect, bool fill) {
     if(rect == nullptr) {
         logger->error("draw_rectangle : rect = nullptr.");
         return false;

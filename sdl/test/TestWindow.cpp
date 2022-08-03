@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "tools/sdl/Renderer.hpp"
+#include "tools/sdl/Window.hpp"
 #include "tools/utils/Log.hpp"
 
 #include "tools/utils/Worker.hpp"
@@ -8,16 +8,16 @@
 namespace test {
 
 using namespace tools::sdl;
-static auto logger = tools::utils::new_logger("TestRenderer");
+static auto logger = tools::utils::new_logger("TestWindow");
 
-class TestRenderer:   public ::testing::Test
+class TestWindow:   public ::testing::Test
 {
     protected:
-    TestRenderer() {
+    TestWindow() {
         outputs_path = std::getenv("TEST_OUTPUTS");
     }
 
-    virtual ~TestRenderer() {}
+    virtual ~TestWindow() {}
 
     virtual void SetUp() {}
 
@@ -27,8 +27,8 @@ class TestRenderer:   public ::testing::Test
     std::string outputs_path;
 };
 
-TEST_F(TestRenderer, test_window) {
-    Renderer r;
+TEST_F(TestWindow, test_window) {
+    Window r;
 
     SDL_Rect rect { 100, 100, 100, 100 };
 
@@ -60,8 +60,8 @@ TEST_F(TestRenderer, test_window) {
     t.join();
 }
 
-TEST_F(TestRenderer, test_multiple_windows) {
-    Renderer r("test"), r2("test2");
+TEST_F(TestWindow, test_multiple_windows) {
+    Window r("test"), r2("test2");
 
     r.set_position(SDL_WINDOWPOS_CENTERED, 300);
     r2.set_position(SDL_WINDOWPOS_CENTERED, 700);

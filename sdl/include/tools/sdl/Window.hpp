@@ -1,5 +1,5 @@
-#ifndef RENDERER_HPP
-#define RENDERER_HPP
+#ifndef WINDOW_HPP
+#define WINDOW_HPP
 
 #include <atomic>
 #include <string>
@@ -12,13 +12,13 @@ namespace tools::sdl {
 /**
  * This class handles everything directly related to rendering on screen.
  */
-class Renderer
+class Window
 {
     public:
 
-    Renderer();
-    Renderer(const std::string &title, int width = 640, int height = 320);
-    ~Renderer();
+    Window();
+    Window(const std::string &title, int width = 640, int height = 320);
+    ~Window();
 
     /**
      * @brief Render current back buffer.
@@ -218,4 +218,4 @@ class Renderer
 
 } // namespace tools::sdl
 
-#endif // RENDERER_HPP
+#endif // WINDOW_HPP
