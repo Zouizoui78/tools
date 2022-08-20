@@ -4,5 +4,6 @@ tmp
 dist
 logs
 extlib
+.vscode
 
 vgcore*

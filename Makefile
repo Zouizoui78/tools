@@ -25,9 +25,6 @@ MODULES=$(dir $(shell find -name 'module.cfg' -not -path "./.make_resources/*"))
 # Build all modules.
 all: $(MODULES)
 
-# Build all modules with gcc optimizations enabled.
-release: $(MODULES)
-
 # Run tests for all modules.
 test: $(MODULES)
 

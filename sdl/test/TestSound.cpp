@@ -1,8 +1,9 @@
 #include <gtest/gtest.h>
-#include "tools/sdl/Sound.hpp"
 #include "tools/utils/Log.hpp"
-
 #include "tools/utils/Stopwatch.hpp"
+#include "tools/sdl/Sound.hpp"
+
+#include <unistd.h>
 
 namespace test {
 

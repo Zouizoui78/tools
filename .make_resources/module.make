@@ -1,5 +1,10 @@
 include module.cfg
 
+# Enable parallelism
+ifneq ($(AS_DEP),1)
+MAKEFLAGS := --jobs=$(shell nproc)
+endif
+
 PROJECT_ROOT=..
 EXTLIB=$(PROJECT_ROOT)/extlib
 EXTLIB_BIN=$(EXTLIB)/bin
@@ -87,8 +92,6 @@ CFLAGS=-std=c++$(CPP) -Wall -Wextra -Werror -MMD -MP
 BUILDDIR=$(PROJECT_ROOT)/build
 ifeq ($(MODE), release)
 	BUILD=$(BUILDDIR)/release
-else ifeq ($(PLATFORM),windows)
-	BUILD=$(BUILDDIR)/windows
 else
 	BUILD=$(BUILDDIR)/debug
 endif
@@ -98,16 +101,12 @@ OBJDIR=$(BUILD)/obj/$(MODULE_NAME)
 
 # OS dependent stuff
 ifeq ($(OS),Windows_NT)
-	LIB_EXT=.lib
+	LIB_EXT=.dll
 	EXE_EXT=.exe
-    OS_DEFINE=-D WINDOWS
-else ifeq ($(PLATFORM),windows)
-	LIB_EXT=.lib
-	EXE_EXT=.exe
-    OS_DEFINE=-D WINDOWS
+    OS_DEFINE=-DWINDOWS
 else
 	LIB_EXT=.so
-    OS_DEFINE=-D LINUX
+    OS_DEFINE=-DLINUX
 endif
 
 # Output file
@@ -120,7 +119,7 @@ endif
 OUTPUT:=$(BINDIR)/$(OUTPUT)
 
 # .so deps
-USEMOD_DEPS=$(USEMOD:%=$(BINDIR)/lib$(PROJECT_NAME)-%$(LIB_EXT))
+USEMOD_OUTPUTS=$(USEMOD:%=$(BINDIR)/lib$(PROJECT_NAME)-%$(LIB_EXT))
 
 # Include variables
 INCLUDEDIR=include                   # Get dependencies include path
@@ -129,20 +128,7 @@ IFLAGS=-Iinclude -I$(EXTLIB_INCLUDE) $(USEMOD:%=-I$(PROJECT_ROOT)/%/include)
 # Linking flags                                     # Get dependencies link flag
 LFLAGS=-L$(BINDIR) -L$(EXTLIB_BIN) -L$(EXTLIB_LIB) $(USEMOD:%=-l$(PROJECT_NAME)-%)
 
-# Often times Windows dlls have different name than their Linux equivalent
-# e.g. libcurl.so -> libcurl-x64.dll
-# Renaming the Windows dll doesn't help because the name is "hardcoded" in the dll
-# so even if we link to libcurl.dll the exe will look for libcurl-x64.dll at runtime.
-# Additionally when targeting Windows we should statically link the standard libs.
-# For these reasons we need separate linking logic and variables for Windows and Linux.
-MINGW_LFLAGS=$(WINDOWS_LINKLIB:%=-l%) -static-libgcc -static-libstdc++
-ifeq ($(PLATFORM),windows)
-	LFLAGS+=$(MINGW_LFLAGS)
-else ifeq ($(OS),Windows_NT)
-	LFLAGS+=$(MINGW_LFLAGS)
-else
-    LFLAGS+=$(LINKLIB:%=-l%)
-endif
+LFLAGS+=$(LINKLIB:%=-l%)
 ifeq ($(TYPE),lib)
 	LFLAGS+=-shared
 endif
@@ -176,13 +162,11 @@ TEST_DEPS=$(TEST_OBJ:.o=.d)
 
 OTHER=$(OS_DEFINE)
 ifeq ($(MODE), release)
-	OTHER+=-O3 -s
-else ifeq ($(PLATFORM),windows)
-# If cross-compiling
-	OTHER+=-O3 -s
-	COMPILER=x86_64-w64-mingw32-g++
+	CFLAGS+=-O3
+	LFLAGS+=-s
 else
-	OTHER+=-g -D DEBUG
+	CFLAGS+=-g -Og
+	OTHER+=-DDEBUG
 endif
 
 ifeq ($(TYPE),lib)
@@ -198,11 +182,7 @@ endif
 test: $(TEST_OUTPUT)
 	@echo "Running tests for module $(MODULE_NAME)"
 	@mkdir -p $(TEST_GTEST_OUTPUT_DIR)
-ifeq ($(OS),Windows_NT)
-	PATH=$(BINDIR) TEST_OUTPUTS=$(TEST_OUTPUTS) GTEST_OUTPUT="xml:$(TEST_GTEST_OUTPUT_FILE)" $(FILTER) ./$(TEST_OUTPUT)
-else
 	$(LD_PATH) TEST_OUTPUTS=$(TEST_OUTPUTS) GTEST_OUTPUT="xml:$(TEST_GTEST_OUTPUT_FILE)" $(FILTER) ./$(TEST_OUTPUT)
-endif
 valgrindtest: $(TEST_OUTPUT)
 	@echo "Running tests for module $(MODULE_NAME) through valgrind"
 	@mkdir -p $(TEST_GTEST_OUTPUT_DIR)
@@ -240,8 +220,10 @@ else
 	$(error "Cannot run a library")
 endif
 
-$(USEMOD_DEPS):
-	@$(MAKE) --directory=$(PROJECT_ROOT)/$@ $(filter-out valgrindtest test run gdb valgrind,$(MAKECMDGOALS))
+$(USEMOD_OUTPUTS): $(USEMOD)
+
+$(USEMOD):
+	@$(MAKE) AS_DEP=1 --directory=$(PROJECT_ROOT)/$(filter $(USEMOD),$@) $(filter-out valgrindtest test run gdb valgrind,$(MAKECMDGOALS))
 
 dist: $(OUTPUT)
 	@mkdir -p $(DISTDIR)
@@ -254,19 +236,19 @@ dist: $(OUTPUT)
 	#@echo Compressing dist directory...
 	#@cd $(MODULE_BUILD) && zip -r $(NAME).zip $(NAME) > /dev/null
 
-$(OUTPUT): $(USEMOD_DEPS) $(OBJ)
+$(OUTPUT): $(USEMOD_OUTPUTS) $(OBJ)
 # $@ : Target name
 	@echo "Linking $@"
 	@mkdir -p $(BINDIR)
-	@$(LD_PATH) $(COMPILER) -o $(OUTPUT) $(OBJ) $(LFLAGS) $(OTHER)
+	$(LD_PATH) $(COMPILER) -o $(OUTPUT) $(OBJ) $(LFLAGS) $(OTHER)
 
 $(OBJDIR)/%.o: $(SRCDIR)/%$(SRC_EXT)
 	@# $< : First dependency
 	@echo "Compiling $<"
 	@mkdir -p $(OBJDIR)
-	@$(COMPILER) $(CFLAGS) $(IFLAGS) -o $@ -c $< $(OTHER)
+	$(COMPILER) $(CFLAGS) $(IFLAGS) -o $@ -c $< $(OTHER)
 
-$(TEST_OUTPUT): $(USEMOD_DEPS) $(OUTPUT) $(TEST_OBJ)
+$(TEST_OUTPUT): $(USEMOD_OUTPUTS) $(OUTPUT) $(TEST_OBJ)
 	@echo "Linking $@"
 	@mkdir -p $(TEST_BINDIR)
 	@$(LD_PATH) $(COMPILER) -o $(TEST_OUTPUT) $(TEST_OBJ) $(TEST_LFLAGS) $(OTHER)
