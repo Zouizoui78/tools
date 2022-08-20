@@ -20,8 +20,6 @@ include $(PROJECT_ROOT)/project.cfg
 
 # USEFUL VARIABLES AND FUNCTIONS
 
-LD_PATH=LD_LIBRARY_PATH=$(BINDIR):$(EXTLIB_BIN)
-
 INCLUDE_PATH=include
 HEADER_EXT=.hpp
 SRC_EXT=.cpp
@@ -104,9 +102,11 @@ ifeq ($(OS),Windows_NT)
 	LIB_EXT=.dll
 	EXE_EXT=.exe
     OS_DEFINE=-DWINDOWS
+	LD_PATH=PATH=$$PATH:$(BINDIR):$(EXTLIB_BIN)
 else
 	LIB_EXT=.so
     OS_DEFINE=-DLINUX
+	LD_PATH=LD_LIBRARY_PATH=$(BINDIR):$(EXTLIB_BIN)
 endif
 
 # Output file
@@ -144,6 +144,12 @@ TESTDIR=$(BUILDDIR)/test
 TEST_OUTPUTS=$(CURDIR)/$(TESTDIR)/output/$(MODULE_NAME)
 TEST_GTEST_OUTPUT_DIR=$(TESTDIR)/gtest_reports
 TEST_GTEST_OUTPUT_FILE=$(TEST_GTEST_OUTPUT_DIR)/$(MODULE_NAME).xml
+
+# https://github.com/google/googletest/issues/2686
+ifeq ($(OS),Windows_NT)
+TEST_GTEST_OUTPUT_FILE:=//$(TEST_GTEST_OUTPUT_FILE)
+endif
+
 TEST_BINDIR=$(TESTDIR)/bin
 TEST_OBJDIR=$(TESTDIR)/obj/$(MODULE_NAME)
 TEST_SRCDIR=test
@@ -182,7 +188,7 @@ endif
 test: $(TEST_OUTPUT)
 	@echo "Running tests for module $(MODULE_NAME)"
 	@mkdir -p $(TEST_GTEST_OUTPUT_DIR)
-	$(LD_PATH) TEST_OUTPUTS=$(TEST_OUTPUTS) GTEST_OUTPUT="xml:$(TEST_GTEST_OUTPUT_FILE)" $(FILTER) ./$(TEST_OUTPUT)
+	$(LD_PATH) TEST_OUTPUTS=$(TEST_OUTPUTS) GTEST_OUTPUT=xml:$(TEST_GTEST_OUTPUT_FILE) $(FILTER) ./$(TEST_OUTPUT)
 valgrindtest: $(TEST_OUTPUT)
 	@echo "Running tests for module $(MODULE_NAME) through valgrind"
 	@mkdir -p $(TEST_GTEST_OUTPUT_DIR)
@@ -240,13 +246,13 @@ $(OUTPUT): $(USEMOD_OUTPUTS) $(OBJ)
 # $@ : Target name
 	@echo "Linking $@"
 	@mkdir -p $(BINDIR)
-	$(LD_PATH) $(COMPILER) -o $(OUTPUT) $(OBJ) $(LFLAGS) $(OTHER)
+	@$(LD_PATH) $(COMPILER) -o $(OUTPUT) $(OBJ) $(LFLAGS) $(OTHER)
 
 $(OBJDIR)/%.o: $(SRCDIR)/%$(SRC_EXT)
 	@# $< : First dependency
 	@echo "Compiling $<"
 	@mkdir -p $(OBJDIR)
-	$(COMPILER) $(CFLAGS) $(IFLAGS) -o $@ -c $< $(OTHER)
+	@$(COMPILER) $(CFLAGS) $(IFLAGS) -o $@ -c $< $(OTHER)
 
 $(TEST_OUTPUT): $(USEMOD_OUTPUTS) $(OUTPUT) $(TEST_OBJ)
 	@echo "Linking $@"

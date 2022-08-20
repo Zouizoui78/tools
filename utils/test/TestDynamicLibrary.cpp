@@ -7,7 +7,12 @@ namespace test {
 using namespace tools::utils;
 
 static auto logger = new_logger("TestDynamicLibrary");
+
+#ifdef WINDOWS
+static std::string path = "test/test_resources/dynamic_library/test.dll";
+#else
 static std::string path = "test/test_resources/dynamic_library/test.so";
+#endif
 
 class TestDynamicLibrary:   public ::testing::Test
 {

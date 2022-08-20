@@ -25,7 +25,7 @@ class TestStopwatch:   public ::testing::Test
 
 TEST_F(TestStopwatch, test_stopwatch) {
     Stopwatch s("test");
-    usleep(1e3);
+    std::this_thread::sleep_for(std::chrono::milliseconds(1));
 }
 
 } // namespace test
