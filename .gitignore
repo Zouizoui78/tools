@@ -6,4 +6,5 @@ logs
 extlib
 .vscode
 
+# Files
 vgcore*
