@@ -7,7 +7,6 @@ set(SRC_TEST
     main.cpp
     utils/TestDynamicLibrary.cpp
     utils/TestFiles.cpp
-    utils/TestLog.cpp
     utils/TestObservable.cpp
     utils/TestScheduler.cpp
     utils/TestStopwatch.cpp

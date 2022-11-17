@@ -5,7 +5,6 @@
 namespace test {
 
 using namespace tools::utils::files;
-static auto logger = tools::utils::new_logger("TestFiles");
 
 class TestFiles:   public ::testing::Test
 {

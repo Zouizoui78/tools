@@ -3,8 +3,6 @@
 
 namespace tools::utils {
 
-static auto logger = new_logger("Observable");
-
 bool Observable::is_event(const std::string &event_id) {
     std::lock_guard lock(_subs_mutex);
     return _map_subscribers.find(event_id) != _map_subscribers.end();

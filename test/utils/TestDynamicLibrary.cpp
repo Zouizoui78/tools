@@ -1,12 +1,9 @@
 #include <gtest/gtest.h>
 #include "tools/utils/DynamicLibrary.hpp"
-#include "tools/utils/Log.hpp"
 
 namespace test {
 
 using namespace tools::utils;
-
-static auto logger = new_logger("TestDynamicLibrary");
 
 // The small lib used for testing this
 // is compiled in the working directory

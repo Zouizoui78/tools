@@ -3,8 +3,6 @@
 
 namespace tools::utils::files {
 
-std::shared_ptr<spdlog::logger> logger = new_logger("Files");
-
 std::string read_text_file(const std::string &path) {
     std::ifstream file(path);
     if (file.is_open()) {
@@ -16,7 +14,7 @@ std::string read_text_file(const std::string &path) {
         return ret;
     }
     else {
-        logger->error("Failed to open file {}.", path);
+        SPDLOG_ERROR("Failed to open file {}.", path);
         return "";
     }
 }
@@ -26,14 +24,14 @@ std::vector<uint8_t> read_binary_file(const std::string &path) {
 
     std::ifstream file(path, std::ios::binary);
     if (!file.is_open()) {
-        logger->error("Failed to open file {}.", path);
+        SPDLOG_ERROR("Failed to open file {}.", path);
         return result;
     }
 
     auto len = std::filesystem::file_size(path);
     uint8_t block_size = sizeof(uint8_t);
     size_t block_n = len / block_size;
-    logger->debug("Reading {} bytes from '{}'", block_n, path);
+    SPDLOG_DEBUG("Reading {} bytes from '{}'", block_n, path);
 
     uint8_t tmp;
     for (size_t i = 0 ; i < block_n ; ++i) {
@@ -47,7 +45,7 @@ std::vector<uint8_t> read_binary_file(const std::string &path) {
 bool write_binary_file(const std::vector<uint8_t> &data, const std::string &path) {
     std::ofstream file(path, std::ios::binary);
     if (!file.is_open()) {
-        logger->error("Failed to open file {}.", path);
+        SPDLOG_ERROR("Failed to open file {}.", path);
         return false;
     }
 

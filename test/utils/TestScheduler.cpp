@@ -1,11 +1,9 @@
 #include <gtest/gtest.h>
 #include "tools/utils/Scheduler.hpp"
-#include "tools/utils/Log.hpp"
 
 namespace test {
 
 using namespace tools::utils;
-static auto logger = new_logger("TestScheduler");
 
 class TestScheduler:   public ::testing::Test
 {

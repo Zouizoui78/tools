@@ -9,8 +9,6 @@ namespace test {
 
 using namespace tools::utils;
 
-static auto logger = tools::utils::new_logger("TestObservable");
-
 class DummyObserver : public IObserver {
 public:
     virtual ~DummyObserver () {}

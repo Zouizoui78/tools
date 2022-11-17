@@ -7,7 +7,6 @@
 namespace test {
 
 using namespace tools::net;
-static auto logger = tools::utils::new_logger("TestUDP");
 
 class TestUDP:   public ::testing::Test
 {
@@ -37,7 +36,7 @@ TEST_F(TestUDP, test_udp_listen) {
         received_bytes = size;
 
         strcpy(received, reinterpret_cast<char *>(data));
-        logger->info("Received {} bytes : {}", size, received);
+        SPDLOG_INFO("Received {} bytes : {}", size, received);
     });
 
     int s = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);

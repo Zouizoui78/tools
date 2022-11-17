@@ -5,8 +5,6 @@
 
 namespace tools::sdl {
 
-static auto logger = tools::utils::new_logger("InputMapper");
-
 InputMapper::InputMapper() {}
     
 InputMapper::~InputMapper() {}
@@ -18,7 +16,7 @@ void InputMapper::set_mapping(SDL_Keycode key, uint8_t mapped_key) {
 bool InputMapper::set_mapping(const std::string &key, uint8_t mapped_key) {
     SDL_Keycode sdl_key = SDL_GetKeyFromName(key.c_str());
     if (sdl_key == SDLK_UNKNOWN) {
-        logger->error("Unknown key '{}'", key);
+        SPDLOG_ERROR("Unknown key '{}'", key);
         return false;
     }
     set_mapping(sdl_key, mapped_key);
@@ -32,7 +30,7 @@ void InputMapper::remove_mapping(SDL_Keycode key) {
 bool InputMapper::remove_mapping(const std::string &key) {
     SDL_Keycode sdl_key = SDL_GetKeyFromName(key.c_str());
     if (sdl_key == SDLK_UNKNOWN) {
-        logger->error("Unknown key : '{}' ; error : {}", key, SDL_GetError());
+        SPDLOG_ERROR("Unknown key : '{}' ; error : {}", key, SDL_GetError());
         return false;
     }
     remove_mapping(sdl_key);
@@ -58,7 +56,7 @@ bool InputMapper::load_map(const std::string &json_path) {
         j = json::parse(content);
     }
     catch (const nlohmann::detail::parse_error &e) {
-        logger->error("Failed to parse input map json '{}' : {}", json_path, e.what());
+        SPDLOG_ERROR("Failed to parse input map json '{}' : {}", json_path, e.what());
         return false;
     }
 
@@ -75,7 +73,7 @@ int InputMapper::map_key(SDL_Keycode key) {
 int InputMapper::map_key(const std::string &key) {
     SDL_Keycode sdl_key = SDL_GetKeyFromName(key.c_str());
     if (sdl_key == SDLK_UNKNOWN) {
-        logger->error("Unknown key '{}'", key);
+        SPDLOG_ERROR("Unknown key '{}'", key);
         return false;
     }
     return map_key(sdl_key);

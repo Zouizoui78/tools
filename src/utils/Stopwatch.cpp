@@ -3,8 +3,6 @@
 
 namespace tools::utils {
 
-static auto logger = new_logger("Stopwatch");
-
 Stopwatch::Stopwatch(const std::string &name) {
     _name = name;
     reset();
@@ -39,7 +37,7 @@ void Stopwatch::log_duration(uint64_t duration) const {
         unit = " us";
     }
     
-    logger->info("{}{:.3f}{}", prefix, d, unit);
+    SPDLOG_INFO("{}{:.3f}{}", prefix, d, unit);
 }
 
 void Stopwatch::reset() {

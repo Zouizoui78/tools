@@ -1,13 +1,12 @@
 #include <gtest/gtest.h>
 #include "tools/sdl/InputMapper.hpp"
+#include "tools/utils/Log.hpp"
 
 #include "tools/utils/Files.hpp"
-#include "tools/utils/Log.hpp"
 
 namespace test {
 
 using namespace tools::sdl;
-static auto logger = tools::utils::new_logger("TestInputMapper");
 
 class TestInputMapper:   public ::testing::Test
 {
@@ -27,7 +26,7 @@ class TestInputMapper:   public ::testing::Test
 };
 
 TEST_F(TestInputMapper, test_add_remove_mapping) {
-    logger->info("Errors are expected in this test.");
+    SPDLOG_INFO("Errors are expected in this test.");
     InputMapper mapper;
     ASSERT_TRUE(mapper.set_mapping("a", 17));
     ASSERT_TRUE(mapper.set_mapping("a", 45));

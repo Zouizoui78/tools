@@ -5,7 +5,6 @@
 namespace test {
 
 using namespace tools::net;
-static auto logger = tools::utils::new_logger("TestHTTPClient");
 
 class TestHTTPClient:   public ::testing::Test
 {
@@ -94,7 +93,7 @@ TEST_F(TestHTTPClient, multiple_clients) {
 }
 
 TEST_F(TestHTTPClient, failures) {
-    logger->info("Errors are expected in this test.");
+    SPDLOG_INFO("Errors are expected in this test.");
     HTTPClient client;
     ASSERT_TRUE(client.is_ok());
     HTTPReply reply;

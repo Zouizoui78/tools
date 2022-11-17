@@ -2,7 +2,6 @@ set(
     SRC
     src/utils/DynamicLibrary.cpp
     src/utils/Files.cpp
-    src/utils/Log.cpp
     src/utils/Observable.cpp
     src/utils/Scheduler.cpp
     src/utils/Stopwatch.cpp

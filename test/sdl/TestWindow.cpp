@@ -1,13 +1,12 @@
 #include <gtest/gtest.h>
 #include "tools/sdl/Window.hpp"
 #include "tools/utils/Log.hpp"
-#include "tools/utils/Worker.hpp"
 #include "tools/utils/Stopwatch.hpp"
+#include "tools/utils/Worker.hpp"
 
 namespace test {
 
 using namespace tools::sdl;
-static auto logger = tools::utils::new_logger("TestWindow");
 
 class TestWindow:   public ::testing::Test
 {

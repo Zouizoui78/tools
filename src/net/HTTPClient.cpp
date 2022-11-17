@@ -3,47 +3,45 @@
 
 namespace tools::net {
 
-static auto logger = tools::utils::new_logger("HTTPClient");
-
 std::atomic<uint32_t> HTTPClient::_instance_count = 0;
 std::atomic<bool> HTTPClient::_global_curl_initialized = false;
 
 HTTPClient::HTTPClient() {
-    logger->debug("HTTPClient ctor");
+    SPDLOG_DEBUG("HTTPClient ctor");
 
     {
         std::lock_guard<std::mutex> lock(_instances_mutex);
         if (!_global_curl_initialized) {
-            logger->info("Curl global initialization");
+            SPDLOG_INFO("Curl global initialization");
             if(curl_global_init(CURL_GLOBAL_ALL) != CURLE_OK)
-                logger->error("Failed to perform curl global initialization.");
+                SPDLOG_ERROR("Failed to perform curl global initialization.");
             else
                 _global_curl_initialized = true;
         }
     }
     
     ++_instance_count;
-    logger->debug("HTTPClient instances : {}", _instance_count);
+    SPDLOG_DEBUG("HTTPClient instances : {}", _instance_count);
 }
     
 HTTPClient::~HTTPClient() {
-    logger->debug("HTTPClient dtor");
+    SPDLOG_DEBUG("HTTPClient dtor");
 
     if (!_threads_to_join.empty()) {
         cleanup_threads();
     }
 
     if (!_threads_map.empty()) {
-        logger->info("Waiting for pending async requests.");
+        SPDLOG_INFO("Waiting for pending async requests.");
         wait_async_requests();
     }
 
     {
         std::lock_guard<std::mutex> lock(_instances_mutex);
         --_instance_count;
-        logger->debug("Remaining HTTPClient instances : {}", _instance_count);
+        SPDLOG_DEBUG("Remaining HTTPClient instances : {}", _instance_count);
         if (_instance_count == 0 && _global_curl_initialized) {
-            logger->info("Curl global cleanup");
+            SPDLOG_INFO("Curl global cleanup");
             curl_global_cleanup();
             _global_curl_initialized = false;
         }
@@ -55,7 +53,7 @@ bool HTTPClient::is_ok() {
 }
 
 bool HTTPClient::get(HTTPReply &reply, const std::string &url, const std::vector<std::string> &headers) {
-    logger->debug("Synchronous GET request to \"{}\"", url);
+    SPDLOG_DEBUG("Synchronous GET request to \"{}\"", url);
     return sync_request(reply, url, headers, "");
 }
 
@@ -65,9 +63,9 @@ bool HTTPClient::post(
     const std::string &post_data,
     const std::vector<std::string> &headers
 ) {
-    logger->debug("Synchronous POST request to \"{}\" with data : {}", url, post_data);
+    SPDLOG_DEBUG("Synchronous POST request to \"{}\" with data : {}", url, post_data);
     if (post_data.empty()) {
-        logger->error("Cannot perform POST request, POST data is empty.");
+        SPDLOG_ERROR("Cannot perform POST request, POST data is empty.");
         return false;
     }
     return sync_request(reply, url, headers, post_data);
@@ -78,7 +76,7 @@ bool HTTPClient::get_async(
     Callback callback,
     const std::vector<std::string> &headers
 ) {
-    logger->debug("Asynchronous GET request to \"{}\"", url);
+    SPDLOG_DEBUG("Asynchronous GET request to \"{}\"", url);
     return async_request(url, callback, headers);
 }
 
@@ -88,9 +86,9 @@ bool HTTPClient::post_async(
     Callback callback,
     const std::vector<std::string> &headers
 ) {
-    logger->debug("Asynchronous POST request to \"{}\" with data : {}", url, post_data);
+    SPDLOG_DEBUG("Asynchronous POST request to \"{}\" with data : {}", url, post_data);
     if (post_data.empty()) {
-        logger->error("Cannot perform POST request to \"{}\", POST data is empty.", url);
+        SPDLOG_ERROR("Cannot perform POST request to \"{}\", POST data is empty.", url);
         return false;
     }
     return async_request(url, callback, headers, post_data);
@@ -106,13 +104,13 @@ bool HTTPClient::sync_request(
     std::string host = get_host_from_url(url);
 
     if (url.empty()) {
-        logger->error("Cannot perform request, url is empty.");
+        SPDLOG_ERROR("Cannot perform request, url is empty.");
         return false;
     }
 
     CURL *handle = easy_handle_init();
     if (!handle) {
-        logger->error("Aborting request to {} : failed to initialize easy handle.", host);
+        SPDLOG_ERROR("Aborting request to {} : failed to initialize easy handle.", host);
         return false;
     }
 
@@ -122,7 +120,7 @@ bool HTTPClient::sync_request(
 
     if (!set_easy_handle_opt(handle, url, post_data, reply)
     ) {
-        logger->error("Aborting request to {} : failed to set easy handle options.", host);
+        SPDLOG_ERROR("Aborting request to {} : failed to set easy handle options.", host);
         curl_easy_cleanup(handle);
         return false;
     }
@@ -131,7 +129,7 @@ bool HTTPClient::sync_request(
     if (!headers.empty()) {
         headers_list = set_easy_handle_headers(handle, headers);
         if (!headers_list) {
-            logger->error("Aborting request to {} : failed to set headers.", host);
+            SPDLOG_ERROR("Aborting request to {} : failed to set headers.", host);
             curl_easy_cleanup(handle);
             return false;
         }
@@ -139,7 +137,7 @@ bool HTTPClient::sync_request(
 
     CURLcode res = curl_easy_perform(handle);
     if (res) {
-        logger->error("Failed request to {} : {}", host, curl_easy_strerror(res));
+        SPDLOG_ERROR("Failed request to {} : {}", host, curl_easy_strerror(res));
         return false;
     }
 
@@ -164,12 +162,12 @@ bool HTTPClient::async_request (
     std::string host = get_host_from_url(url);
 
     if (url.empty()) {
-        logger->error("Cannot perform asynchronous request, url is empty.");
+        SPDLOG_ERROR("Cannot perform asynchronous request, url is empty.");
         return false;
     }
 
     if (!callback) {
-        logger->error("Cannot perform asynchronous request to {}, callback is invalid.", host);
+        SPDLOG_ERROR("Cannot perform asynchronous request to {}, callback is invalid.", host);
         return false;
     }
 
@@ -201,20 +199,20 @@ bool HTTPClient::async_request (
 CURL *HTTPClient::easy_handle_init() {
     CURL *handle = curl_easy_init();
     if (!handle) {
-        logger->error("Failed to initialize curl easy handle.");
+        SPDLOG_ERROR("Failed to initialize curl easy handle.");
         return nullptr;
     }
 
     CURLcode res = curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, HTTPClient::curl_callback);
     if (res) {
-        logger->error("Failed to set easy handle callback.");
+        SPDLOG_ERROR("Failed to set easy handle callback.");
         return nullptr;
     }
 
     #ifdef WINDOWS
     res = curl_easy_setopt(handle, CURLOPT_SSL_VERIFYPEER, false);
     if (res)
-        logger->warn("Failed to disable SSL verification.");
+        SPDLOG_WARN("Failed to disable SSL verification.");
     #endif
 
     return handle;
@@ -225,14 +223,14 @@ curl_slist *HTTPClient::set_easy_handle_headers(CURL *handle, const std::vector<
     for (auto const &e : headers) {
         headers_list = curl_slist_append(headers_list, e.c_str());
         if (headers_list == nullptr) {
-            logger->warn("Failed to set header : {}", e);
+            SPDLOG_WARN("Failed to set header : {}", e);
             return nullptr;
         }
-        logger->debug("Added header : \"{}\"", e);
+        SPDLOG_DEBUG("Added header : \"{}\"", e);
     }
 
     if (curl_easy_setopt(handle, CURLOPT_HTTPHEADER, headers_list)) {
-        logger->warn("Failed to attach header list to easy handle.");
+        SPDLOG_WARN("Failed to attach header list to easy handle.");
         curl_slist_free_all(headers_list);
         return nullptr;
     }
@@ -248,13 +246,13 @@ bool HTTPClient::set_easy_handle_opt(
 ) {
     CURLcode res = curl_easy_setopt(handle, CURLOPT_URL, url.c_str());
     if (res) {
-        logger->error("Failed to set easy handle URL.");
+        SPDLOG_ERROR("Failed to set easy handle URL.");
         return false;
     }
 
     res = curl_easy_setopt(handle, CURLOPT_WRITEDATA, static_cast<const void *>(&reply));
     if (res) {
-        logger->error("Failed to set easy handle callback object.");
+        SPDLOG_ERROR("Failed to set easy handle callback object.");
         return false;
     }
 
@@ -264,7 +262,7 @@ bool HTTPClient::set_easy_handle_opt(
         // by a previous POST request.
         res = curl_easy_setopt(handle, CURLOPT_POST, 0);
         if (res) {
-            logger->error("Failed to disable curl POST mode.");
+            SPDLOG_ERROR("Failed to disable curl POST mode.");
             return false;
         }
     }
@@ -272,7 +270,7 @@ bool HTTPClient::set_easy_handle_opt(
         // This implicitly set CURLOPT_POST to 1, activating POST mode.
         res = curl_easy_setopt(handle, CURLOPT_POSTFIELDS, post_data.c_str());
         if (res) {
-            logger->error("Failed to set POST fields.");
+            SPDLOG_ERROR("Failed to set POST fields.");
             return false;
         }
     }
@@ -282,13 +280,13 @@ bool HTTPClient::set_easy_handle_opt(
 
 size_t HTTPClient::curl_callback(char *data, size_t size, size_t nmemb, void *instance) {
     if (!instance) {
-        logger->error("Aborting curl callback : invalid instance ptr.");
+        SPDLOG_ERROR("Aborting curl callback : invalid instance ptr.");
         return 0;
     }
 
     HTTPReply *reply = reinterpret_cast<HTTPReply *>(instance);
     if (!reply) {
-        logger->error("Aborting curl callback : invalid casted reply ptr.");
+        SPDLOG_ERROR("Aborting curl callback : invalid casted reply ptr.");
         return 0;
     }
 
@@ -297,13 +295,13 @@ size_t HTTPClient::curl_callback(char *data, size_t size, size_t nmemb, void *in
 
     // Get response data.
     if (data != nullptr && nmemb > 0) {
-        logger->debug("curl callback : received {} bytes from {}", realsize, reply->host);
+        SPDLOG_DEBUG("curl callback : received {} bytes from {}", realsize, reply->host);
         reply->data += data;
     }
 
     // Get HTTP response code.
     if (curl_easy_getinfo(reply->_handle, CURLINFO_RESPONSE_CODE, &reply->res_code)) {
-        logger->warn("Failed to get HTTP response code.");
+        SPDLOG_WARN("Failed to get HTTP response code.");
         reply->res_code = 0;
     }
 
@@ -313,7 +311,7 @@ size_t HTTPClient::curl_callback(char *data, size_t size, size_t nmemb, void *in
 void HTTPClient::cleanup_threads() {
     std::scoped_lock lock(_threads_map_mutex, _threads_to_join_mutex);
     if (_threads_to_join.size() > 0) {
-        logger->debug("Cleaning {} threads.", _threads_to_join.size());
+        SPDLOG_DEBUG("Cleaning {} threads.", _threads_to_join.size());
         for (const auto &e : _threads_to_join) {
             _threads_map[e].join();
             _threads_map.erase(e);

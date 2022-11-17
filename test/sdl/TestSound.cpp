@@ -1,14 +1,13 @@
 #include <gtest/gtest.h>
+#include "tools/sdl/Sound.hpp"
 #include "tools/utils/Log.hpp"
 #include "tools/utils/Stopwatch.hpp"
-#include "tools/sdl/Sound.hpp"
 
 #include <unistd.h>
 
 namespace test {
 
 using namespace tools::sdl;
-static auto logger = tools::utils::new_logger("TestSound");
 
 class TestSound:   public ::testing::Test
 {
@@ -49,8 +48,8 @@ TEST_F(TestSound, test_sinus) {
         Sinus *sin = new Sinus;
         sin->set_frequency(440 * (i * 2 + 1));
         sin->set_volume(1.0 / (i * 2 + 1));
-        logger->info(440 * (i * 2 + 1));
-        logger->info(1.0 / (i * 2 + 1));
+        SPDLOG_INFO(440 * (i * 2 + 1));
+        SPDLOG_INFO(1.0 / (i * 2 + 1));
         player.add_sound(sin);
         sounds.push_back(sin);
         usleep(1e6);
@@ -78,7 +77,7 @@ TEST_F(TestSound, test_square) {
             square.set_duty_cycle(0.125);
         else
             square.set_duty_cycle(0.125 * i * 2);
-        logger->info("Duty cycle = {}", square.get_duty_cycle());
+        SPDLOG_INFO("Duty cycle = {}", square.get_duty_cycle());
         usleep(1500e3);
     }
 }

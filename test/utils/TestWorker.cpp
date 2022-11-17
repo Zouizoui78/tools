@@ -6,7 +6,6 @@
 namespace test {
 
 using namespace tools::utils;
-static auto logger = new_logger("TestWorker");
 
 class TestWorker:   public ::testing::Test
 {
@@ -51,7 +50,7 @@ TEST_F(TestWorker, test_change_task) {
 
     Worker task([&a]() {
         ++a;
-        logger->debug("Callback called, a = {}", a);
+        SPDLOG_DEBUG("Callback called, a = {}", a);
     });
 
     task.set_delay_ms(1);
@@ -62,10 +61,10 @@ TEST_F(TestWorker, test_change_task) {
 
     task.set_task([&b]() {
         ++b;
-        logger->debug("Callback called, b = {}", b);
+        SPDLOG_DEBUG("Callback called, b = {}", b);
     });
 
-    logger->info("New task set.");
+    SPDLOG_INFO("New task set.");
 
     uint8_t backup_a = a;
 
@@ -83,7 +82,7 @@ TEST_F(TestWorker, test_empty_callback) {
 
     EXPECT_FALSE(task.is_running());
 
-    logger->info("Error is expected here.");
+    SPDLOG_INFO("Error is expected here.");
     task.start();
     EXPECT_FALSE(task.is_running());
 }
@@ -109,7 +108,7 @@ TEST_F(TestWorker, test_time_accuracy) {
         if (!first_done)
             first_done = true;
         else {
-            logger->info("{} ms", diff);
+            SPDLOG_INFO("{} ms", diff);
             EXPECT_NEAR(diff, duration, duration_error);
         }
 

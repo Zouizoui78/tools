@@ -7,12 +7,10 @@
 
 namespace tools::net {
 
-static auto logger = tools::utils::new_logger("UDP");
-
 UDP::UDP(uint16_t port) {
     _socket = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
     if (_socket == -1) {
-        logger->error("Failed to create UDP socket.");
+        SPDLOG_ERROR("Failed to create UDP socket.");
         _ok = false;
     }
 
@@ -21,14 +19,14 @@ UDP::UDP(uint16_t port) {
     _addr.sin_family = AF_INET;
 
     if (bind(_socket, reinterpret_cast<sockaddr *>(&_addr), sizeof(_addr)) != 0) {
-        logger->error("Failed to bind UDP socket.");
+        SPDLOG_ERROR("Failed to bind UDP socket.");
         _ok = false;
     }
 
     _listen_buffer = reinterpret_cast<uint8_t *>(calloc(UDP_MAX_PACKET_SIZE, sizeof(uint8_t)));
 
     _ok = true;
-    logger->info("Opened UDP socket on port {}.", port);
+    SPDLOG_INFO("Opened UDP socket on port {}.", port);
 }
     
 UDP::~UDP() {
@@ -42,7 +40,7 @@ UDP::~UDP() {
         }
 
         _ok = false;
-        logger->info("Closed UDP socket on port {}.", ntohs(_addr.sin_port));
+        SPDLOG_INFO("Closed UDP socket on port {}.", ntohs(_addr.sin_port));
     }
 
     if (_listen_buffer != nullptr) {
@@ -56,12 +54,12 @@ bool UDP::is_ok() {
 
 bool UDP::start_listen(std::function<void (uint8_t *data, size_t size)> callback) {
     if (!callback) {
-        logger->error("Cannot start listening, invalid callback.");
+        SPDLOG_ERROR("Cannot start listening, invalid callback.");
         return false;
     }
 
     if (_listen_thread_running) {
-        logger->error("Cannot start listening, already running.");
+        SPDLOG_ERROR("Cannot start listening, already running.");
         return false;
     }
 
@@ -74,7 +72,7 @@ bool UDP::start_listen(std::function<void (uint8_t *data, size_t size)> callback
         while (_listen_thread_running) {
             ssize_t size = recvfrom(_socket, _listen_buffer, UDP_MAX_PACKET_SIZE, 0, reinterpret_cast<sockaddr*>(&from), &fromlen);
             if (size == -1) {
-                logger->error("Failed to receive data : {}", strerror(errno));
+                SPDLOG_ERROR("Failed to receive data : {}", strerror(errno));
             }
             else if (size > 0) {
                 _listen_callback(_listen_buffer, size);

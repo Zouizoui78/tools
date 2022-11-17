@@ -5,8 +5,6 @@
 
 namespace tools::utils {
 
-static auto logger = new_logger("Scheduler");
-
 Scheduler::Scheduler() {}
     
 Scheduler::~Scheduler() {}
@@ -40,7 +38,7 @@ void Scheduler::loop_wrapper() {
             auto now = std::chrono::steady_clock::now();
             if (now > e.next_run) {
                 if (!e.task())
-                    logger->error("Task '{}' returned false.", e.name);
+                    SPDLOG_ERROR("Task '{}' returned false.", e.name);
                 e.next_run = now + std::chrono::microseconds(e.delay_us);
             }
         }

@@ -3,8 +3,6 @@
 
 namespace tools::utils {
 
-static auto logger = new_logger("Worker");
-
 Worker::Worker() {}
 
 Worker::Worker(std::function<void ()> task, bool threaded) {
@@ -18,12 +16,12 @@ Worker::~Worker() {
 
 bool Worker::start() {
     if (_running) {
-        logger->warn("Cannot start background task because it is already running.");
+        SPDLOG_WARN("Cannot start background task because it is already running.");
         return true;
     }
 
     if (!_task) {
-        logger->error("Cannot start background task, invalid callback. The function passed to the constructor was invalid (empty) or set_task() was called with an empty callback.");
+        SPDLOG_ERROR("Cannot start background task, invalid callback. The function passed to the constructor was invalid (empty) or set_task() was called with an empty callback.");
         return false;
     }
 
@@ -65,7 +63,7 @@ void Worker::task_wrapper() {
             std::lock_guard lock(_task_mutex);
             _task();
         } catch (const std::bad_function_call &e) {
-            logger->error("Failed to run callback.");
+            SPDLOG_ERROR("Failed to run callback.");
         }
 
         // If the task is not stopped during sleep, keep sleeping until sleep_end.
@@ -99,7 +97,7 @@ void Worker::set_delay_ms(double delay_ms) {
 
 void Worker::set_frequency(uint32_t frequency) {
     if (frequency > 1e6) {
-        logger->warn("Trying to set frequency to {}, which is to high. Setting frequency to the maximum (1MHz).", frequency);
+        SPDLOG_WARN("Trying to set frequency to {}, which is to high. Setting frequency to the maximum (1MHz).", frequency);
         frequency = 1e6;
     }
     set_delay_ms(1000.0 / frequency);

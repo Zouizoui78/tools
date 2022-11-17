@@ -3,8 +3,6 @@
 
 namespace tools::sdl {
 
-static auto logger = tools::utils::new_logger("Sound");
-
 // Default waveform implementations
 ASound::ASound() {
     set_volume(1);
@@ -101,13 +99,13 @@ SoundPlayer::~SoundPlayer() {
         SDL_CloseAudio();
         SDL_QuitSubSystem(SDL_INIT_AUDIO);
         _is_audio_initialized = false;
-        logger->info("SDL audio subsystem cleaned up.");
+        SPDLOG_INFO("SDL audio subsystem cleaned up.");
     }
 }
 
 bool SoundPlayer::init() {
     if (SDL_InitSubSystem(SDL_INIT_AUDIO) != 0) {
-        logger->error("Failed to initialize audio subsystem : {}", SDL_GetError());
+        SPDLOG_ERROR("Failed to initialize audio subsystem : {}", SDL_GetError());
         _is_audio_initialized = false;
     }
     
@@ -122,11 +120,11 @@ bool SoundPlayer::init() {
     SDL_AudioSpec obtained;
 
     if (SDL_OpenAudio(&desired, &obtained) != 0) {
-        logger->error("Failed to open sound device : {}", SDL_GetError());
+        SPDLOG_ERROR("Failed to open sound device : {}", SDL_GetError());
         _is_audio_initialized = false;
     }
 
-    logger->info("SDL audio subsystem initialized.");
+    SPDLOG_INFO("SDL audio subsystem initialized.");
     _is_audio_initialized = true;
     return _is_audio_initialized;
 }
