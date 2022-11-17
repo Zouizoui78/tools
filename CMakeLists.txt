@@ -37,6 +37,9 @@ target_include_directories(
 )
 
 target_link_libraries(${PROJECT} curl)
+target_link_libraries(${PROJECT} fmt)
 target_link_libraries(${PROJECT} SDL2)
 target_link_libraries(${PROJECT} SDL2_ttf)
 target_link_libraries(${PROJECT} spdlog)
+
+add_subdirectory(test)

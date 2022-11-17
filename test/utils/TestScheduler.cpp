@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
-#include "Scheduler.hpp"
-#include "Log.hpp"
+#include "tools/utils/Scheduler.hpp"
+#include "tools/utils/Log.hpp"
 
 namespace test {
 

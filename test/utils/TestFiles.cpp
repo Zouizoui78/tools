@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
-#include "Files.hpp"
-#include "Log.hpp"
+#include "tools/utils/Files.hpp"
+#include "tools/utils/Log.hpp"
 
 namespace test {
 
@@ -23,8 +23,8 @@ class TestFiles:   public ::testing::Test
 
     public:
     std::string outputs_path;
-    std::string path_text = "test/test_resources/files/test.txt";
-    std::string path_bin = "test/test_resources/files/test.bin";
+    std::string path_text = "test_resources/Files/test.txt";
+    std::string path_bin = "test_resources/Files/test.bin";
     std::string path_tmp;
 };
 

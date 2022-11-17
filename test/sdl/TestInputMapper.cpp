@@ -1,8 +1,8 @@
 #include <gtest/gtest.h>
 #include "tools/sdl/InputMapper.hpp"
 
-#include "Files.hpp"
-#include "Log.hpp"
+#include "tools/utils/Files.hpp"
+#include "tools/utils/Log.hpp"
 
 namespace test {
 
@@ -29,20 +29,23 @@ class TestInputMapper:   public ::testing::Test
 TEST_F(TestInputMapper, test_add_remove_mapping) {
     logger->info("Errors are expected in this test.");
     InputMapper mapper;
-    ASSERT_TRUE(mapper.add_mapping("a", 17));
-    ASSERT_FALSE(mapper.add_mapping("a", 45));
-    ASSERT_FALSE(mapper.add_mapping(SDL_KeyCode::SDLK_a, 45));
-    ASSERT_EQ(mapper.map_key("a"), 17);
+    ASSERT_TRUE(mapper.set_mapping("a", 17));
+    ASSERT_TRUE(mapper.set_mapping("a", 45));
+    mapper.set_mapping(SDL_KeyCode::SDLK_a, 45);
+    ASSERT_EQ(mapper.map_key(SDL_KeyCode::SDLK_a), 45);
+    ASSERT_EQ(mapper.map_key("a"), 45);
 
-    ASSERT_TRUE(mapper.add_mapping("b", 32));
+    ASSERT_FALSE(mapper.set_mapping("nonsense", 1));
+
+    ASSERT_TRUE(mapper.set_mapping("b", 32));
     ASSERT_TRUE(mapper.remove_mapping("a"));
     ASSERT_EQ(mapper.map_key("a"), -1);
-    ASSERT_FALSE(mapper.remove_mapping("a"));
+    ASSERT_TRUE(mapper.remove_mapping("a"));
 }
 
 TEST_F(TestInputMapper, test_json_map) {
     InputMapper mapper;
-    std::string path = "test/test_resources/InputMapper/test_map.json";
+    std::string path = "test_resources/InputMapper/test_map.json";
 
     ASSERT_TRUE(mapper.load_map(path));
     ASSERT_EQ(mapper.map_key("a"), 1);

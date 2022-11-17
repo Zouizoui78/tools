@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
-#include "DynamicLibrary.hpp"
-#include "Log.hpp"
+#include "tools/utils/DynamicLibrary.hpp"
+#include "tools/utils/Log.hpp"
 
 namespace test {
 
@@ -8,10 +8,13 @@ using namespace tools::utils;
 
 static auto logger = new_logger("TestDynamicLibrary");
 
+// The small lib used for testing this
+// is compiled in the working directory
+// when compiling tests.
 #ifdef WINDOWS
-static std::string path = "test/test_resources/dynamic_library/test.dll";
+static std::string path = "./libshared.dll";
 #else
-static std::string path = "test/test_resources/dynamic_library/test.so";
+static std::string path = "./libshared.so";
 #endif
 
 class TestDynamicLibrary:   public ::testing::Test

@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
-#include "Log.hpp"
-#include "Stopwatch.hpp"
+#include "tools/utils/Log.hpp"
+#include "tools/utils/Stopwatch.hpp"
 #include "tools/sdl/Sound.hpp"
 
 #include <unistd.h>
