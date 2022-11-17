@@ -43,3 +43,19 @@ target_link_libraries(${PROJECT} SDL2_ttf)
 target_link_libraries(${PROJECT} spdlog)
 
 add_subdirectory(test)
+
+set(INSTALL_INCLUDEDIR include)
+set(INSTALL_LIBDIR lib)
+
+# Installing headers
+install(
+    DIRECTORY include/
+    DESTINATION ${INSTALL_INCLUDEDIR}
+)
+
+# Installing binary
+install(
+    TARGETS ${PROJECT}
+    DESTINATION ${INSTALL_LIBDIR}
+    EXPORT ${PROJECT}ConfigTargets
+)
