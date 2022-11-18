@@ -33,19 +33,24 @@ add_library(${PROJECT} SHARED ${SRC})
 target_include_directories(
     ${PROJECT}
     PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/include
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>  
+    $<INSTALL_INTERFACE:include>
 )
 
-target_link_libraries(${PROJECT} curl)
-target_link_libraries(${PROJECT} fmt)
-target_link_libraries(${PROJECT} SDL2)
-target_link_libraries(${PROJECT} SDL2_ttf)
-target_link_libraries(${PROJECT} spdlog)
+target_link_libraries(
+    ${PROJECT}
+    curl
+    fmt
+    SDL2
+    SDL2_ttf
+    spdlog
+)
 
 add_subdirectory(test)
 
 set(INSTALL_INCLUDEDIR include)
 set(INSTALL_LIBDIR lib)
+set(INSTALL_CMAKEDIR lib/cmake/${PROJECT})
 
 # Installing headers
 install(
@@ -58,4 +63,23 @@ install(
     TARGETS ${PROJECT}
     DESTINATION ${INSTALL_LIBDIR}
     EXPORT ${PROJECT}ConfigTargets
+)
+
+# Cmake build files
+install(
+    EXPORT ${PROJECT}ConfigTargets
+    DESTINATION ${INSTALL_CMAKEDIR}
+)
+
+# Generate config files
+include(CMakePackageConfigHelpers)
+configure_package_config_file( 
+    cmake/${PROJECT}Config.cmake.in
+    ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT}Config.cmake
+    INSTALL_DESTINATION ${INSTALL_CMAKEDIR}
+)
+
+install(
+    FILES ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT}Config.cmake
+    DESTINATION ${INSTALL_CMAKEDIR}
 )
