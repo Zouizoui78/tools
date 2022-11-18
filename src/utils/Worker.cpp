@@ -63,7 +63,7 @@ void Worker::task_wrapper() {
             std::lock_guard lock(_task_mutex);
             _task();
         } catch (const std::bad_function_call &e) {
-            SPDLOG_ERROR("Failed to run callback.");
+            SPDLOG_ERROR("Failed to run callback : bad_function_call.");
         }
 
         // If the task is not stopped during sleep, keep sleeping until sleep_end.

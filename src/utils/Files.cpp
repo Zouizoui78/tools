@@ -14,7 +14,7 @@ std::string read_text_file(const std::string &path) {
         return ret;
     }
     else {
-        SPDLOG_ERROR("Failed to open file {}.", path);
+        SPDLOG_ERROR("Failed to open file {} : {}", path, strerror(errno));
         return "";
     }
 }
@@ -24,7 +24,7 @@ std::vector<uint8_t> read_binary_file(const std::string &path) {
 
     std::ifstream file(path, std::ios::binary);
     if (!file.is_open()) {
-        SPDLOG_ERROR("Failed to open file {}.", path);
+        SPDLOG_ERROR("Failed to open file {} : {}", path, strerror(errno));
         return result;
     }
 
@@ -45,7 +45,7 @@ std::vector<uint8_t> read_binary_file(const std::string &path) {
 bool write_binary_file(const std::vector<uint8_t> &data, const std::string &path) {
     std::ofstream file(path, std::ios::binary);
     if (!file.is_open()) {
-        SPDLOG_ERROR("Failed to open file {}.", path);
+        SPDLOG_ERROR("Failed to open file {} : {}", path, strerror(errno));
         return false;
     }
 
