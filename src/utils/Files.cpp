@@ -4,19 +4,21 @@
 namespace tools::utils::files {
 
 std::string read_text_file(const std::string &path) {
+    std::string ret("");
+
     std::ifstream file(path);
-    if (file.is_open()) {
-        std::stringstream content;
-        content << file.rdbuf();
-        std::string ret = content.str();
-        if (ret.back() == '\n')
-            ret.pop_back();
+    if (!file.is_open()) {
+        SPDLOG_ERROR("Failed to open file {} : {}", path, strerror(errno));
         return ret;
     }
-    else {
-        SPDLOG_ERROR("Failed to open file {} : {}", path, strerror(errno));
-        return "";
-    }
+
+    uintmax_t file_size = std::filesystem::file_size(path);
+    char *buf = (char *)calloc(file_size, sizeof(char));
+    file.read(buf, file_size);
+    ret = buf;
+    free(buf);
+
+    return ret;
 }
 
 std::vector<uint8_t> read_binary_file(const std::string &path) {
@@ -28,14 +30,12 @@ std::vector<uint8_t> read_binary_file(const std::string &path) {
         return result;
     }
 
-    auto len = std::filesystem::file_size(path);
-    uint8_t block_size = sizeof(uint8_t);
-    size_t block_n = len / block_size;
-    SPDLOG_DEBUG("Reading {} bytes from '{}'", block_n, path);
+    uintmax_t file_size = std::filesystem::file_size(path);
+    SPDLOG_DEBUG("Reading {} bytes from '{}'", file_size, path);
 
     uint8_t tmp;
-    for (size_t i = 0 ; i < block_n ; ++i) {
-        file.read(reinterpret_cast<char *>(&tmp), block_size);
+    for (size_t i = 0 ; i < file_size ; ++i) {
+        file.read(reinterpret_cast<char *>(&tmp), 1);
         result.push_back(tmp);
     }
 
@@ -49,11 +49,7 @@ bool write_binary_file(const std::vector<uint8_t> &data, const std::string &path
         return false;
     }
 
-    uint8_t block_size = sizeof(uint8_t);
-    for (size_t i = 0 ; i < data.size() ; ++i) {
-        file.write(reinterpret_cast<const char *>(&data[i]), block_size);
-    }
-
+    file.write(reinterpret_cast<const char *>(data.data()), data.size());
     return true;
 }
 

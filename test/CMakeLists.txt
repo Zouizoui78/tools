@@ -38,6 +38,12 @@ add_custom_command(
     COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_SOURCE_DIR}/resources ${CMAKE_CURRENT_BINARY_DIR}/test_resources
 )
 
+# Create test_outputs directory
+add_custom_command(
+    TARGET ${NAME}
+    COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/test_outputs
+)
+
 # Compile small shared library used in tests
 set(DYN_LIB_TEST shared)
 add_library(
