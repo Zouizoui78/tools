@@ -9,20 +9,20 @@ Stopwatch::Stopwatch(const std::string &name) {
 }
     
 Stopwatch::~Stopwatch() {
-    log_duration(get_duration());
+    log_duration();
 }
 
 uint64_t Stopwatch::get_duration() const {
     return (std::chrono::steady_clock::now() - _start_time_point).count();
 }
 
-void Stopwatch::log_duration(uint64_t duration) const {
+void Stopwatch::log_duration() const {
     std::string prefix = "";
     if (!_name.empty())
         prefix = _name + " : ";
 
     std::string unit = " ns";
-    double d = duration;
+    double d = get_duration();
 
     if (d > 1e9) {
         d /= 1e9;

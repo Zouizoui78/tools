@@ -15,7 +15,7 @@ class Stopwatch {
     ~Stopwatch();
 
     uint64_t get_duration() const;
-    void log_duration(uint64_t duration) const;
+    void log_duration() const;
 
     void reset();
 
