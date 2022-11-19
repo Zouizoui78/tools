@@ -13,8 +13,12 @@ std::string read_text_file(const std::string &path) {
     }
 
     uintmax_t file_size = std::filesystem::file_size(path);
-    char *buf = (char *)calloc(file_size, sizeof(char));
+    SPDLOG_DEBUG("Reading {} bytes from '{}'", file_size, path);
+
+    char *buf = static_cast<char *>(malloc((file_size + 1) * sizeof(char)));
     file.read(buf, file_size);
+    buf[file_size] = '\0';
+
     ret = buf;
     free(buf);
 
@@ -53,4 +57,4 @@ bool write_binary_file(const std::vector<uint8_t> &data, const std::string &path
     return true;
 }
 
-} // namespace tools::utils
+} // namespace tools::utils::files
