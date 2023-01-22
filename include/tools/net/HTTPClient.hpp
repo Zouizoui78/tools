@@ -15,17 +15,17 @@ class HTTPClient;
 
 /**
  * @brief HTTP reply content packaging class.
- * 
+ *
  */
 class HTTPReply {
     public:
     /**
-     * @brief Default constructor. 
+     * @brief Default constructor.
      */
     HTTPReply();
-    
+
     /**
-     * @brief Construct an HTTPReply object. 
+     * @brief Construct an HTTPReply object.
      */
     HTTPReply(CURL *handle);
 
@@ -58,13 +58,13 @@ using Callback = std::function<void (HTTPReply &)>;
 
 /**
  * @brief Very simple cURL wrapper for performing HTTP GET and POST requests.
- * 
+ *
  */
 class HTTPClient {
     public:
-    
+
     /**
-     * @brief Default constructor. 
+     * @brief Default constructor.
      */
     HTTPClient();
 
@@ -81,7 +81,7 @@ class HTTPClient {
 
     /**
      * @brief Perform a blocking HTTP POST request.
-     * 
+     *
      * @param reply OUTPUT Reply object. Its fields are cleared before the request if performed.
      * @param url URL to post to.
      * @param headers headers to send with the request.
@@ -91,7 +91,7 @@ class HTTPClient {
 
     /**
      * @brief Perform a blocking HTTP POST request.
-     * 
+     *
      * @param reply OUTPUT Reply object.
      * @param url URL to post to.
      * @param post_data Data to send with POST requests.
@@ -107,7 +107,7 @@ class HTTPClient {
 
     /**
      * @brief Perform a non-blocking HTTP GET request.
-     * 
+     *
      * @param url URL to post to.
      * @param callback Called after the request is complete.
      * @param headers Headers to send with the request.
@@ -121,7 +121,7 @@ class HTTPClient {
 
     /**
      * @brief Perform a non-blocking HTTP POST request.
-     * 
+     *
      * @param url URL to post to.
      * @param callback Called after the request is complete.
      * @param headers Headers to send with the request.
@@ -143,7 +143,7 @@ class HTTPClient {
 
     /**
      * @brief Callback called by curl when requests are done.
-     * 
+     *
      * @param data Data received. Does not necesserally contains the entire response,
      * i.e. this callback can be called several times by curl.
      * @param size Always 1 according to curl docs.
@@ -155,14 +155,14 @@ class HTTPClient {
 
     /**
      * @brief Initialize an easy handle.
-     * 
+     *
      * @return CURL* Created handle ; nullptr if failed.
      */
     CURL *easy_handle_init();
 
     /**
      * @brief Set the handle's headers.
-     * 
+     *
      * @param handle Handle to modify.
      * @param headers Strings containing the headers to add to the list.
      * @return curl_slist * Headers list. The caller should free it when the request is done. nullptr if empty headers vector.
@@ -172,7 +172,7 @@ class HTTPClient {
     /**
      * @brief Set the common easy handle options that
      * are needed by both sync and async requests.
-     * 
+     *
      * @param handle curl handle to modify.
      * @param url Request URL.
      * @param post_data POST request data. If empty the handle is set to send a GET request.
@@ -194,7 +194,7 @@ class HTTPClient {
     /**
      * @brief Parse the url to extract the host.
      * E.g. if url == "https://example.com:12345/test", it returns "example.com".
-     * 
+     *
      * @param url URL to parse.
      * @return std::string Host.
      */
@@ -202,7 +202,7 @@ class HTTPClient {
 
     /**
      * @brief Internal method used to send synchronous requests with _sync_handle.
-     * 
+     *
      * @param reply Reply object.
      * @param url URL to send request to.
      * @param headers Headers to apply on the request.
@@ -218,7 +218,7 @@ class HTTPClient {
 
     /**
      * @brief Internal method used to send asynchronous requests.
-     * 
+     *
      * @param url URL to send request to.
      * @param callback Called when responses is received.
      * @param headers Headers to apply on the request.

@@ -28,7 +28,7 @@ class Window
     /**
      * @brief Fill the screen with the current drawing color.
      * Ignore viewports.
-     * 
+     *
      * @return Ok or not.
      */
     bool clear();
@@ -51,7 +51,7 @@ class Window
 
     /**
      * @brief Set current rendering viewport to the rectangle.
-     * 
+     *
      * @param rect Rectangle to use as viewport. If nullptr the entire screen is taken as a viewport.
      * @return Ok or not.
      */
@@ -59,14 +59,14 @@ class Window
 
     /**
      * @brief Set default font for text rendering.
-     * 
+     *
      * @param font Font to set as default.
      */
     void set_default_font(TTF_Font* font) { _default_font = font; }
 
     /**
      * @brief Set the current rendering color used for rectangles, lines and clear.
-     * 
+     *
      * @param color Color to be used.
      * @return Ok or not.
      */
@@ -74,11 +74,11 @@ class Window
 
     /**
      * @brief Set the current rendering color used for rectangles, lines and clear.
-     * 
+     *
      * @param r
-     * @param g 
-     * @param b 
-     * @param a 
+     * @param g
+     * @param b
+     * @param a
      * @return true success
      * @return false failure
      */
@@ -86,7 +86,7 @@ class Window
 
     /**
      * @brief Load a font.
-     * 
+     *
      * @param fontPath Path to the font to load.
      * @param size Point size to load the font fe.
      * @return TTF_Font* nullptr if error.
@@ -95,7 +95,7 @@ class Window
 
     /**
      * @brief Load an image into a texture.
-     * 
+     *
      * @param imgPath Path to the image to load.
      * @return texture or nullptr on error.
      */
@@ -103,7 +103,7 @@ class Window
 
     /**
      * @brief Create a texture from a text.
-     * 
+     *
      * @param text Text to render.
      * @param color Text color, default is white.
      * @param font Font to use. Default font is used if nullptr.
@@ -117,7 +117,7 @@ class Window
 
     /**
      * @brief Render a texture.
-     * 
+     *
      * @param texture The texture to render.
      * @param dst Part of the rendering target in which the texture is rendered. Whole rendering target if nullptr.
      * @param portion The portion of the texture to copy to the destination. Entire destination is used if nullptr.
@@ -127,7 +127,7 @@ class Window
 
     /**
      * @brief Extract a part of a texture.
-     * 
+     *
      * @param source Texture to extract a part of.
      * @param dst Texture to render to. Will be erased.
      * @param rect Part to extract.
@@ -137,14 +137,14 @@ class Window
 
     /**
      * @brief Fill _width and _height with values taken from SDL.
-     * 
+     *
      * @return Ok or not.
      */
     bool get_screen_size();
 
     /**
      * @brief Create a texture from a surface. The surface is freed.
-     * 
+     *
      * @param surface
      * @return texture or nullptr on error.
      */
@@ -152,7 +152,7 @@ class Window
 
     /**
      * @brief Render a texture into another texture.
-     * 
+     *
      * @param src Texture to render.
      * @param dst Texture to render into.
      * @param dstRect Destination rectangle.
@@ -163,7 +163,7 @@ class Window
 
     /**
      * @brief Create a Blank Render Target object.
-     * 
+     *
      * @param width
      * @param height
      * @return SDL_Texture* nullptr if failure.
@@ -172,18 +172,18 @@ class Window
 
     /**
      * @brief Draw the passed rectangle.
-     * 
+     *
      * @param rect Rectangle to draw.
      * @return Ok or not.
      */
     bool draw_rectangle(SDL_Rect* rect, bool fill = false);
-    
+
 
     private:
 
     /**
      * @brief Renderer initialization.
-     * 
+     *
      * @return Ok or not.
      */
     bool init();

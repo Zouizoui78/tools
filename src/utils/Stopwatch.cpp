@@ -7,7 +7,7 @@ Stopwatch::Stopwatch(const std::string &name) {
     _name = name;
     reset();
 }
-    
+
 Stopwatch::~Stopwatch() {
     log_duration();
 }
@@ -26,18 +26,18 @@ void Stopwatch::log_duration() const {
 
     if (d > 1e9) {
         d /= 1e9;
-        unit = " s";
+        unit = "s";
     }
     else if (d > 1e6) {
         d /= 1e6;
-        unit = " ms";
+        unit = "ms";
     }
     else if (d > 1e3) {
         d /= 1e3;
-        unit = " us";
+        unit = "us";
     }
-    
-    SPDLOG_INFO("{}{:.3f}{}", prefix, d, unit);
+
+    SPDLOG_INFO("{}{:.3f} {}", prefix, d, unit);
 }
 
 void Stopwatch::reset() {

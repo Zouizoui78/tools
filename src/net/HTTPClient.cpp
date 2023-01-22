@@ -19,11 +19,11 @@ HTTPClient::HTTPClient() {
                 _global_curl_initialized = true;
         }
     }
-    
+
     ++_instance_count;
     SPDLOG_DEBUG("HTTPClient instances : {}", _instance_count);
 }
-    
+
 HTTPClient::~HTTPClient() {
     SPDLOG_DEBUG("HTTPClient dtor");
 
@@ -147,7 +147,7 @@ bool HTTPClient::sync_request(
     }
 
     curl_easy_cleanup(handle);
-    
+
     return true;
 }
 
@@ -192,7 +192,7 @@ bool HTTPClient::async_request (
         std::lock_guard<std::mutex> lock(_threads_map_mutex);
         _threads_map[thread.get_id()] = std::move(thread);
     }
-    
+
     return true;
 }
 
@@ -258,7 +258,7 @@ bool HTTPClient::set_easy_handle_opt(
 
     if (post_data.empty()) {
         // If post_data is empty, we assume we are sending a GET request.
-        // So we disable POST mode which might have been enabled 
+        // So we disable POST mode which might have been enabled
         // by a previous POST request.
         res = curl_easy_setopt(handle, CURLOPT_POST, 0);
         if (res) {

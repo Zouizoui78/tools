@@ -58,7 +58,7 @@ void Worker::task_wrapper() {
             sleep_end = std::chrono::steady_clock::now() + std::chrono::microseconds(_sleep_delay_us);
 
         auto wait_end = std::chrono::steady_clock::now() + std::chrono::microseconds(_delay_us);
-        
+
         try {
             std::lock_guard lock(_task_mutex);
             _task();
@@ -68,8 +68,7 @@ void Worker::task_wrapper() {
 
         // If the task is not stopped during sleep, keep sleeping until sleep_end.
         // We don't sleep for the whole wait duration
-        // to avoid loosing time because of
-        // the OS' scheduler.
+        // to minimize inaccuracy caused by the OS' scheduler.
         while (!_high_precision && _running && std::chrono::steady_clock::now() < sleep_end) {
             std::this_thread::sleep_for(std::chrono::microseconds(1));
         }

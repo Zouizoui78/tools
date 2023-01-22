@@ -9,9 +9,8 @@ namespace tools::utils {
 class Stopwatch {
 
     public:
-    
-    Stopwatch(const std::string &name = "");
 
+    Stopwatch(const std::string &name = "");
     ~Stopwatch();
 
     uint64_t get_duration() const;

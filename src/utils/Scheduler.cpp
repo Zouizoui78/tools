@@ -6,7 +6,6 @@
 namespace tools::utils {
 
 Scheduler::Scheduler() {}
-    
 Scheduler::~Scheduler() {}
 
 bool Scheduler::add_task(Task task) {
@@ -34,7 +33,7 @@ void Scheduler::loop() {
         for (auto &e : _tasks) {
             if (!is_running())
                 break;
-            
+
             auto now = std::chrono::steady_clock::now();
             if (now > e.next_run) {
                 if (!e.task())

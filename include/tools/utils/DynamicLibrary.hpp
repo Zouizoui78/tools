@@ -17,9 +17,8 @@ namespace tools::utils {
  */
 class DynamicLibrary {
     public:
-    
-    DynamicLibrary(const std::string &path);
 
+    DynamicLibrary(const std::string &path);
     ~DynamicLibrary();
 
     /**

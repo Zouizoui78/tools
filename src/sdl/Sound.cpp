@@ -8,7 +8,7 @@ ASound::ASound() {
     set_volume(1);
     set_frequency(440);
 }
-    
+
 ASound::~ASound() {}
 
 double ASound::get_volume() const {
@@ -108,7 +108,7 @@ bool SoundPlayer::init() {
         SPDLOG_ERROR("Failed to initialize audio subsystem : {}", SDL_GetError());
         _is_audio_initialized = false;
     }
-    
+
     SDL_AudioSpec desired;
     desired.freq = SOUND_SAMPLING_RATE;
     desired.format = AUDIO_S16SYS;

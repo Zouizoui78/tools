@@ -28,7 +28,7 @@ UDP::UDP(uint16_t port) {
     _ok = true;
     SPDLOG_INFO("Opened UDP socket on port {}.", port);
 }
-    
+
 UDP::~UDP() {
     if (is_ok()) {
         shutdown(_socket, SHUT_RDWR); // Interrupt blocking recvfrom.

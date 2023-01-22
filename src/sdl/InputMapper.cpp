@@ -6,7 +6,6 @@
 namespace tools::sdl {
 
 InputMapper::InputMapper() {}
-    
 InputMapper::~InputMapper() {}
 
 void InputMapper::set_mapping(SDL_Keycode key, uint8_t mapped_key) {
@@ -50,7 +49,7 @@ bool InputMapper::load_map(const std::string &json_path) {
     std::string content = tools::utils::files::read_text_file(json_path);
     if (content.empty())
         return false;
-    
+
     json j;
     try {
         j = json::parse(content);

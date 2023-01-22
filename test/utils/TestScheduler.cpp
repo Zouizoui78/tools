@@ -24,24 +24,24 @@ class TestScheduler:   public ::testing::Test
 
 TEST_F(TestScheduler, test_add_task) {
     Scheduler s;
-    
+
     Task task_a;
     task_a.name = "task_a";
     task_a.task = [&]() {
             return true;
     };
-    
+
     Task task_b;
     task_b.name = "task_b";
     task_b.task = [&]() {
             return true;
     };
-    
+
     Task task_c;
     task_c.task = [&]() {
             return true;
     };
-    
+
     Task task_d;
     task_d.name = "task_b";
 
@@ -54,7 +54,7 @@ TEST_F(TestScheduler, test_add_task) {
 
 TEST_F(TestScheduler, test_scheduling) {
     Scheduler s;
-    
+
     uint32_t count_a = 0;
     Task task_a;
     task_a.name = "task_a";
@@ -65,7 +65,7 @@ TEST_F(TestScheduler, test_scheduling) {
             return true;
         };
     task_a.delay_us = 10000;
-    
+
     uint32_t count_b = 0;
     Task task_b;
     task_b.name = "task_b";

@@ -12,9 +12,8 @@ namespace tools::net {
 
 class UDP {
     public:
-    
-    UDP(uint16_t port);
 
+    UDP(uint16_t port);
     ~UDP();
 
     bool is_ok();

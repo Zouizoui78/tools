@@ -23,9 +23,8 @@ struct Task {
 
 class Scheduler {
     public:
-    
-    Scheduler();
 
+    Scheduler();
     ~Scheduler();
 
     bool add_task(Task task);

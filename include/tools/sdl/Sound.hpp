@@ -93,7 +93,7 @@ class SoundPlayer {
 
     /**
      * @brief Add a sound to be played when play() is called.
-     * 
+     *
      * @param sound sound to register.
      * @return true No error.
      * @return false Sound already registered.
@@ -102,7 +102,7 @@ class SoundPlayer {
 
     /**
      * @brief Remove a sound from the registered sounds vector.
-     * 
+     *
      * @param sound Sound to remove.
      * @return true No error.
      * @return false Sound not found in vector.

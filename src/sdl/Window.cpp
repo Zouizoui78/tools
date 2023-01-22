@@ -163,13 +163,13 @@ bool Window::set_viewport(SDL_Rect* rect) {
         SPDLOG_ERROR("Failed to set viewport.");
         return false;
     }
-    
+
     SPDLOG_INFO("Set viewport to h = {}, w = {}, x = {}, y = {}", rect->h, rect->w, rect->x, rect->y);
     return true;
 }
 
 bool Window::set_draw_color(SDL_Color& color) {
-    return set_draw_color(color.r, color.g, color.b, color.a);   
+    return set_draw_color(color.r, color.g, color.b, color.a);
 }
 
 bool Window::set_draw_color(uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
@@ -184,7 +184,7 @@ bool Window::set_draw_color(uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
         return false;
     }
 
-    return true; 
+    return true;
 }
 
 TTF_Font* Window::load_font(std::string font_path, int size) {
@@ -251,7 +251,7 @@ SDL_Texture* Window::load_text(
         SPDLOG_ERROR("Failed to create texture from image.");
         return nullptr;
     }
-    
+
     SPDLOG_INFO("Loaded text '{}'", text);
     return texture;
 }
@@ -278,7 +278,7 @@ bool Window::crop_texture(SDL_Texture* src, SDL_Texture*& dst, SDL_Rect* rect) {
     if(rect == nullptr) {
         SPDLOG_ERROR("Cannot crop texture, rectangle = nullptr.");
         return false;
-    } 
+    }
 
     if(rect->h == 0 || rect->w == 0) {
         SPDLOG_ERROR("Cannot crop texture, rectangle has either height or width at 0.");
