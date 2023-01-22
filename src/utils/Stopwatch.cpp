@@ -8,10 +8,6 @@ Stopwatch::Stopwatch(const std::string &name) {
     reset();
 }
 
-Stopwatch::~Stopwatch() {
-    log_duration();
-}
-
 uint64_t Stopwatch::get_duration() const {
     return (std::chrono::steady_clock::now() - _start_time_point).count();
 }
