@@ -17,12 +17,12 @@ uint64_t Stopwatch::get_duration() const {
 }
 
 void Stopwatch::log_duration() const {
+    double d = get_duration();
     std::string prefix = "";
+    std::string unit = " ns";
+
     if (!_name.empty())
         prefix = _name + " : ";
-
-    std::string unit = " ns";
-    double d = get_duration();
 
     if (d > 1e9) {
         d /= 1e9;
