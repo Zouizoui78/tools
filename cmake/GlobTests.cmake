@@ -10,7 +10,7 @@ function(glob_tests LINKED_LIBS)
             ../main.cpp
         )
 
-        target_compile_features(${target} PUBLIC cxx_std_17)
+        target_compile_features(${target} PUBLIC cxx_std_20)
 
         target_link_libraries(${target} PRIVATE GTest::gtest)
 

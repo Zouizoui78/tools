@@ -112,6 +112,9 @@ class SoundPlayer {
     void play();
     void pause();
 
+    int16_t make_sample();
+    std::vector<int16_t> make_samples(int n_samples);
+
     private:
 
     static void sdl_callback(void *instance, uint8_t *raw_buffer, int bytes);

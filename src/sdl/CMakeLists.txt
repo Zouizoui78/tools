@@ -8,7 +8,7 @@ add_library(
     ${SRC_LIST}
 )
 
-target_compile_features(${PROJECT}-${MODULE} PUBLIC cxx_std_17)
+target_compile_features(${PROJECT}-${MODULE} PUBLIC cxx_std_20)
 
 target_include_directories(${PROJECT}-${MODULE} PUBLIC include)
 

@@ -2,6 +2,8 @@
 
 #include "spdlog/spdlog.h"
 
+#include <numbers>
+
 namespace tools::sdl {
 
 // Default waveform implementations
@@ -54,7 +56,7 @@ void Sinus::set_frequency(double frequency) {
 }
 
 void Sinus::update_freq_mult() {
-    _freq_mult = 2.0 * 3.141592653589793116 * _frequency;
+    _freq_mult = 2.0 * std::numbers::pi * _frequency;
 }
 
 
@@ -153,20 +155,34 @@ bool SoundPlayer::remove_sound(ASound *sound) {
     return true;
 }
 
+int16_t SoundPlayer::make_sample() {
+    int16_t ret = 0;
+    double time = static_cast<double>(_sample_n) / SOUND_SAMPLING_RATE;
+
+    for (ASound *sound : _sounds) {
+        ret += sound->synthesize(SoundSynthesisData{_sample_n, time});
+    }
+
+    _sample_n++;
+    return ret;
+}
+
+std::vector<int16_t> SoundPlayer::make_samples(int n_samples) {
+    std::vector<int16_t> ret;
+    ret.reserve(n_samples);
+    for (int i = 0 ; i < n_samples ; i++) {
+        ret.push_back(make_sample());
+    }
+    return ret;
+}
+
 void SoundPlayer::sdl_callback(void *instance, uint8_t *raw_buffer, int bytes) {
     SoundPlayer *player = static_cast<SoundPlayer *>(instance);
     int16_t *buffer = reinterpret_cast<int16_t *>(raw_buffer);
 
     uint32_t len = bytes / sizeof(int16_t);
     for (uint32_t i = 0 ; i < len ; i++) {
-        double time = static_cast<double>(player->_sample_n) / SOUND_SAMPLING_RATE;
-
-        buffer[i] = 0;
-        for (ASound *sound : player->_sounds) {
-            buffer[i] += sound->synthesize(SoundSynthesisData{player->_sample_n, time});
-        }
-
-        player->_sample_n++;
+        buffer[i] = player->make_sample();
     }
 }
 
