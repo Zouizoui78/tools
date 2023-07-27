@@ -31,15 +31,15 @@ void Scheduler::stop() {
 
 void Scheduler::loop() {
     while (is_running()) {
-        for (auto &e : _tasks) {
+        for (auto &task : _tasks) {
             if (!is_running())
                 break;
 
             auto now = std::chrono::steady_clock::now();
-            if (now > e.next_run) {
-                if (!e.task())
-                    spdlog::error("Task '{}' returned false.", e.name);
-                e.next_run = now + e.delay_ns;
+            if (now > task.next_run) {
+                if (!task.task())
+                    spdlog::error("Task '{}' returned false.", task.name);
+                task.next_run = now + task.delay_ns;
             }
         }
         if (!_high_precision) {

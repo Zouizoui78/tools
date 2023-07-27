@@ -9,7 +9,7 @@ namespace test {
 using namespace tools::sdl;
 using namespace std::literals;
 
-class TestSound:   public ::testing::Test
+class TestSound: public ::testing::Test
 {
     protected:
     TestSound() {

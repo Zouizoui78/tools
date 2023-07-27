@@ -1,11 +1,11 @@
 #include "gtest/gtest.h"
-#include "utils/Time.hpp"
+#include "utils/time.hpp"
 
 namespace test {
 
-using namespace tools::utils::time;
+using namespace tools::time;
 
-class TestTime:   public ::testing::Test
+class TestTime: public ::testing::Test
 {
     protected:
     TestTime() {

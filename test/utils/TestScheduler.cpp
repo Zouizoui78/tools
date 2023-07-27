@@ -6,7 +6,7 @@ namespace test {
 using namespace tools::utils;
 using namespace std::literals;
 
-class TestScheduler:   public ::testing::Test
+class TestScheduler: public ::testing::Test
 {
     protected:
     TestScheduler() {
@@ -60,20 +60,20 @@ TEST_F(TestScheduler, test_scheduling) {
     Task task_a;
     task_a.name = "task_a";
     task_a.task = [&]() {
-            ++count_a;
-            if (count_a == 10)
-                s.stop();
-            return true;
-        };
+        ++count_a;
+        if (count_a == 100)
+            s.stop();
+        return true;
+    };
     task_a.delay_ns = 10ms;
 
     uint32_t count_b = 0;
     Task task_b;
     task_b.name = "task_b";
     task_b.task = [&]() {
-            ++count_b;
-            return true;
-        };
+        ++count_b;
+        return true;
+    };
     task_b.delay_ns = 1ms;
 
     ASSERT_TRUE(s.add_task(task_a));
@@ -82,7 +82,7 @@ TEST_F(TestScheduler, test_scheduling) {
 
     s.start();
 
-    ASSERT_EQ(count_a, 10);
+    ASSERT_EQ(count_a, 100);
     ASSERT_GE(count_b, 95);
 }
 

@@ -8,7 +8,7 @@ namespace test {
 using namespace tools::utils;
 using namespace std::chrono;
 
-class TestStopwatch:   public ::testing::Test
+class TestStopwatch: public ::testing::Test
 {
     protected:
     TestStopwatch() {

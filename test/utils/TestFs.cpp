@@ -5,7 +5,7 @@
 
 namespace test {
 
-class TestFiles:   public ::testing::Test
+class TestFiles: public ::testing::Test
 {
     protected:
     TestFiles() {
@@ -21,8 +21,8 @@ class TestFiles:   public ::testing::Test
 
     public:
     std::string outputs_path;
-    std::string path_text = "test_resources/Files/test.txt";
-    std::string path_bin = "test_resources/Files/test.bin";
+    std::string path_text = "test/resources/fs/test.txt";
+    std::string path_bin = "test/resources/fs/test.bin";
     std::string path_tmp;
 };
 

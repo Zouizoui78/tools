@@ -1,24 +1,28 @@
 #include "gtest/gtest.h"
 #include "utils/DynamicLibrary.hpp"
 
+#include "spdlog/spdlog.h"
+#include <filesystem>
+
 namespace test {
 
 using namespace tools::utils;
 
-// The small lib used for testing this
-// is compiled in the working directory
-// when compiling tests.
-#ifdef WINDOWS
-static std::string path = "test/resources/DynamicLibrary/libshared.dll";
-#else
-static std::string path = "test/resources/DynamicLibrary/libshared.so";
-#endif
-
-class TestDynamicLibrary:   public ::testing::Test
+class TestDynamicLibrary: public ::testing::Test
 {
     protected:
     TestDynamicLibrary() {
         outputs_path = std::string(std::getenv("TEST_OUTPUTS"));
+
+    #ifdef WINDOWS
+        static std::string dynlib_filename = "dynlib.dll";
+    #else
+        static std::string dynlib_filename = "dynlib.so";
+    #endif
+
+        dynlib_path =
+            (std::filesystem::path(std::getenv("DYNLIB_PATH")) / dynlib_filename)
+            .string();
     }
 
     virtual ~TestDynamicLibrary() {}
@@ -29,15 +33,16 @@ class TestDynamicLibrary:   public ::testing::Test
 
     public:
     std::string outputs_path;
+    std::string dynlib_path;
 };
 
 TEST_F(TestDynamicLibrary, test_load_library) {
-    DynamicLibrary lib(path);
+    DynamicLibrary lib(dynlib_path);
     ASSERT_TRUE(lib.is_loaded());
 }
 
 TEST_F(TestDynamicLibrary, test_load_function) {
-    DynamicLibrary lib(path);
+    DynamicLibrary lib(dynlib_path);
     ASSERT_TRUE(lib.is_loaded());
 
     auto func_ptr = lib.get_function<bool, const std::string &>("func");
@@ -54,7 +59,7 @@ TEST_F(TestDynamicLibrary, test_load_function) {
 }
 
 TEST_F(TestDynamicLibrary, test_call) {
-    DynamicLibrary lib(path);
+    DynamicLibrary lib(dynlib_path);
     ASSERT_TRUE(lib.is_loaded());
 
     bool ret = false;

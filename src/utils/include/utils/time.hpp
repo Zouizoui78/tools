@@ -3,10 +3,10 @@
 
 #include <string>
 
-namespace tools::utils::time {
+namespace tools::time {
 
 time_t string_to_time(const std::string &time, const std::string &format);
 
-} // namespace tools::utils
+} // namespace tools::time
 
 #endif // TIME_HPP

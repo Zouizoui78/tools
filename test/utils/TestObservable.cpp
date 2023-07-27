@@ -24,7 +24,7 @@ public:
     bool test2_called = false;
 };
 
-class TestObservable:   public ::testing::Test
+class TestObservable: public ::testing::Test
 {
     protected:
     TestObservable() {

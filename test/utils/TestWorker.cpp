@@ -8,7 +8,7 @@ namespace test {
 
 using namespace tools::utils;
 
-class TestWorker:   public ::testing::Test
+class TestWorker: public ::testing::Test
 {
     protected:
     TestWorker() {

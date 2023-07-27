@@ -9,7 +9,7 @@ namespace test {
 
 using namespace tools::sdl;
 
-class TestWindow:   public ::testing::Test
+class TestWindow: public ::testing::Test
 {
     protected:
     TestWindow() {

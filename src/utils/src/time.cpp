@@ -4,7 +4,7 @@
 #include <iomanip>
 #include <sstream>
 
-namespace tools::utils::time {
+namespace tools::time {
 
 time_t string_to_time(const std::string &time, const std::string &format) {
     std::tm tm {};
@@ -17,4 +17,4 @@ time_t string_to_time(const std::string &time, const std::string &format) {
 #endif
 }
 
-} // namespace tools::utils
+} // namespace tools::time
