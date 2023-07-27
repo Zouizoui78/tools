@@ -92,6 +92,9 @@ void Square::update_sampling_duty_cycle() {
 // SoundPlayer
 
 SoundPlayer::SoundPlayer() {
+#ifdef WINDOWS
+    putenv("SDL_AUDIODRIVER=dsound");
+#endif
     init();
 }
 
