@@ -44,7 +44,6 @@ TEST_F(TestSound, test_sinus) {
     std::vector<Sinus *> sounds;
     player.play();
     for (int i = 0 ; i < 6 ; i++) {
-        // Adding harmonics 1 to 10 to form a square signal from sinuses.
         Sinus *sin = new Sinus;
         sin->set_frequency(440 * (i * 2 + 1));
         sin->set_volume(1.0 / (i * 2 + 1));

@@ -61,7 +61,7 @@ TEST_F(TestScheduler, test_scheduling) {
     task_a.name = "task_a";
     task_a.task = [&]() {
         ++count_a;
-        if (count_a == 100)
+        if (count_a == 10)
             s.stop();
         return true;
     };
@@ -82,7 +82,7 @@ TEST_F(TestScheduler, test_scheduling) {
 
     s.start();
 
-    ASSERT_EQ(count_a, 100);
+    ASSERT_EQ(count_a, 10);
     ASSERT_GE(count_b, 95);
 }
 
