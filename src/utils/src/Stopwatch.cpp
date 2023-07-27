@@ -1,5 +1,6 @@
-#include "tools/utils/Stopwatch.hpp"
-#include "tools/utils/Log.hpp"
+#include "utils/Stopwatch.hpp"
+
+#include "spdlog/spdlog.h"
 
 namespace tools::utils {
 
@@ -33,7 +34,7 @@ void Stopwatch::log_duration() const {
         unit = "us";
     }
 
-    SPDLOG_INFO("{}{:.3f} {}", prefix, d, unit);
+    spdlog::info("{}{:.3f} {}", prefix, d, unit);
 }
 
 void Stopwatch::reset() {

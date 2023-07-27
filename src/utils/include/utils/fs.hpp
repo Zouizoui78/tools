@@ -1,12 +1,12 @@
-#ifndef FILES_HPP
-#define FILES_HPP
+#ifndef FS_HPP
+#define FS_HPP
 
 #include <filesystem>
 #include <fstream>
 #include <string>
 #include <vector>
 
-namespace tools::utils::files {
+namespace tools::fs {
 
 /**
  * @brief Read a file and return its content as a string.
@@ -32,4 +32,4 @@ bool write_binary_file(const std::vector<uint8_t> &data, const std::string &path
 
 } // namespace tools::utils
 
-#endif // FILES_HPP
+#endif // FS_HPP

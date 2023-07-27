@@ -1,5 +1,6 @@
-#include "tools/utils/Scheduler.hpp"
-#include "tools/utils/Log.hpp"
+#include "utils/Scheduler.hpp"
+
+#include "spdlog/spdlog.h"
 
 #include <thread>
 
@@ -37,7 +38,7 @@ void Scheduler::loop() {
             auto now = std::chrono::steady_clock::now();
             if (now > e.next_run) {
                 if (!e.task())
-                    SPDLOG_ERROR("Task '{}' returned false.", e.name);
+                    spdlog::error("Task '{}' returned false.", e.name);
                 e.next_run = now + e.delay_ns;
             }
         }

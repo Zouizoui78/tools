@@ -1,5 +1,5 @@
-#include <gtest/gtest.h>
-#include "tools/utils/Time.hpp"
+#include "gtest/gtest.h"
+#include "utils/Time.hpp"
 
 namespace test {
 

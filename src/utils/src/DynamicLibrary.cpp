@@ -1,4 +1,4 @@
-#include "tools/utils/DynamicLibrary.hpp"
+#include "utils/DynamicLibrary.hpp"
 
 namespace tools::utils {
 

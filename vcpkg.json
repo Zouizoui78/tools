@@ -1,0 +1,11 @@
+{
+    "name": "vcpkg-qt",
+    "version": "0.0.1",
+    "dependencies": [
+        "gtest",
+        "nlohmann-json",
+        "sdl2",
+        "sdl2-ttf",
+        "spdlog"
+    ]
+}

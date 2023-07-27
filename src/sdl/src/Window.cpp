@@ -1,5 +1,6 @@
-#include "tools/sdl/Window.hpp"
-#include "tools/utils/Log.hpp"
+#include "sdl/Window.hpp"
+
+#include "spdlog/spdlog.h"
 
 namespace tools::sdl {
 
@@ -7,10 +8,10 @@ std::atomic<bool> Window::_sdl_initialized = false;
 std::atomic<uint8_t> Window::_instances_count = 0;
 
 bool Window::sdl_init() {
-    SPDLOG_INFO("SDL init.");
+    spdlog::info("SDL init.");
     bool ret = true;
     if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS) < 0) {
-        SPDLOG_ERROR("Failed to initialize SDL.");
+        spdlog::error("Failed to initialize SDL.");
         ret = false;
     }
     _sdl_initialized = ret;
@@ -18,7 +19,7 @@ bool Window::sdl_init() {
 }
 
 void Window::sdl_cleanup() {
-    SPDLOG_INFO("SDL cleanup.");
+    spdlog::info("SDL cleanup.");
     SDL_Quit();
     _sdl_initialized = false;
 }
@@ -46,16 +47,16 @@ bool Window::init() {
         sdl_init();
 
     if(TTF_Init() != 0) {
-        SPDLOG_ERROR("Failed to initialize TTF.");
+        spdlog::error("Failed to initialize TTF.");
         return false;
     }
 
     if(!get_screen_size()) {
-        SPDLOG_ERROR("Failed to get screen's size.");
+        spdlog::error("Failed to get screen's size.");
         return false;
     }
 
-    SPDLOG_INFO("Screen size = ({}, {})", _screen_width, _screen_height);
+    spdlog::info("Screen size = ({}, {})", _screen_width, _screen_height);
 
     if (_width > _screen_width)
         _width = _screen_width;
@@ -72,7 +73,7 @@ bool Window::init() {
     );
 
     if(_window == nullptr) {
-        SPDLOG_ERROR("Failed to create window.");
+        spdlog::error("Failed to create window.");
         return false;
     }
 
@@ -83,16 +84,16 @@ bool Window::init() {
     );
 
     if(_renderer == nullptr) {
-        SPDLOG_ERROR("Failed to create renderer.");
+        spdlog::error("Failed to create renderer.");
         return false;
     }
 
-    SPDLOG_INFO("Width = {}, height = {}", get_width(), get_height());
+    spdlog::info("Width = {}, height = {}", get_width(), get_height());
 
     _instances_count++;
-    SPDLOG_DEBUG("{} renderer instance(s).", _instances_count);
+    spdlog::debug("{} renderer instance(s).", static_cast<int>(_instances_count));
 
-    SPDLOG_INFO("Init done.");
+    spdlog::info("Init done.");
     _initialized = true;
     return true;
 }
@@ -102,7 +103,7 @@ void Window::stop() {
     _initialized = false;
 
     _instances_count--;
-    SPDLOG_DEBUG("{} renderer instance(s).", _instances_count);
+    spdlog::debug("{} renderer instance(s).", _instances_count.load());
     if (_instances_count == 0) {
         sdl_cleanup();
     }
@@ -114,7 +115,7 @@ void Window::refresh() {
 
 bool Window::clear() {
     if(SDL_RenderClear(_renderer) == -1) {
-        SPDLOG_ERROR("Failed to clear renderer.");
+        spdlog::error("Failed to clear renderer.");
         return false;
     }
     return true;
@@ -147,7 +148,7 @@ SDL_Texture* Window::get_render_target() {
 
 bool Window::set_render_target(SDL_Texture* dst) {
     if(SDL_SetRenderTarget(_renderer, dst) == -1) {
-        SPDLOG_ERROR("Failed to set rendering target.");
+        spdlog::error("Failed to set rendering target.");
         return false;
     }
     return true;
@@ -155,16 +156,16 @@ bool Window::set_render_target(SDL_Texture* dst) {
 
 bool Window::set_viewport(SDL_Rect* rect) {
     if(rect == nullptr) {
-        SPDLOG_ERROR("Cannot set viewport, nullptr.");
+        spdlog::error("Cannot set viewport, nullptr.");
         return false;
     }
 
     if(SDL_RenderSetViewport(_renderer, rect) == -1) {
-        SPDLOG_ERROR("Failed to set viewport.");
+        spdlog::error("Failed to set viewport.");
         return false;
     }
 
-    SPDLOG_INFO("Set viewport to h = {}, w = {}, x = {}, y = {}", rect->h, rect->w, rect->x, rect->y);
+    spdlog::info("Set viewport to h = {}, w = {}, x = {}, y = {}", rect->h, rect->w, rect->x, rect->y);
     return true;
 }
 
@@ -180,7 +181,7 @@ bool Window::set_draw_color(uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
         b,
         a
     ) == -1) {
-        SPDLOG_ERROR("Failed to set draw color.");
+        spdlog::error("Failed to set draw color.");
         return false;
     }
 
@@ -189,37 +190,37 @@ bool Window::set_draw_color(uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
 
 TTF_Font* Window::load_font(std::string font_path, int size) {
     if(font_path.empty()) {
-        SPDLOG_ERROR("Cannot load font, empty path.");
+        spdlog::error("Cannot load font, empty path.");
         return nullptr;
     }
 
     TTF_Font* font = TTF_OpenFont(font_path.c_str(), size);
     if(font == nullptr)
-        SPDLOG_ERROR("Failed to load font '{}'", font_path);
+        spdlog::error("Failed to load font '{}'", font_path);
     else
-        SPDLOG_INFO("Loaded font '{}'", font_path);
+        spdlog::info("Loaded font '{}'", font_path);
     return font;
 }
 
 SDL_Texture* Window::load_image(std::string img_path) {
     if(img_path.empty()) {
-        SPDLOG_ERROR("Cannot load image, empty path.");
+        spdlog::error("Cannot load image, empty path.");
         return nullptr;
     }
 
     SDL_Surface* surface = SDL_LoadBMP(img_path.c_str());
     if(surface == nullptr) {
-        SPDLOG_ERROR("Failed to create surface from image '{}'", img_path);
+        spdlog::error("Failed to create surface from image '{}'", img_path);
         return nullptr;
     }
 
     SDL_Texture* texture = surface_to_texture(surface);
     if(texture == nullptr) {
-        SPDLOG_ERROR("Failed to create texture from image '{}'", img_path);
+        spdlog::error("Failed to create texture from image '{}'", img_path);
         return nullptr;
     }
 
-    SPDLOG_INFO("Loaded image '{}'", img_path);
+    spdlog::info("Loaded image '{}'", img_path);
     return texture;
 }
 
@@ -232,7 +233,7 @@ SDL_Texture* Window::load_text(
     if(font == nullptr) {
         if(_default_font == nullptr)
         {
-            SPDLOG_ERROR("Cannot load text, no default font and no font provided.");
+            spdlog::error("Cannot load text, no default font and no font provided.");
             return nullptr;
         }
         surface = TTF_RenderText_Solid(_default_font, text.c_str(), color);
@@ -242,28 +243,28 @@ SDL_Texture* Window::load_text(
     }
 
     if(surface == nullptr) {
-        SPDLOG_ERROR("Failed to create surface from text.");
+        spdlog::error("Failed to create surface from text.");
         return nullptr;
     }
 
     SDL_Texture* texture = surface_to_texture(surface);
     if(texture == nullptr) {
-        SPDLOG_ERROR("Failed to create texture from image.");
+        spdlog::error("Failed to create texture from image.");
         return nullptr;
     }
 
-    SPDLOG_INFO("Loaded text '{}'", text);
+    spdlog::info("Loaded text '{}'", text);
     return texture;
 }
 
 bool Window::render_texture(SDL_Texture* texture, SDL_Rect* dst, SDL_Rect* portion) {
     if(texture == nullptr) {
-        SPDLOG_ERROR("Cannot render texture, nullptr.");
+        spdlog::error("Cannot render texture, nullptr.");
         return false;
     }
 
     if(SDL_RenderCopy(_renderer, texture, portion, dst) == -1) {
-        SPDLOG_ERROR("Failed to render texture.");
+        spdlog::error("Failed to render texture.");
         return false;
     }
     return true;
@@ -271,29 +272,29 @@ bool Window::render_texture(SDL_Texture* texture, SDL_Rect* dst, SDL_Rect* porti
 
 bool Window::crop_texture(SDL_Texture* src, SDL_Texture*& dst, SDL_Rect* rect) {
     if(src == nullptr) {
-        SPDLOG_ERROR("Cannot crop texture, source = nullptr.");
+        spdlog::error("Cannot crop texture, source = nullptr.");
         return false;
     }
 
     if(rect == nullptr) {
-        SPDLOG_ERROR("Cannot crop texture, rectangle = nullptr.");
+        spdlog::error("Cannot crop texture, rectangle = nullptr.");
         return false;
     }
 
     if(rect->h == 0 || rect->w == 0) {
-        SPDLOG_ERROR("Cannot crop texture, rectangle has either height or width at 0.");
+        spdlog::error("Cannot crop texture, rectangle has either height or width at 0.");
         return false;
     }
 
     dst = this->create_blank_render_target(rect->w, rect->h);
 
     if(dst == nullptr) {
-        SPDLOG_ERROR("Failed to create target texture.");
+        spdlog::error("Failed to create target texture.");
         return false;
     }
 
     if(!this->render_to_texture(src, dst, rect)) {
-        SPDLOG_ERROR("Failed to crop texture.");
+        spdlog::error("Failed to crop texture.");
         return false;
     }
 
@@ -303,7 +304,7 @@ bool Window::crop_texture(SDL_Texture* src, SDL_Texture*& dst, SDL_Rect* rect) {
 bool Window::get_screen_size() {
     SDL_DisplayMode mode = SDL_DisplayMode();
     if(SDL_GetDesktopDisplayMode(0, &mode) == -1) {
-        SPDLOG_ERROR("Failed to get display information.");
+        spdlog::error("Failed to get display information.");
         return false;
     }
     _screen_width = mode.w;
@@ -313,13 +314,13 @@ bool Window::get_screen_size() {
 
 SDL_Texture* Window::surface_to_texture(SDL_Surface* surface) {
     if(surface == nullptr) {
-        SPDLOG_ERROR("Cannot create texture from surface, nullptr.");
+        spdlog::error("Cannot create texture from surface, nullptr.");
         return nullptr;
     }
 
     SDL_Texture* texture = SDL_CreateTextureFromSurface(_renderer, surface);
     if(texture == nullptr) {
-        SPDLOG_ERROR("Failed to create texture from surface.");
+        spdlog::error("Failed to create texture from surface.");
         return nullptr;
     }
 
@@ -333,18 +334,18 @@ bool Window::render_to_texture(SDL_Texture* src, SDL_Texture* dst, SDL_Rect* dst
 
     // Set render target to destination texture.
     if(!this->set_render_target(dst)) {
-        SPDLOG_ERROR("Failed to set rendering target prior to render to texture.");
+        spdlog::error("Failed to set rendering target prior to render to texture.");
         return false;
     }
 
     if(this->render_texture(src, nullptr, dstRect) == false) {
-        SPDLOG_ERROR("Failed to render texture to target texture.");
+        spdlog::error("Failed to render texture to target texture.");
         return false;
     }
 
     // Restore rendering target.
     if(!this->set_render_target(target)) {
-        SPDLOG_ERROR("Failed to set rendering target back to default.");
+        spdlog::error("Failed to set rendering target back to default.");
         return false;
     }
 
@@ -357,17 +358,17 @@ SDL_Texture* Window::create_blank_render_target(int width, int height) {
 
 bool Window::draw_rectangle(SDL_Rect* rect, bool fill) {
     if(rect == nullptr) {
-        SPDLOG_ERROR("draw_rectangle : rect = nullptr.");
+        spdlog::error("draw_rectangle : rect = nullptr.");
         return false;
     }
 
     if(SDL_RenderDrawRect(_renderer, rect) == -1) {
-        SPDLOG_ERROR("draw_rectangle : Failed to render rectangle.");
+        spdlog::error("draw_rectangle : Failed to render rectangle.");
         return false;
     }
 
     if (fill && SDL_RenderFillRect(_renderer, rect) == -1) {
-        SPDLOG_ERROR("Failed to fill rectangle.");
+        spdlog::error("Failed to fill rectangle.");
         return false;
     }
 

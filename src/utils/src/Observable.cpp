@@ -1,5 +1,6 @@
-#include "tools/utils/Observable.hpp"
-#include "tools/utils/Log.hpp"
+#include "utils/Observable.hpp"
+
+#include <algorithm>
 
 namespace tools::utils {
 

@@ -1,5 +1,5 @@
-#include <gtest/gtest.h>
-#include "tools/utils/DynamicLibrary.hpp"
+#include "gtest/gtest.h"
+#include "utils/DynamicLibrary.hpp"
 
 namespace test {
 
@@ -9,9 +9,9 @@ using namespace tools::utils;
 // is compiled in the working directory
 // when compiling tests.
 #ifdef WINDOWS
-static std::string path = "./libshared.dll";
+static std::string path = "test/resources/DynamicLibrary/libshared.dll";
 #else
-static std::string path = "./libshared.so";
+static std::string path = "test/resources/DynamicLibrary/libshared.so";
 #endif
 
 class TestDynamicLibrary:   public ::testing::Test

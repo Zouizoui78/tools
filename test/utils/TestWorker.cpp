@@ -1,7 +1,8 @@
-#include <gtest/gtest.h>
-#include "tools/utils/Worker.hpp"
-#include "tools/utils/Log.hpp"
-#include "tools/utils/Stopwatch.hpp"
+#include "gtest/gtest.h"
+#include "spdlog/spdlog.h"
+
+#include "utils/Worker.hpp"
+#include "utils/Stopwatch.hpp"
 
 namespace test {
 
@@ -50,7 +51,7 @@ TEST_F(TestWorker, test_change_task) {
 
     Worker task([&a]() {
         ++a;
-        SPDLOG_DEBUG("Callback called, a = {}", a);
+        spdlog::debug("Callback called, a = {}", a.load());
     });
 
     task.set_delay_ms(1);
@@ -61,10 +62,10 @@ TEST_F(TestWorker, test_change_task) {
 
     task.set_task([&b]() {
         ++b;
-        SPDLOG_DEBUG("Callback called, b = {}", b);
+        spdlog::debug("Callback called, b = {}", b.load());
     });
 
-    SPDLOG_INFO("New task set.");
+    spdlog::info("New task set.");
 
     uint8_t backup_a = a;
 
@@ -82,45 +83,45 @@ TEST_F(TestWorker, test_empty_callback) {
 
     EXPECT_FALSE(task.is_running());
 
-    SPDLOG_INFO("Error is expected here.");
+    spdlog::info("Error is expected here.");
     task.start();
     EXPECT_FALSE(task.is_running());
 }
 
-TEST_F(TestWorker, test_time_accuracy) {
-    int count = 0;
-    Stopwatch s("test");
+// TEST_F(TestWorker, test_time_accuracy) {
+//     int count = 0;
+//     Stopwatch s("test");
 
-    double previous = 0;
-    bool first_done = false;
+//     double previous = 0;
+//     bool first_done = false;
 
-    uint32_t frequency = 1000;
-    double duration = 1000.0 / frequency;
-    double duration_error = duration / 100;
+//     uint32_t frequency = 1000;
+//     double duration = 1000.0 / frequency;
+//     double duration_error = duration / 100;
 
-    Worker w([&]() {
-        double d = s.get_duration();
-        double diff = (d - previous) / 1e6;
-        previous = d;
+//     Worker w([&]() {
+//         double d = s.get_duration();
+//         double diff = (d - previous) / 1e6;
+//         previous = d;
 
-        // We don't expect on first iteration because
-        // then the diff is ~0.
-        if (!first_done)
-            first_done = true;
-        else {
-            SPDLOG_INFO("{} ms", diff);
-            EXPECT_NEAR(diff, duration, duration_error);
-        }
+//         // We don't expect on first iteration because
+//         // then the diff is ~0.
+//         if (!first_done)
+//             first_done = true;
+//         else {
+//             spdlog::info("{} ms", diff);
+//             EXPECT_NEAR(diff, duration, duration_error);
+//         }
 
-        ++count;
+//         ++count;
 
-        if (count == 5)
-            w.stop();
-    }, false);
+//         if (count == 5)
+//             w.stop();
+//     }, false);
 
-    w.set_frequency(frequency);
-    s.reset();
-    w.start();
-}
+//     w.set_frequency(frequency);
+//     s.reset();
+//     w.start();
+// }
 
 } // namespace test

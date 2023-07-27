@@ -1,19 +1,19 @@
-#include "tools/utils/Files.hpp"
-#include "tools/utils/Log.hpp"
+#include "utils/fs.hpp"
+#include "spdlog/spdlog.h"
 
-namespace tools::utils::files {
+namespace tools::fs {
 
 std::string read_text_file(const std::string &path) {
     std::string ret("");
 
     std::ifstream file(path);
     if (!file.is_open()) {
-        SPDLOG_ERROR("Failed to open file {} : {}", path, strerror(errno));
+        spdlog::error("Failed to open file {} : {}", path, strerror(errno));
         return ret;
     }
 
     uintmax_t file_size = std::filesystem::file_size(path);
-    SPDLOG_DEBUG("Reading {} bytes from '{}'", file_size, path);
+    spdlog::debug("Reading {} bytes from '{}'", file_size, path);
 
     char *buf = static_cast<char *>(malloc((file_size + 1) * sizeof(char)));
     file.read(buf, file_size);
@@ -30,12 +30,12 @@ std::vector<uint8_t> read_binary_file(const std::string &path) {
 
     std::ifstream file(path, std::ios::binary);
     if (!file.is_open()) {
-        SPDLOG_ERROR("Failed to open file {} : {}", path, strerror(errno));
+        spdlog::error("Failed to open file {} : {}", path, strerror(errno));
         return result;
     }
 
     uintmax_t file_size = std::filesystem::file_size(path);
-    SPDLOG_DEBUG("Reading {} bytes from '{}'", file_size, path);
+    spdlog::debug("Reading {} bytes from '{}'", file_size, path);
 
     uint8_t tmp;
     for (size_t i = 0 ; i < file_size ; ++i) {
@@ -49,7 +49,7 @@ std::vector<uint8_t> read_binary_file(const std::string &path) {
 bool write_binary_file(const std::vector<uint8_t> &data, const std::string &path) {
     std::ofstream file(path, std::ios::binary);
     if (!file.is_open()) {
-        SPDLOG_ERROR("Failed to open file {} : {}", path, strerror(errno));
+        spdlog::error("Failed to open file {} : {}", path, strerror(errno));
         return false;
     }
 

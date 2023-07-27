@@ -1,9 +1,10 @@
-#include <gtest/gtest.h>
-#include "tools/utils/Scheduler.hpp"
+#include "gtest/gtest.h"
+#include "utils/Scheduler.hpp"
 
 namespace test {
 
 using namespace tools::utils;
+using namespace std::literals;
 
 class TestScheduler:   public ::testing::Test
 {
@@ -64,7 +65,7 @@ TEST_F(TestScheduler, test_scheduling) {
                 s.stop();
             return true;
         };
-    task_a.delay_us = 10000;
+    task_a.delay_ns = 10ms;
 
     uint32_t count_b = 0;
     Task task_b;
@@ -73,7 +74,7 @@ TEST_F(TestScheduler, test_scheduling) {
             ++count_b;
             return true;
         };
-    task_b.delay_us = 1000;
+    task_b.delay_ns = 1ms;
 
     ASSERT_TRUE(s.add_task(task_a));
     ASSERT_TRUE(s.add_task(task_b));

@@ -1,5 +1,6 @@
-#include "tools/sdl/Sound.hpp"
-#include "tools/utils/Log.hpp"
+#include "sdl/Sound.hpp"
+
+#include "spdlog/spdlog.h"
 
 namespace tools::sdl {
 
@@ -99,13 +100,13 @@ SoundPlayer::~SoundPlayer() {
         SDL_CloseAudio();
         SDL_QuitSubSystem(SDL_INIT_AUDIO);
         _is_audio_initialized = false;
-        SPDLOG_INFO("SDL audio subsystem cleaned up.");
+        spdlog::info("SDL audio subsystem cleaned up.");
     }
 }
 
 bool SoundPlayer::init() {
     if (SDL_InitSubSystem(SDL_INIT_AUDIO) != 0) {
-        SPDLOG_ERROR("Failed to initialize audio subsystem : {}", SDL_GetError());
+        spdlog::error("Failed to initialize audio subsystem : {}", SDL_GetError());
         _is_audio_initialized = false;
     }
 
@@ -120,11 +121,11 @@ bool SoundPlayer::init() {
     SDL_AudioSpec obtained;
 
     if (SDL_OpenAudio(&desired, &obtained) != 0) {
-        SPDLOG_ERROR("Failed to open sound device : {}", SDL_GetError());
+        spdlog::error("Failed to open sound device : {}", SDL_GetError());
         _is_audio_initialized = false;
     }
 
-    SPDLOG_INFO("SDL audio subsystem initialized.");
+    spdlog::info("SDL audio subsystem initialized.");
     _is_audio_initialized = true;
     return _is_audio_initialized;
 }

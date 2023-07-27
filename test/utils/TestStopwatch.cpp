@@ -1,5 +1,5 @@
-#include <gtest/gtest.h>
-#include "tools/utils/Stopwatch.hpp"
+#include "gtest/gtest.h"
+#include "utils/Stopwatch.hpp"
 
 #include <thread>
 

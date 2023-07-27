@@ -1,8 +1,8 @@
-#include <gtest/gtest.h>
-#include "tools/sdl/InputMapper.hpp"
-#include "tools/utils/Log.hpp"
+#include "gtest/gtest.h"
+#include "spdlog/spdlog.h"
 
-#include "tools/utils/Files.hpp"
+#include "sdl/InputMapper.hpp"
+#include "utils/fs.hpp"
 
 namespace test {
 
@@ -26,7 +26,7 @@ class TestInputMapper:   public ::testing::Test
 };
 
 TEST_F(TestInputMapper, test_add_remove_mapping) {
-    SPDLOG_INFO("Errors are expected in this test.");
+    spdlog::info("Errors are expected in this test.");
     InputMapper mapper;
     ASSERT_TRUE(mapper.set_mapping("a", 17));
     ASSERT_TRUE(mapper.set_mapping("a", 45));

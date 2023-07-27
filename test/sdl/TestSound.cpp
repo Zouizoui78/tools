@@ -1,13 +1,13 @@
-#include <gtest/gtest.h>
-#include "tools/sdl/Sound.hpp"
-#include "tools/utils/Log.hpp"
-#include "tools/utils/Stopwatch.hpp"
+#include "gtest/gtest.h"
+#include "spdlog/spdlog.h"
 
-#include <unistd.h>
+#include "sdl/Sound.hpp"
+#include "utils/Stopwatch.hpp"
 
 namespace test {
 
 using namespace tools::sdl;
+using namespace std::literals;
 
 class TestSound:   public ::testing::Test
 {
@@ -48,11 +48,11 @@ TEST_F(TestSound, test_sinus) {
         Sinus *sin = new Sinus;
         sin->set_frequency(440 * (i * 2 + 1));
         sin->set_volume(1.0 / (i * 2 + 1));
-        SPDLOG_INFO(440 * (i * 2 + 1));
-        SPDLOG_INFO(1.0 / (i * 2 + 1));
+        spdlog::info(440 * (i * 2 + 1));
+        spdlog::info(1.0 / (i * 2 + 1));
         player.add_sound(sin);
         sounds.push_back(sin);
-        usleep(1e6);
+        std::this_thread::sleep_for(1s);
     }
 
     player.pause();
@@ -77,8 +77,8 @@ TEST_F(TestSound, test_square) {
             square.set_duty_cycle(0.125);
         else
             square.set_duty_cycle(0.125 * i * 2);
-        SPDLOG_INFO("Duty cycle = {}", square.get_duty_cycle());
-        usleep(1500e3);
+        spdlog::info("Duty cycle = {}", square.get_duty_cycle());
+        std::this_thread::sleep_for(1.5s);
     }
 }
 
@@ -88,9 +88,9 @@ TEST_F(TestSound, test_duty_cycle) {
     square.set_duty_cycle(0.25);
     player.add_sound(&square);
     player.play();
-    usleep(1e6);
+    std::this_thread::sleep_for(1s);
     square.set_duty_cycle(0.75);
-    usleep(1e6);
+    std::this_thread::sleep_for(1s);
 }
 
 TEST_F(TestSound, test_setting_changes) {
@@ -108,7 +108,7 @@ TEST_F(TestSound, test_setting_changes) {
             sound.set_frequency(si);
         else
             sound.set_frequency(la);
-        usleep(400e3);
+        std::this_thread::sleep_for(400ms);
     }
     for (int i = 0 ; i < 4 ; i++) {
         if (i == 0)
@@ -120,7 +120,7 @@ TEST_F(TestSound, test_setting_changes) {
         else {
             sound.set_duty_cycle(0.75);
         }
-        usleep(400e3);
+        std::this_thread::sleep_for(400ms);
     }
 }
 
