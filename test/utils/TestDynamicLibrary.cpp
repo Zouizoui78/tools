@@ -17,7 +17,7 @@ class TestDynamicLibrary: public ::testing::Test
     #ifdef WINDOWS
         static std::string dynlib_filename = "dynlib.dll";
     #else
-        static std::string dynlib_filename = "dynlib.so";
+        static std::string dynlib_filename = "libdynlib.so";
     #endif
 
         dynlib_path =
