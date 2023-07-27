@@ -1,5 +1,5 @@
 {
-    "name": "vcpkg-qt",
+    "name": "tools",
     "version": "0.0.1",
     "dependencies": [
         "gtest",
