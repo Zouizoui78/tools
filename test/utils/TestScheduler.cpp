@@ -1,8 +1,6 @@
 #include "gtest/gtest.h"
 #include "utils/Scheduler.hpp"
 
-#include "spdlog/spdlog.h"
-
 namespace test {
 
 using namespace tools::utils;
