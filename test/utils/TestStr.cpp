@@ -12,8 +12,8 @@ TEST_F(TestStr, test_stoi) {
     EXPECT_EQ(tools::str::stoi("24aaa"), 24);
     EXPECT_EQ(tools::str::stoi("   24.3aaa"), 24);
 
-    EXPECT_FALSE(tools::str::stoi("aaa")); // invalid_argument
-    EXPECT_FALSE(tools::str::stoi("11111111111111111111111111111")); // out_of_range
+    EXPECT_EQ(tools::str::stoi("aaa"), std::nullopt); // invalid_argument
+    EXPECT_EQ(tools::str::stoi("11111111111111111111111111111"), std::nullopt); // out_of_range
 }
 
 TEST_F(TestStr, test_stod) {

@@ -1,6 +1,8 @@
 #include "gtest/gtest.h"
 #include "utils/Scheduler.hpp"
 
+#include "spdlog/spdlog.h"
+
 namespace test {
 
 using namespace tools::utils;
@@ -55,6 +57,8 @@ TEST_F(TestScheduler, test_add_task) {
 
 TEST_F(TestScheduler, test_scheduling) {
     Scheduler s;
+    // Needed on windows
+    s.set_high_precision(true);
 
     uint32_t count_a = 0;
     Task task_a;
