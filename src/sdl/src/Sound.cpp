@@ -38,6 +38,10 @@ double ASound::get_period() const {
     return _period;
 }
 
+int16_t ASound::get_sampling_period() const {
+    return _sampling_period;
+}
+
 
 Sinus::Sinus() : ASound() {
     update_freq_mult();
@@ -77,6 +81,10 @@ double Square::get_duty_cycle() const {
 void Square::set_duty_cycle(double duty_cycle) {
     _duty_cycle = duty_cycle;
     update_sampling_duty_cycle();
+}
+
+int16_t Square::get_sampling_duty_cycle() const {
+    return _sampling_duty_cycle;
 }
 
 void Square::update_sampling_duty_cycle() {
@@ -134,7 +142,7 @@ bool SoundPlayer::is_initialized() {
     return _is_audio_initialized;
 }
 
-bool SoundPlayer::add_sound(ASound *sound) {
+bool SoundPlayer::add_sound(std::shared_ptr<ASound> sound) {
     auto it = std::find(_sounds.begin(), _sounds.end(), sound);
     if (it != _sounds.end())
         return false;
@@ -142,7 +150,7 @@ bool SoundPlayer::add_sound(ASound *sound) {
     return true;
 }
 
-bool SoundPlayer::remove_sound(ASound *sound) {
+bool SoundPlayer::remove_sound(std::shared_ptr<ASound> sound) {
     auto it = std::find(_sounds.begin(), _sounds.end(), sound);
     if (it == _sounds.end())
         return false;
@@ -150,21 +158,21 @@ bool SoundPlayer::remove_sound(ASound *sound) {
     return true;
 }
 
-double SoundPlayer::make_sample() {
+double SoundPlayer::synthesize() {
     double ret = 0;
     double time = static_cast<double>(_sample_n) / SOUND_SAMPLING_RATE;
-    for (ASound *sound : _sounds) {
+    for (auto sound : _sounds) {
         ret += sound->synthesize(SoundSynthesisData{_sample_n, time});
     }
     _sample_n++;
     return ret;
 }
 
-std::vector<double> SoundPlayer::make_samples(int n_samples) {
+std::vector<double> SoundPlayer::synthesize_n_samples(int n_samples) {
     std::vector<double> ret;
     ret.reserve(n_samples);
     for (int i = 0 ; i < n_samples ; i++) {
-        ret.push_back(make_sample());
+        ret.push_back(synthesize());
     }
     return ret;
 }
@@ -175,7 +183,7 @@ void SoundPlayer::sdl_callback(void *instance, uint8_t *raw_buffer, int bytes) {
 
     uint32_t len = bytes / sizeof(float);
     for (uint32_t i = 0 ; i < len ; i++) {
-        buffer[i] = static_cast<float>(player->make_sample());
+        buffer[i] = static_cast<float>(player->synthesize());
     }
 }
 

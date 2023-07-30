@@ -2,6 +2,7 @@
 #define SOUND_HPP
 
 #include <cstdint>
+#include <memory>
 #include <vector>
 
 #include <SDL2/SDL.h>
@@ -9,7 +10,7 @@
 namespace tools::sdl {
 
 struct SoundSynthesisData {
-    uint32_t sample_n;
+    int64_t sample_n;
     double time;
 };
 
@@ -27,6 +28,7 @@ class ASound {
     virtual void set_frequency (double frequency);
 
     double get_period() const;
+    int16_t get_sampling_period() const;
 
     protected:
 
@@ -34,7 +36,7 @@ class ASound {
 
     double _frequency;
     double _period;
-    uint32_t _sampling_period;
+    int16_t _sampling_period;
 };
 
 class Sinus : public ASound {
@@ -65,12 +67,14 @@ class Square : public ASound {
     double get_duty_cycle() const;
     void set_duty_cycle(double duty_cycle);
 
+    int16_t get_sampling_duty_cycle() const;
+
     private:
 
     void update_sampling_duty_cycle();
 
     double _duty_cycle = 0.5;
-    uint32_t _sampling_duty_cycle = 1;
+    int16_t _sampling_duty_cycle = 1;
 };
 
 class SoundPlayer {
@@ -88,7 +92,7 @@ class SoundPlayer {
      * @return true No error.
      * @return false Sound already registered.
      */
-    bool add_sound(ASound *sound);
+    bool add_sound(std::shared_ptr<ASound> sound);
 
     /**
      * @brief Remove a sound from the registered sounds vector.
@@ -97,13 +101,13 @@ class SoundPlayer {
      * @return true No error.
      * @return false Sound not found in vector.
      */
-    bool remove_sound(ASound *sound);
+    bool remove_sound(std::shared_ptr<ASound> sound);
 
     void play();
     void pause();
 
-    double make_sample();
-    std::vector<double> make_samples(int n_samples);
+    double synthesize();
+    std::vector<double> synthesize_n_samples(int n_samples);
 
     private:
 
@@ -111,9 +115,9 @@ class SoundPlayer {
 
     bool init();
 
-    std::vector<ASound *> _sounds;
+    std::vector<std::shared_ptr<ASound>> _sounds;
 
-    uint32_t _sample_n = 0;
+    int64_t _sample_n = 0;
     bool _is_audio_initialized = false;
 };
 
