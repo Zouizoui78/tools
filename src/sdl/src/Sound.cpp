@@ -6,21 +6,20 @@
 
 namespace tools::sdl {
 
+constexpr uint32_t SOUND_SAMPLING_RATE = 44100;
+
 // Default waveform implementations
 ASound::ASound() {
     set_volume(1);
     set_frequency(440);
 }
 
-ASound::~ASound() {}
-
 double ASound::get_volume() const {
-    return _volume;
+    return _volume * 2;
 }
 
 void ASound::set_volume(double volume) {
-    _volume = volume;
-    _amplitude_mult = _volume * SOUND_AMPLITUDE;
+    _volume = volume * 0.5;
 }
 
 double ASound::get_frequency() const  {
@@ -44,10 +43,8 @@ Sinus::Sinus() : ASound() {
     update_freq_mult();
 }
 
-Sinus::~Sinus() {}
-
-int16_t Sinus::synthesize(SoundSynthesisData data) const {
-    return _amplitude_mult * sin(_freq_mult * data.time);
+double Sinus::synthesize(SoundSynthesisData data) const {
+    return _volume * sin(_freq_mult * data.time);
 }
 
 void Sinus::set_frequency(double frequency) {
@@ -64,10 +61,8 @@ Square::Square() : ASound() {
     update_sampling_duty_cycle();
 }
 
-Square::~Square() {}
-
-int16_t Square::synthesize(SoundSynthesisData data) const {
-    return (data.sample_n % _sampling_period) >= _sampling_duty_cycle ? -_amplitude_mult : _amplitude_mult;
+double Square::synthesize(SoundSynthesisData data) const {
+    return (data.sample_n % _sampling_period) >= _sampling_duty_cycle ? -_volume : _volume;
 }
 
 void Square::set_frequency(double frequency) {
@@ -117,9 +112,9 @@ bool SoundPlayer::init() {
 
     SDL_AudioSpec desired;
     desired.freq = SOUND_SAMPLING_RATE;
-    desired.format = AUDIO_S16SYS;
+    desired.format = AUDIO_F32SYS;
     desired.channels = 1; // mono
-    desired.samples = 2048; // buffer-size
+    desired.samples = 2048; // buffer size
     desired.callback = sdl_callback; // called periodically by SDL to refill the buffer
     desired.userdata = this;
 
@@ -155,20 +150,18 @@ bool SoundPlayer::remove_sound(ASound *sound) {
     return true;
 }
 
-int16_t SoundPlayer::make_sample() {
-    int16_t ret = 0;
+double SoundPlayer::make_sample() {
+    double ret = 0;
     double time = static_cast<double>(_sample_n) / SOUND_SAMPLING_RATE;
-
     for (ASound *sound : _sounds) {
         ret += sound->synthesize(SoundSynthesisData{_sample_n, time});
     }
-
     _sample_n++;
     return ret;
 }
 
-std::vector<int16_t> SoundPlayer::make_samples(int n_samples) {
-    std::vector<int16_t> ret;
+std::vector<double> SoundPlayer::make_samples(int n_samples) {
+    std::vector<double> ret;
     ret.reserve(n_samples);
     for (int i = 0 ; i < n_samples ; i++) {
         ret.push_back(make_sample());
@@ -178,11 +171,11 @@ std::vector<int16_t> SoundPlayer::make_samples(int n_samples) {
 
 void SoundPlayer::sdl_callback(void *instance, uint8_t *raw_buffer, int bytes) {
     SoundPlayer *player = static_cast<SoundPlayer *>(instance);
-    int16_t *buffer = reinterpret_cast<int16_t *>(raw_buffer);
+    float *buffer = reinterpret_cast<float *>(raw_buffer);
 
-    uint32_t len = bytes / sizeof(int16_t);
+    uint32_t len = bytes / sizeof(float);
     for (uint32_t i = 0 ; i < len ; i++) {
-        buffer[i] = player->make_sample();
+        buffer[i] = static_cast<float>(player->make_sample());
     }
 }
 

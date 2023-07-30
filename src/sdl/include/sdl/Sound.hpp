@@ -8,9 +8,6 @@
 
 namespace tools::sdl {
 
-constexpr uint32_t SOUND_SAMPLING_RATE = 44100;
-constexpr uint32_t SOUND_AMPLITUDE = 1000;
-
 struct SoundSynthesisData {
     uint32_t sample_n;
     double time;
@@ -21,9 +18,7 @@ class ASound {
 
     ASound();
 
-    virtual ~ASound();
-
-    virtual int16_t synthesize(SoundSynthesisData data) const = 0;
+    virtual double synthesize(SoundSynthesisData data) const = 0;
 
     double get_volume() const;
     virtual void set_volume(double volume);
@@ -36,7 +31,6 @@ class ASound {
     protected:
 
     double _volume;
-    double _amplitude_mult;
 
     double _frequency;
     double _period;
@@ -48,9 +42,7 @@ class Sinus : public ASound {
 
     Sinus();
 
-    virtual ~Sinus();
-
-    virtual int16_t synthesize(SoundSynthesisData data) const override;
+    virtual double synthesize(SoundSynthesisData data) const override;
 
     virtual void set_frequency(double frequency) override;
 
@@ -66,9 +58,7 @@ class Square : public ASound {
 
     Square();
 
-    virtual ~Square();
-
-    virtual int16_t synthesize(SoundSynthesisData data) const override;
+    virtual double synthesize(SoundSynthesisData data) const override;
 
     virtual void set_frequency(double frequency) override;
 
@@ -112,8 +102,8 @@ class SoundPlayer {
     void play();
     void pause();
 
-    int16_t make_sample();
-    std::vector<int16_t> make_samples(int n_samples);
+    double make_sample();
+    std::vector<double> make_samples(int n_samples);
 
     private:
 
