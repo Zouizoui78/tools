@@ -11,7 +11,7 @@ add_library(
 target_include_directories(
     ${TARGET} PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    $<INSTALL_INTERFACE:include/${MODULE}>
+    $<INSTALL_INTERFACE:include/tools/${MODULE}>
 )
 
 target_link_libraries(${TARGET} PRIVATE spdlog::spdlog)
