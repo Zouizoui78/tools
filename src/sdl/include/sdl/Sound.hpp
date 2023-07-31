@@ -9,9 +9,12 @@
 
 namespace tools::sdl {
 
-struct SoundSynthesisData {
-    int64_t sample_n;
+struct SynthesisTimepoint {
+    // Synthesis time in seconds since the beginning of the synthesis
     double time;
+
+    // Index of the sample starting from 0 at the beginning of the synthesis
+    int64_t sample_n;
 };
 
 class ASound {
@@ -19,7 +22,7 @@ class ASound {
 
     ASound();
 
-    virtual double synthesize(SoundSynthesisData data) const = 0;
+    virtual double synthesize(SynthesisTimepoint timepoint) const = 0;
 
     double get_volume() const;
     virtual void set_volume(double volume);
@@ -44,15 +47,17 @@ class Sinus : public ASound {
 
     Sinus();
 
-    virtual double synthesize(SoundSynthesisData data) const override;
+    virtual double synthesize(SynthesisTimepoint timepoint) const override;
 
     virtual void set_frequency(double frequency) override;
 
+    double get_angular_freq() const;
+
     private:
 
-    void update_freq_mult();
+    void update_angular_freq();
 
-    double _freq_mult = 0;
+    double _angular_freq = 0;
 };
 
 class Square : public ASound {
@@ -60,7 +65,7 @@ class Square : public ASound {
 
     Square();
 
-    virtual double synthesize(SoundSynthesisData data) const override;
+    virtual double synthesize(SynthesisTimepoint timepoint) const override;
 
     virtual void set_frequency(double frequency) override;
 

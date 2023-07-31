@@ -45,20 +45,24 @@ int16_t ASound::get_sampling_period() const {
 
 
 Sinus::Sinus() : ASound() {
-    update_freq_mult();
+    update_angular_freq();
 }
 
-double Sinus::synthesize(SoundSynthesisData data) const {
-    return _volume * sin(_freq_mult * data.time);
+double Sinus::synthesize(SynthesisTimepoint timepoint) const {
+    return _volume * sin(_angular_freq * timepoint.time);
 }
 
 void Sinus::set_frequency(double frequency) {
     ASound::set_frequency(frequency);
-    update_freq_mult();
+    update_angular_freq();
 }
 
-void Sinus::update_freq_mult() {
-    _freq_mult = 2.0 * std::numbers::pi * _frequency;
+double Sinus::get_angular_freq() const {
+    return _angular_freq;
+}
+
+void Sinus::update_angular_freq() {
+    _angular_freq = 2.0 * std::numbers::pi * _frequency;
 }
 
 
@@ -66,8 +70,8 @@ Square::Square() : ASound() {
     update_sampling_duty_cycle();
 }
 
-double Square::synthesize(SoundSynthesisData data) const {
-    return (data.sample_n % _sampling_period) >= _sampling_duty_cycle ? -_volume : _volume;
+double Square::synthesize(SynthesisTimepoint timepoint) const {
+    return (timepoint.sample_n % _sampling_period) >= _sampling_duty_cycle ? -_volume : _volume;
 }
 
 void Square::set_frequency(double frequency) {
@@ -163,7 +167,7 @@ double SoundPlayer::synthesize() {
     double ret = 0;
     double time = static_cast<double>(_sample_n) / SOUND_SAMPLING_RATE;
     for (auto sound : _sounds) {
-        ret += sound->synthesize(SoundSynthesisData{_sample_n, time});
+        ret += sound->synthesize(SynthesisTimepoint{ time, _sample_n });
     }
     _sample_n++;
     return ret;
