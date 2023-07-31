@@ -44,7 +44,6 @@ endif()
 
 # Install
 
-set(INSTALL_INCLUDEDIR include)
 set(INSTALL_LIBDIR lib)
 set(INSTALL_CMAKEDIR lib/cmake/${PROJECT})
 
@@ -55,7 +54,7 @@ foreach(module sdl;utils)
     # Installing headers
     install(
         DIRECTORY src/${module}/include
-        DESTINATION ${INSTALL_INCLUDEDIR}
+        DESTINATION include/${module}
     )
 endforeach()
 
