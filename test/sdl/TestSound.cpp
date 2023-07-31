@@ -82,7 +82,7 @@ TEST_F(TestSound, test_square) {
 
     player.play();
 
-    for (uint8_t i = 0 ; i < 4 ; i++) {
+    for (int i = 0 ; i < 4 ; i++) {
         if (i == 0)
             square->set_duty_cycle(0.125);
         else

@@ -6,7 +6,8 @@
 
 namespace tools::sdl {
 
-constexpr uint32_t SOUND_SAMPLING_RATE = 44100;
+constexpr int32_t SOUND_SAMPLING_RATE = 44100;
+constexpr double VOLUME_MULT = 0.01;
 
 // Default waveform implementations
 ASound::ASound() {
@@ -15,11 +16,11 @@ ASound::ASound() {
 }
 
 double ASound::get_volume() const {
-    return _volume * 2;
+    return _volume / VOLUME_MULT;
 }
 
 void ASound::set_volume(double volume) {
-    _volume = volume * 0.5;
+    _volume = volume * VOLUME_MULT;
 }
 
 double ASound::get_frequency() const  {
@@ -181,8 +182,8 @@ void SoundPlayer::sdl_callback(void *instance, uint8_t *raw_buffer, int bytes) {
     SoundPlayer *player = static_cast<SoundPlayer *>(instance);
     float *buffer = reinterpret_cast<float *>(raw_buffer);
 
-    uint32_t len = bytes / sizeof(float);
-    for (uint32_t i = 0 ; i < len ; i++) {
+    int32_t len = bytes / sizeof(float);
+    for (int32_t i = 0 ; i < len ; i++) {
         buffer[i] = static_cast<float>(player->synthesize());
     }
 }
