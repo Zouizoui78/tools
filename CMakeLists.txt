@@ -50,7 +50,7 @@ foreach(module sdl;utils)
     # Installing headers
     install(
         DIRECTORY src/${module}/include
-        DESTINATION include/${module}
+        DESTINATION include/${PROJECT}/${module}
     )
 endforeach()
 

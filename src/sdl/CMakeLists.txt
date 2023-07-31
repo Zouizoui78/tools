@@ -3,7 +3,6 @@ set(TARGET ${PROJECT}-${MODULE})
 
 file(GLOB SRC_LIST src/*.cpp)
 
-# static or shared based on configuration settings settings
 add_library(
     ${TARGET}
     ${SRC_LIST}
@@ -12,7 +11,7 @@ add_library(
 target_include_directories(
     ${TARGET} PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    $<INSTALL_INTERFACE:include/${TARGET}>  # <prefix>/include/mylib
+    $<INSTALL_INTERFACE:include/${MODULE}>
 )
 
 target_link_libraries(
