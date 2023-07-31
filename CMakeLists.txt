@@ -40,3 +40,47 @@ if((CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME OR MODERN_CMAKE_BUILD_TESTING)
    AND BUILD_TESTING)
     add_subdirectory(test)
 endif()
+
+
+# Install
+
+set(INSTALL_INCLUDEDIR include)
+set(INSTALL_LIBDIR lib)
+set(INSTALL_CMAKEDIR lib/cmake/${PROJECT})
+
+foreach(module sdl;utils)
+    set(TARGET ${PROJECT}-${module})
+    list(APPEND TARGETS ${TARGET})
+
+    # Installing headers
+    install(
+        DIRECTORY src/${module}/include
+        DESTINATION ${INSTALL_INCLUDEDIR}
+    )
+endforeach()
+
+# Installing binary
+install(
+    TARGETS ${TARGETS}
+    DESTINATION ${INSTALL_LIBDIR}
+    EXPORT ${PROJECT}Targets
+)
+
+# Install cmake config file
+install(
+    EXPORT ${PROJECT}Targets
+    DESTINATION ${INSTALL_CMAKEDIR}
+)
+
+# Generate config files
+include(CMakePackageConfigHelpers)
+configure_package_config_file(
+    cmake/${PROJECT}Config.cmake.in
+    ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT}Config.cmake
+    INSTALL_DESTINATION ${INSTALL_CMAKEDIR}
+)
+
+install(
+    FILES ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT}Config.cmake
+    DESTINATION ${INSTALL_CMAKEDIR}
+)

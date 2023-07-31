@@ -29,5 +29,3 @@ function(glob_tests LINKED_LIBS)
         )
     endforeach()
 endfunction(glob_tests)
-
-
