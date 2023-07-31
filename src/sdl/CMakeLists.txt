@@ -11,7 +11,7 @@ add_library(
 target_include_directories(
     ${TARGET} PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    $<INSTALL_INTERFACE:include/tools/${MODULE}>
+    $<INSTALL_INTERFACE:include>
 )
 
 target_link_libraries(
@@ -23,7 +23,6 @@ target_link_libraries(
 target_link_libraries(
     ${TARGET}
     PRIVATE
-    $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main>
     $<IF:$<TARGET_EXISTS:SDL2::SDL2>,SDL2::SDL2,SDL2::SDL2-static>
 )
 
