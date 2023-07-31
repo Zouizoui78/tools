@@ -30,14 +30,10 @@ find_package(spdlog CONFIG REQUIRED)
 
 add_subdirectory(src)
 
-if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
-    include(CTest)
-    # enable_testing()
-    find_package(GTest CONFIG REQUIRED)
-endif()
-
 if((CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME OR MODERN_CMAKE_BUILD_TESTING)
    AND BUILD_TESTING)
+    include(CTest)
+    find_package(GTest CONFIG REQUIRED)
     add_subdirectory(test)
 endif()
 
