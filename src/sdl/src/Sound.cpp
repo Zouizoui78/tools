@@ -130,8 +130,8 @@ bool SoundPlayer::init() {
     SDL_AudioSpec desired;
     desired.freq = SOUND_SAMPLING_RATE;
     desired.format = AUDIO_F32SYS;
-    desired.channels = 1; // mono
-    desired.samples = 512; // buffer size
+    desired.channels = 1;
+    desired.samples = 512; // samples/s
     desired.callback = sdl_callback; // called periodically by SDL to refill the buffer
     desired.userdata = this;
 
