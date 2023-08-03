@@ -43,7 +43,7 @@ endif()
 set(INSTALL_LIBDIR lib)
 set(INSTALL_CMAKEDIR lib/cmake/${PROJECT})
 
-foreach(module sdl;utils)
+foreach(module sdl;utils;waveform)
     set(TARGET ${PROJECT}-${module})
     list(APPEND TARGETS ${TARGET})
 
