@@ -109,8 +109,12 @@ SoundPlayer::SoundPlayer() {
 }
 
 SoundPlayer::~SoundPlayer() {
+    if (_audio_device_id != 0) {
+        SDL_CloseAudioDevice(_audio_device_id);
+        _audio_device_id = 0;
+    }
+
     if (is_initialized()) {
-        SDL_CloseAudio();
         SDL_QuitSubSystem(SDL_INIT_AUDIO);
         _is_audio_initialized = false;
         spdlog::info("SDL audio subsystem cleaned up.");
@@ -127,13 +131,13 @@ bool SoundPlayer::init() {
     desired.freq = SOUND_SAMPLING_RATE;
     desired.format = AUDIO_F32SYS;
     desired.channels = 1; // mono
-    desired.samples = 2048; // buffer size
+    desired.samples = 512; // buffer size
     desired.callback = sdl_callback; // called periodically by SDL to refill the buffer
     desired.userdata = this;
 
-    SDL_AudioSpec obtained;
+    _audio_device_id = SDL_OpenAudioDevice(nullptr, 0, &desired, nullptr, 0);
 
-    if (SDL_OpenAudio(&desired, &obtained) != 0) {
+    if (_audio_device_id == 0) {
         spdlog::error("Failed to open sound device : {}", SDL_GetError());
         _is_audio_initialized = false;
     }
@@ -193,11 +197,11 @@ void SoundPlayer::sdl_callback(void *instance, uint8_t *raw_buffer, int bytes) {
 }
 
 void SoundPlayer::play() {
-    SDL_PauseAudio(0);
+    SDL_PauseAudioDevice(_audio_device_id, 0);
 }
 
 void SoundPlayer::pause() {
-    SDL_PauseAudio(1);
+    SDL_PauseAudioDevice(_audio_device_id, 1);
 }
 
 } // namespace tools::sdl

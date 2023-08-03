@@ -122,6 +122,7 @@ class SoundPlayer {
 
     std::vector<std::shared_ptr<ASound>> _sounds;
 
+    SDL_AudioDeviceID _audio_device_id = 0;
     int64_t _sample_n = 0;
     bool _is_audio_initialized = false;
 };
