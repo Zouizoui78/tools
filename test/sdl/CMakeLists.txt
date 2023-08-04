@@ -1,1 +1,1 @@
-glob_tests("tools-sdl;tools-utils")
+glob_tests("tools-sdl;tools-utils;tools-waveform")

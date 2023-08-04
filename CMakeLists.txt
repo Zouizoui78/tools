@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.17)
 
 set(PROJECT tools)
-set(VERSION 0.1)
+set(VERSION 0.0.1)
 set(PRJ_VER ${PROJECT}-${VERSION})
 
 project(
@@ -43,7 +43,7 @@ endif()
 set(INSTALL_LIBDIR lib)
 set(INSTALL_CMAKEDIR lib/cmake/${PROJECT})
 
-foreach(module sdl;utils)
+foreach(module sdl;utils;waveform)
     set(TARGET ${PROJECT}-${module})
     list(APPEND TARGETS ${TARGET})
 
