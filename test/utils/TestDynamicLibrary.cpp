@@ -1,5 +1,5 @@
 #include "gtest/gtest.h"
-#include "utils/DynamicLibrary.hpp"
+#include "tools/utils/DynamicLibrary.hpp"
 
 #include "spdlog/spdlog.h"
 #include <filesystem>

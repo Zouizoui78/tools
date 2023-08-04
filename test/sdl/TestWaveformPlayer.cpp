@@ -1,10 +1,10 @@
 #include "gtest/gtest.h"
 #include "spdlog/spdlog.h"
 
-#include "sdl/WaveformPlayer.hpp"
-#include "utils/Stopwatch.hpp"
-#include "waveform/AWaveform.hpp"
-#include "waveform/Waveforms.hpp"
+#include "tools/sdl/WaveformPlayer.hpp"
+#include "tools/utils/Stopwatch.hpp"
+#include "tools/waveform/AWaveform.hpp"
+#include "tools/waveform/Waveforms.hpp"
 
 namespace test {
 

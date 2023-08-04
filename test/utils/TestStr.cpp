@@ -1,5 +1,5 @@
 #include "gtest/gtest.h"
-#include "utils/str.hpp"
+#include "tools/utils/str.hpp"
 
 namespace test {
 

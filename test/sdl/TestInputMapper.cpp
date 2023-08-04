@@ -1,8 +1,8 @@
 #include "gtest/gtest.h"
 #include "spdlog/spdlog.h"
 
-#include "sdl/InputMapper.hpp"
-#include "utils/fs.hpp"
+#include "tools/sdl/InputMapper.hpp"
+#include "tools/utils/fs.hpp"
 
 namespace test {
 

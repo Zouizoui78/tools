@@ -1,5 +1,5 @@
-#include "waveform/WaveformGenerator.hpp"
-#include "waveform/Constants.hpp"
+#include "tools/waveform/WaveformGenerator.hpp"
+#include "tools/waveform/Constants.hpp"
 
 namespace tools::waveform {
 

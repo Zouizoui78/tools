@@ -1,5 +1,5 @@
-#include "waveform/AWaveform.hpp"
-#include "waveform/Constants.hpp"
+#include "tools/waveform/AWaveform.hpp"
+#include "tools/waveform/Constants.hpp"
 
 #include <algorithm>
 

@@ -1,4 +1,4 @@
-#include "sdl/Window.hpp"
+#include "tools/sdl/Window.hpp"
 
 #include "spdlog/spdlog.h"
 

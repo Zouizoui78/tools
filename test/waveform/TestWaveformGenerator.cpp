@@ -1,9 +1,9 @@
 #include "gtest/gtest.h"
 #include "spdlog/spdlog.h"
 
-#include "waveform/Constants.hpp"
-#include "waveform/WaveformGenerator.hpp"
-#include "waveform/Waveforms.hpp"
+#include "tools/waveform/Constants.hpp"
+#include "tools/waveform/WaveformGenerator.hpp"
+#include "tools/waveform/Waveforms.hpp"
 
 #include <numbers>
 

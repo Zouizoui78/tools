@@ -1,5 +1,5 @@
 #include "gtest/gtest.h"
-#include "utils/Observable.hpp"
+#include "tools/utils/Observable.hpp"
 
 #define EVENT "test"
 #define EVENT2 "test2"

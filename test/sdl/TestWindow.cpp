@@ -1,9 +1,9 @@
 #include "gtest/gtest.h"
 #include "spdlog/spdlog.h"
 
-#include "sdl/Window.hpp"
-#include "utils/Stopwatch.hpp"
-#include "utils/Worker.hpp"
+#include "tools/sdl/Window.hpp"
+#include "tools/utils/Stopwatch.hpp"
+#include "tools/utils/Worker.hpp"
 
 namespace test {
 

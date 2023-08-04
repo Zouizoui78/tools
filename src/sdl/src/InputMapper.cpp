@@ -1,5 +1,5 @@
-#include "sdl/InputMapper.hpp"
-#include "utils/fs.hpp"
+#include "tools/sdl/InputMapper.hpp"
+#include "tools/utils/fs.hpp"
 
 #include "spdlog/spdlog.h"
 

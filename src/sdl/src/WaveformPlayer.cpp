@@ -1,5 +1,5 @@
-#include "sdl/WaveformPlayer.hpp"
-#include "waveform/Constants.hpp"
+#include "tools/sdl/WaveformPlayer.hpp"
+#include "tools/waveform/Constants.hpp"
 
 #include "spdlog/spdlog.h"
 
