@@ -1,84 +1,51 @@
 #include "gtest/gtest.h"
 #include "spdlog/spdlog.h"
 
-#include "sdl/Sound.hpp"
+#include "sdl/WaveformPlayer.hpp"
 #include "utils/Stopwatch.hpp"
+#include "waveform/AWaveform.hpp"
+#include "waveform/Waveforms.hpp"
 
 namespace test {
 
-using namespace tools::sdl;
 using namespace std::literals;
+using namespace tools::sdl;
+using namespace tools::waveform;
 
-class TestSound: public ::testing::Test
-{
-    protected:
-    TestSound() {
-        outputs_path = std::getenv("TEST_OUTPUTS");
-    }
+class TestSound: public ::testing::Test {
+public:
+    std::shared_ptr<WaveformGenerator> generator;
+    tools::sdl::WaveformPlayer player;
 
-    virtual ~TestSound() {}
-
-    virtual void SetUp() {}
-
-    virtual void TearDown() {}
-
-    public:
-    std::string outputs_path;
+    TestSound() :
+        generator(std::make_shared<WaveformGenerator>()),
+        player(generator)
+    {}
 };
 
-TEST_F(TestSound, test_init) {
-    Sinus sin;
-    EXPECT_EQ(sin.get_volume(), 1);
-    EXPECT_EQ(sin.get_frequency(), 440);
-    EXPECT_EQ(sin.get_period(), 1.0/440);
-
-    Square square;
-    EXPECT_EQ(square.get_duty_cycle(), 0.5);
-}
-
-TEST_F(TestSound, test_add_remove_sound) {
-    auto sound = std::make_shared<Sinus>();
-    SoundPlayer player;
-    ASSERT_TRUE(player.is_initialized());
-
-    ASSERT_TRUE(player.add_sound(sound));
-    ASSERT_FALSE(player.add_sound(sound));
-
-    ASSERT_TRUE(player.remove_sound(sound));
-    ASSERT_FALSE(player.remove_sound(sound));
-}
-
 TEST_F(TestSound, test_sinus) {
-    SoundPlayer player;
     ASSERT_TRUE(player.is_initialized());
     player.play();
 
-    std::vector<std::shared_ptr<ASound>> sounds;
-    player.play();
+    std::vector<std::shared_ptr<AWaveform>> sounds;
     for (int i = 0 ; i < 6 ; i++) {
         auto sin = std::make_shared<Sinus>();
         sin->set_frequency(440 * (i * 2 + 1));
         sin->set_volume(1.0 / (i * 2 + 1));
         spdlog::info(440 * (i * 2 + 1));
         spdlog::info(1.0 / (i * 2 + 1));
-        player.add_sound(sin);
+        generator->add_waveform(sin);
         sounds.push_back(sin);
         std::this_thread::sleep_for(1s);
-    }
-
-    player.pause();
-    for (auto sound : sounds) {
-        ASSERT_TRUE(player.remove_sound(sound));
     }
 }
 
 TEST_F(TestSound, test_square) {
-    SoundPlayer player;
     ASSERT_TRUE(player.is_initialized());
 
     auto square = std::make_shared<Square>();
     square->set_frequency(261.63);
-    player.add_sound(square);
+    generator->add_waveform(square);
 
     player.play();
 
@@ -93,14 +60,13 @@ TEST_F(TestSound, test_square) {
 }
 
 TEST_F(TestSound, test_setting_changes) {
-    SoundPlayer player;
     ASSERT_TRUE(player.is_initialized());
 
     double la = 440;
     double si = 494;
 
     auto sound = std::make_shared<Square>();
-    player.add_sound(sound);
+    generator->add_waveform(sound);
     player.play();
     for (int i = 0 ; i < 5 ; i++) {
         if (sound->get_frequency() == la)

@@ -1,5 +1,5 @@
-#ifndef WAVEFORM_SYNTHESIZER_HPP
-#define WAVEFORM_SYNTHESIZER_HPP
+#ifndef WAVEFORM_PLAYER_HPP
+#define WAVEFORM_PLAYER_HPP
 
 #include <memory>
 #include "SDL2/SDL.h"
@@ -7,10 +7,10 @@
 
 namespace tools::sdl {
 
-class WaveformSynthesizer {
+class WaveformPlayer {
 public:
-    ~WaveformSynthesizer();
-    WaveformSynthesizer(std::shared_ptr<tools::waveform::WaveformGenerator> generator);
+    ~WaveformPlayer();
+    WaveformPlayer(std::shared_ptr<tools::waveform::WaveformGenerator> generator);
 
     bool is_initialized() const;
 
@@ -28,4 +28,4 @@ private:
 
 } // namespace tools::sdl
 
-#endif // WAVEFORM_SYNTHESIZER_HPP
+#endif // WAVEFORM_PLAYER_HPP

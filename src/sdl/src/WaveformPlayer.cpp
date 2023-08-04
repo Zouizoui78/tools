@@ -1,18 +1,18 @@
-#include "sdl/WaveformSynthesizer.hpp"
+#include "sdl/WaveformPlayer.hpp"
 #include "waveform/Constants.hpp"
 
 #include "spdlog/spdlog.h"
 
 namespace tools::sdl {
 
-WaveformSynthesizer::WaveformSynthesizer(std::shared_ptr<tools::waveform::WaveformGenerator> generator) : _generator(generator) {
+WaveformPlayer::WaveformPlayer(std::shared_ptr<tools::waveform::WaveformGenerator> generator) : _generator(generator) {
 #ifdef WINDOWS
     putenv("SDL_AUDIODRIVER=dsound");
 #endif
     init();
 }
 
-WaveformSynthesizer::~WaveformSynthesizer() {
+WaveformPlayer::~WaveformPlayer() {
     if (_audio_device_id != 0) {
         SDL_CloseAudioDevice(_audio_device_id);
         _audio_device_id = 0;
@@ -25,7 +25,7 @@ WaveformSynthesizer::~WaveformSynthesizer() {
     }
 }
 
-bool WaveformSynthesizer::init() {
+bool WaveformPlayer::init() {
     if (SDL_InitSubSystem(SDL_INIT_AUDIO) != 0) {
         spdlog::error("Failed to initialize audio subsystem : {}", SDL_GetError());
         _is_audio_initialized = false;
@@ -51,25 +51,25 @@ bool WaveformSynthesizer::init() {
     return _is_audio_initialized;
 }
 
-bool WaveformSynthesizer::is_initialized() const {
+bool WaveformPlayer::is_initialized() const {
     return _is_audio_initialized;
 }
 
-void WaveformSynthesizer::sdl_callback(void *instance, uint8_t *raw_buffer, int bytes) {
-    WaveformSynthesizer *synthesizer = static_cast<WaveformSynthesizer *>(instance);
+void WaveformPlayer::sdl_callback(void *instance, uint8_t *raw_buffer, int bytes) {
+    WaveformPlayer *player = static_cast<WaveformPlayer *>(instance);
     float *buffer = reinterpret_cast<float *>(raw_buffer);
 
     int32_t len = bytes / sizeof(float);
     for (int32_t i = 0 ; i < len ; i++) {
-        buffer[i] = static_cast<float>(synthesizer->_generator->generate_sample());
+        buffer[i] = static_cast<float>(player->_generator->generate_sample());
     }
 }
 
-void WaveformSynthesizer::play() const {
+void WaveformPlayer::play() const {
     SDL_PauseAudioDevice(_audio_device_id, 0);
 }
 
-void WaveformSynthesizer::pause() const {
+void WaveformPlayer::pause() const {
     SDL_PauseAudioDevice(_audio_device_id, 1);
 }
 

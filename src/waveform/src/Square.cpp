@@ -1,15 +1,17 @@
 #include "waveform/Square.hpp"
 
+#include <algorithm>
+
 namespace tools::waveform {
 
 Square::Square() : AWaveform() {
-    update_sampling_duty_cycle();
+    set_duty_cycle(0.5);
 }
 
 double Square::synthesize(WaveformTimepoint timepoint) const {
-    return (timepoint.sample_n % _sampling_period) >= _sampling_duty_cycle
-            ? -_volume
-            : _volume;
+    return (timepoint.sample_n % _samples_in_period) >= _sampling_duty_cycle
+        ? -_volume
+        : _volume;
 }
 
 void Square::set_frequency(double frequency) {
@@ -22,7 +24,7 @@ double Square::get_duty_cycle() const {
 }
 
 void Square::set_duty_cycle(double duty_cycle) {
-    _duty_cycle = duty_cycle;
+    _duty_cycle = std::clamp(duty_cycle, 0.01, 0.99);
     update_sampling_duty_cycle();
 }
 
@@ -31,7 +33,7 @@ int16_t Square::get_sampling_duty_cycle() const {
 }
 
 void Square::update_sampling_duty_cycle() {
-    _sampling_duty_cycle = _sampling_period * _duty_cycle;
+    _sampling_duty_cycle = _samples_in_period * _duty_cycle;
 }
 
 } // namespace tools::waveform

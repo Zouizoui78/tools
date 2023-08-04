@@ -10,7 +10,11 @@ function(glob_tests LINKED_LIBS)
             ../main.cpp
         )
 
-        target_link_libraries(${target} PRIVATE GTest::gtest)
+        target_link_libraries(
+            ${target}
+            PRIVATE GTest::gtest
+            PRIVATE spdlog::spdlog
+        )
 
         foreach(LIB ${LINKED_LIBS})
             target_link_libraries(${target} PRIVATE ${LIB})

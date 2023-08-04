@@ -1,6 +1,8 @@
 #include "waveform/AWaveform.hpp"
 #include "waveform/Constants.hpp"
 
+#include <algorithm>
+
 namespace tools::waveform {
 
 AWaveform::AWaveform() {
@@ -13,7 +15,7 @@ double AWaveform::get_volume() const {
 }
 
 void AWaveform::set_volume(double volume) {
-    _volume = volume * volume_mult;
+    _volume = std::clamp(volume, 0.0, 1.0) * volume_mult;
 }
 
 double AWaveform::get_frequency() const  {
@@ -21,19 +23,19 @@ double AWaveform::get_frequency() const  {
 }
 
 void AWaveform::set_frequency(double frequency) {
-    if (frequency <= 0)
+    if (frequency < 1e-9)
         return;
     _frequency = frequency;
     _period = 1.0 / frequency;
-    _sampling_period = sampling_rate / _frequency;
+    _samples_in_period = sampling_rate / _frequency;
 }
 
 double AWaveform::get_period() const {
     return _period;
 }
 
-int16_t AWaveform::get_sampling_period() const {
-    return _sampling_period;
+int16_t AWaveform::get_samples_in_period() const {
+    return _samples_in_period;
 }
 
 } // namespace tools::waveform
