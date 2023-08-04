@@ -49,7 +49,7 @@ foreach(module sdl;utils;waveform)
 
     # Installing headers
     install(
-        DIRECTORY src/${module}/include/${module}
+        DIRECTORY src/${module}/include/${PROJECT}
         DESTINATION include/${PROJECT}
     )
 endforeach()
