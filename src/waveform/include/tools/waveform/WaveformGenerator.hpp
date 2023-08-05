@@ -12,10 +12,10 @@ namespace tools::waveform {
 class WaveformGenerator {
 public:
     // Return false if waveform is already registered.
-    bool add_waveform(std::shared_ptr<AWaveform> sound);
+    bool add_waveform(std::shared_ptr<AWaveform> waveform);
 
     // Return false if waveform not found.
-    bool remove_waveform(std::shared_ptr<AWaveform> sound);
+    bool remove_waveform(std::shared_ptr<AWaveform> waveform);
 
     // Every time this function is called,
     // the returned sample is the next one in the waveform.

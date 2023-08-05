@@ -12,18 +12,24 @@ using namespace std::literals;
 using namespace tools::sdl;
 using namespace tools::waveform;
 
-class TestSound: public ::testing::Test {
+class TestWaveformPlayer: public ::testing::Test {
 public:
     std::shared_ptr<WaveformGenerator> generator;
     tools::sdl::WaveformPlayer player;
 
-    TestSound() :
+    TestWaveformPlayer() :
         generator(std::make_shared<WaveformGenerator>()),
         player(generator)
     {}
 };
 
-TEST_F(TestSound, test_sinus) {
+TEST_F(TestWaveformPlayer, test_is_playing) {
+    ASSERT_FALSE(player.is_playing());
+    player.play();
+    ASSERT_TRUE(player.is_playing());
+}
+
+TEST_F(TestWaveformPlayer, test_sinus) {
     ASSERT_TRUE(player.is_initialized());
     player.play();
 
@@ -40,7 +46,7 @@ TEST_F(TestSound, test_sinus) {
     }
 }
 
-TEST_F(TestSound, test_square) {
+TEST_F(TestWaveformPlayer, test_square) {
     ASSERT_TRUE(player.is_initialized());
 
     auto square = std::make_shared<Square>();
@@ -59,7 +65,7 @@ TEST_F(TestSound, test_square) {
     }
 }
 
-TEST_F(TestSound, test_setting_changes) {
+TEST_F(TestWaveformPlayer, test_setting_changes) {
     ASSERT_TRUE(player.is_initialized());
 
     double la = 440;

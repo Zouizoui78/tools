@@ -16,6 +16,7 @@ public:
 
     void play() const;
     void pause() const;
+    bool is_playing() const;
 
 private:
     SDL_AudioDeviceID _audio_device_id = 0;

@@ -3,18 +3,18 @@
 
 namespace tools::waveform {
 
-bool WaveformGenerator::add_waveform(std::shared_ptr<AWaveform> sound) {
+bool WaveformGenerator::add_waveform(std::shared_ptr<AWaveform> waveform) {
     std::lock_guard lock(_mutex);
-    auto it = std::find(_waveforms.begin(), _waveforms.end(), sound);
+    auto it = std::find(_waveforms.begin(), _waveforms.end(), waveform);
     if (it != _waveforms.end())
         return false;
-    _waveforms.push_back(sound);
+    _waveforms.push_back(waveform);
     return true;
 }
 
-bool WaveformGenerator::remove_waveform(std::shared_ptr<AWaveform> sound) {
+bool WaveformGenerator::remove_waveform(std::shared_ptr<AWaveform> waveform) {
     std::lock_guard lock(_mutex);
-    auto it = std::find(_waveforms.begin(), _waveforms.end(), sound);
+    auto it = std::find(_waveforms.begin(), _waveforms.end(), waveform);
     if (it == _waveforms.end())
         return false;
     _waveforms.erase(it);
@@ -26,8 +26,8 @@ double WaveformGenerator::generate_sample() {
     double time = static_cast<double>(_sample_n) / sampling_rate;
     {
         std::lock_guard lock(_mutex);
-        for (auto sound : _waveforms) {
-            ret += sound->synthesize(WaveformTimepoint{ time, _sample_n });
+        for (auto waveform : _waveforms) {
+            ret += waveform->synthesize(WaveformTimepoint{ time, _sample_n });
         }
     }
     _sample_n++;

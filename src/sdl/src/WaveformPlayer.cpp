@@ -73,4 +73,8 @@ void WaveformPlayer::pause() const {
     SDL_PauseAudioDevice(_audio_device_id, 1);
 }
 
+bool WaveformPlayer::is_playing() const {
+    return SDL_GetAudioDeviceStatus(_audio_device_id) == SDL_AUDIO_PLAYING;
+}
+
 } // namespace tools::sdl
