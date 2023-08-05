@@ -1,6 +1,7 @@
 #ifndef WAVEFORM_GENERATOR_HPP
 #define WAVEFORM_GENERATOR_HPP
 
+#include <atomic>
 #include <memory>
 #include <mutex>
 #include <vector>

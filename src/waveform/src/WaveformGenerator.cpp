@@ -1,6 +1,8 @@
 #include "tools/waveform/WaveformGenerator.hpp"
 #include "tools/waveform/Constants.hpp"
 
+#include <algorithm>
+
 namespace tools::waveform {
 
 bool WaveformGenerator::add_waveform(std::shared_ptr<AWaveform> waveform) {
