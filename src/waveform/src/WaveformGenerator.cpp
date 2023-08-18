@@ -25,14 +25,14 @@ bool WaveformGenerator::remove_waveform(std::shared_ptr<AWaveform> waveform) {
 
 double WaveformGenerator::generate_sample() {
     double ret = 0;
-    double time = static_cast<double>(_sample_n) / sampling_rate;
+    double time = static_cast<double>(_sample_index) / sampling_rate;
     {
         std::lock_guard lock(_mutex);
         for (auto waveform : _waveforms) {
-            ret += waveform->synthesize(WaveformTimepoint{ time, _sample_n });
+            ret += waveform->synthesize(WaveformTimepoint{ time, _sample_index });
         }
     }
-    _sample_n++;
+    _sample_index++;
     return ret;
 }
 
@@ -45,8 +45,16 @@ std::vector<double> WaveformGenerator::generate_n_samples(int n_samples) {
     return ret;
 }
 
-void WaveformGenerator::reset_samples() {
-    _sample_n = 0;
+int64_t WaveformGenerator::get_sample_index() const {
+    return _sample_index;
+}
+
+void WaveformGenerator::set_sample_index(int64_t sample_index) {
+    _sample_index = sample_index;
+}
+
+void WaveformGenerator::reset_sample_index() {
+    set_sample_index(0);
 }
 
 } // namespace tools::waveform

@@ -43,10 +43,10 @@ TEST_F(TestFiles, test_read_binary_file) {
 TEST_F(TestFiles, test_write_binary_file) {
     std::vector<uint8_t> test { 0x20, 0x56, 0x78, 0x12, 0x65, 0x94, 0x30, 0x12 };
 
+    std::filesystem::remove(path_tmp);
+    ASSERT_FALSE(std::filesystem::exists(path_tmp));
     ASSERT_TRUE(tools::fs::write_binary_file(test, path_tmp));
     ASSERT_EQ(tools::fs::read_binary_file(path_tmp), test);
-
-    std::filesystem::remove(path_tmp);
 }
 
 } // namespace test
