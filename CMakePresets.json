@@ -9,8 +9,8 @@
             "installDir": "${sourceDir}/dist/${presetName}",
             "architecture": { "value": "x64", "strategy": "external" },
             "cacheVariables": {
-                "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
-                "BUILD_TESTING": true
+                "CMAKE_EXPORT_COMPILE_COMMANDS": true,
+                "CMAKE_INTERPROCEDURAL_OPTIMIZATION": true
             }
         },
         {
@@ -43,7 +43,28 @@
         },
         {
             "name": "releasewin",
-            "inherits": ["basewin", "release"]
+            "inherits": ["basewin", "release"],
+            "cacheVariables": {
+                "CMAKE_WIN32_EXECUTABLE": true
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "debug",
+            "configurePreset": "debug"
+        },
+        {
+            "name": "release",
+            "configurePreset": "release"
+        },
+        {
+            "name": "debugwin",
+            "configurePreset": "debugwin"
+        },
+        {
+            "name": "releasewin",
+            "configurePreset": "releasewin"
         }
     ]
 }

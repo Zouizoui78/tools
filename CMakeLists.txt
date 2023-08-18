@@ -4,13 +4,28 @@ set(PROJECT tools)
 set(VERSION 0.0.1)
 set(PRJ_VER ${PROJECT}-${VERSION})
 
+set (CMAKE_CXX_STANDARD 20)
+set (CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# Install vcpkg
+include(FetchContent)
+
+FetchContent_Declare(
+    vcpkg
+    GIT_REPOSITORY https://github.com/microsoft/vcpkg
+    GIT_TAG 2023.07.21
+    SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/external/vcpkg
+)
+FetchContent_MakeAvailable(vcpkg)
+
+set(CMAKE_TOOLCHAIN_FILE "${vcpkg_SOURCE_DIR}/scripts/buildsystems/vcpkg.cmake" CACHE FILEPATH "")
+
 project(
     ${PROJECT}
     VERSION ${VERSION}
     LANGUAGES CXX
 )
 
-# Options shared across modules
 if (WIN32)
     add_compile_options(-DWINDOWS)
 endif (WIN32)
@@ -19,9 +34,6 @@ if (UNIX)
 endif (UNIX)
 
 add_compile_options($<$<CONFIG:Debug>:-DDEBUG>$<$<CONFIG:Release>:-DRELEASE>)
-
-set (CMAKE_CXX_STANDARD 20)
-set (CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(nlohmann_json CONFIG REQUIRED)
 find_package(SDL2 CONFIG REQUIRED)
@@ -78,4 +90,11 @@ configure_package_config_file(
 install(
     FILES ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT}Config.cmake
     DESTINATION ${INSTALL_CMAKEDIR}
+)
+
+# Needed for clangd
+add_custom_target(
+    compile_commands_symlink
+    ALL
+    COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_BINARY_DIR}/compile_commands.json ${CMAKE_CURRENT_SOURCE_DIR}/compile_commands.json
 )
