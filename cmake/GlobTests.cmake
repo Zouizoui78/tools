@@ -31,5 +31,10 @@ function(glob_tests LINKED_LIBS)
             PROPERTY ENVIRONMENT
             "TEST_OUTPUTS=build/test_outputs/${target};${ARGN}"
         )
+
+        set_property(
+            TEST ${target}
+            PROPERTY LABELS ${target}
+        )
     endforeach()
 endfunction(glob_tests)
