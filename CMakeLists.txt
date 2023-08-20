@@ -31,6 +31,13 @@ if (WIN32)
 endif (WIN32)
 if (UNIX)
     add_compile_options(-DLINUX)
+
+    # Needed for clangd
+    add_custom_target(
+        compile_commands_symlink
+        ALL
+        COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_BINARY_DIR}/compile_commands.json ${CMAKE_CURRENT_SOURCE_DIR}/compile_commands.json
+    )
 endif (UNIX)
 
 add_compile_options($<$<CONFIG:Debug>:-DDEBUG>$<$<CONFIG:Release>:-DRELEASE>)
@@ -90,11 +97,4 @@ configure_package_config_file(
 install(
     FILES ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT}Config.cmake
     DESTINATION ${INSTALL_CMAKEDIR}
-)
-
-# Needed for clangd
-add_custom_target(
-    compile_commands_symlink
-    ALL
-    COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_BINARY_DIR}/compile_commands.json ${CMAKE_CURRENT_SOURCE_DIR}/compile_commands.json
 )
