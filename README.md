@@ -10,15 +10,9 @@ Various tools I use in some projects.
 
 ## Build
 
-Install [cmake](https://cmake.org/download/) and [vcpkg](https://vcpkg.io/en/getting-started.html).
+    # preset = relwin on Windows
+    # configure
+    cmake --preset=rel
 
-Set the `VCPKG_ROOT` environment variable to the root of `vcpkg` installation directory.
-
-Configure :
-
-    # preset = releasewin on Windows
-    cmake --preset=release
-
-Build :
-
-    cmake --build build/release(win)
+    # build
+    cmake --build build/rel

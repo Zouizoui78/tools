@@ -1,37 +1,21 @@
-set(MODULE sdl)
-set(TARGET ${PROJECT}-${MODULE})
-
-file(GLOB SRC_LIST src/*.cpp)
-
-add_library(
-    ${TARGET}
-    ${SRC_LIST}
+set(SOURCES
+    src/InputMapper.cpp
+    src/WaveformPlayer.cpp
+    src/Window.cpp
 )
 
-target_include_directories(
-    ${TARGET} PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    $<INSTALL_INTERFACE:include>
+set(PUBLIC_HEADERS
+    include/tools/sdl/InputMapper.hpp
+    include/tools/sdl/WaveformPlayer.hpp
+    include/tools/sdl/Window.hpp
 )
 
-target_link_libraries(
-    ${TARGET}
-    PRIVATE
-    nlohmann_json::nlohmann_json
-)
+add_library(tools-sdl ${SOURCES} ${PUBLIC_HEADERS})
+target_include_directories(tools-sdl PUBLIC include)
+target_link_libraries(tools-sdl PUBLIC tools-utils tools-waveform)
 
-target_link_libraries(
-    ${TARGET}
-    PRIVATE
-    $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main>
-    $<IF:$<TARGET_EXISTS:SDL2::SDL2>,SDL2::SDL2,SDL2::SDL2-static>
-)
+find_package(SDL2 REQUIRED)
+target_link_libraries(tools-sdl PUBLIC SDL2::SDL2)
 
-target_link_libraries(
-    ${TARGET}
-    PRIVATE
-    $<IF:$<TARGET_EXISTS:SDL2_ttf::SDL2_ttf>,SDL2_ttf::SDL2_ttf,SDL2_ttf::SDL2_ttf-static>
-)
-
-target_link_libraries(${TARGET} PRIVATE spdlog::spdlog)
-target_link_libraries(${TARGET} PRIVATE tools-utils tools-waveform)
+find_package(SDL2_ttf REQUIRED)
+target_link_libraries(tools-sdl PUBLIC SDL2_ttf::SDL2_ttf)

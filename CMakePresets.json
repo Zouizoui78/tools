@@ -4,14 +4,11 @@
         {
             "name": "base",
             "hidden": true,
-            "generator": "Ninja",
             "binaryDir": "${sourceDir}/build/${presetName}",
-            "installDir": "${sourceDir}/dist/${presetName}",
             "architecture": { "value": "x64", "strategy": "external" },
             "cacheVariables": {
                 "CMAKE_EXPORT_COMPILE_COMMANDS": true,
-                "CMAKE_INTERPROCEDURAL_OPTIMIZATION": true,
-                "BUILD_TESTING": true
+                "CMAKE_INTERPROCEDURAL_OPTIMIZATION": true
             }
         },
         {
@@ -31,12 +28,7 @@
         {
             "name": "basewin",
             "hidden": true,
-            "inherits": ["base"],
-            "cacheVariables": {
-                "CMAKE_CXX_COMPILER": "cl.exe",
-                "VCPKG_HOST_TRIPLET": "x64-windows-static-md",
-                "VCPKG_TARGET_TRIPLET": "x64-windows-static-md"
-            }
+            "inherits": ["base"]
         },
         {
             "name": "dbgwin",
@@ -44,10 +36,7 @@
         },
         {
             "name": "relwin",
-            "inherits": ["basewin", "rel"],
-            "cacheVariables": {
-                "CMAKE_WIN32_EXECUTABLE": true
-            }
+            "inherits": ["basewin", "rel"]
         }
     ],
     "buildPresets": [

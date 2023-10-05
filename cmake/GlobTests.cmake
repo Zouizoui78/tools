@@ -9,6 +9,8 @@ function(glob_tests LINKED_LIBS)
             ${file}
             ../main.cpp
         )
+        
+        find_package(spdlog REQUIRED)
 
         target_link_libraries(
             ${target}
