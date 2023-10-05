@@ -13,7 +13,7 @@ class Stopwatch {
     Stopwatch(const std::string &name = "");
 
     uint64_t get_duration() const;
-    void log_duration() const;
+    std::string dump_duration() const;
 
     void reset();
 

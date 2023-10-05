@@ -14,8 +14,8 @@ class TestDynamicLibrary: public ::testing::Test
     TestDynamicLibrary() {
         outputs_path = std::string(std::getenv("TEST_OUTPUTS"));
 
-    #ifdef WINDOWS
-        static std::string dynlib_filename = "dynlib.dll";
+    #ifdef WIN32
+        static std::string dynlib_filename = "libdynlib.dll";
     #else
         static std::string dynlib_filename = "libdynlib.so";
     #endif

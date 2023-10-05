@@ -1,12 +1,11 @@
 #ifndef INPUTMAPPER_HPP
 #define INPUTMAPPER_HPP
 
-#include "nlohmann/json.hpp"
+#include <map>
+#include <string>
 #include "SDL2/SDL_keyboard.h"
 
 namespace tools::sdl {
-
-using json = nlohmann::json;
 
 /**
  * @brief Class allowing to assign a SDL keycode to a value.
@@ -56,27 +55,6 @@ class InputMapper {
      * @return false ; key name doesn't exist
      */
     bool remove_mapping(const std::string &key);
-
-    /**
-     * @brief Load the mapping contained in the json.
-     * If a key name is incorrect, returns false but keep going.
-     *
-     * @param map
-     * @return true ; no error
-     * @return false ; at least one entry had a bad key name
-     */
-    bool load_map(const json &map);
-
-    /**
-     * @brief Load the json stored at the given path and load the resulting keymap. Calls the overload bool load_map(const json &map);.
-     *
-     * @param json_path
-     * @return true ; no error
-     * @return false ; at least one entry had a bad key name
-     *
-     * @exception nlohmann::detail::parse_error if json parsing fails.
-     */
-    bool load_map(const std::string &json_path);
 
     /**
      * @brief Return the value mapped to the passed key.

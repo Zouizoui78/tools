@@ -1,12 +1,10 @@
 #include "tools/sdl/WaveformPlayer.hpp"
 #include "tools/waveform/Constants.hpp"
 
-#include "spdlog/spdlog.h"
-
 namespace tools::sdl {
 
 WaveformPlayer::WaveformPlayer(std::shared_ptr<tools::waveform::WaveformGenerator> generator) : _generator(generator) {
-#ifdef WINDOWS
+#ifdef WIN32
     putenv("SDL_AUDIODRIVER=dsound");
 #endif
     init();
@@ -21,13 +19,11 @@ WaveformPlayer::~WaveformPlayer() {
     if (is_initialized()) {
         SDL_QuitSubSystem(SDL_INIT_AUDIO);
         _is_audio_initialized = false;
-        spdlog::info("SDL audio subsystem cleaned up.");
     }
 }
 
 bool WaveformPlayer::init() {
     if (SDL_InitSubSystem(SDL_INIT_AUDIO) != 0) {
-        spdlog::error("Failed to initialize audio subsystem : {}", SDL_GetError());
         _is_audio_initialized = false;
     }
 
@@ -42,11 +38,9 @@ bool WaveformPlayer::init() {
     _audio_device_id = SDL_OpenAudioDevice(nullptr, 0, &desired, nullptr, 0);
 
     if (_audio_device_id == 0) {
-        spdlog::error("Failed to open sound device : {}", SDL_GetError());
         _is_audio_initialized = false;
     }
 
-    spdlog::info("SDL audio subsystem initialized.");
     _is_audio_initialized = true;
     return _is_audio_initialized;
 }

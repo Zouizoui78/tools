@@ -42,17 +42,4 @@ TEST_F(TestInputMapper, test_add_remove_mapping) {
     ASSERT_TRUE(mapper.remove_mapping("a"));
 }
 
-TEST_F(TestInputMapper, test_json_map) {
-    InputMapper mapper;
-    std::string path = "test/resources/InputMapper/test_map.json";
-
-    ASSERT_TRUE(mapper.load_map(path));
-    ASSERT_EQ(mapper.map_key("a"), 1);
-    ASSERT_EQ(mapper.map_key("z"), 3);
-    ASSERT_EQ(mapper.map_key("e"), 67);
-    ASSERT_EQ(mapper.map_key("r"), 53);
-    ASSERT_EQ(mapper.map_key("t"), 4);
-    ASSERT_EQ(mapper.map_key("y"), 98);
-}
-
 } // namespace test

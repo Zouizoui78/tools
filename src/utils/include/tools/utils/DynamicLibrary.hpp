@@ -3,8 +3,9 @@
 
 #include <functional>
 #include <string>
+#include <iostream>
 
-#ifdef WINDOWS
+#ifdef WIN32
 #include <windows.h>
 #else
 #include <dlfcn.h>
@@ -36,7 +37,8 @@ class DynamicLibrary {
      */
     template <typename R, typename ... Targs>
     R (*get_function(const std::string &function_name))(Targs ...) {
-    #ifdef WINDOWS
+    #ifdef WIN32
+        std::cout << "salut\n";
         // Avoid a stupid warning on windows.
         void *tmp = reinterpret_cast<void *>(GetProcAddress(_lib_instance, function_name.c_str()));
         return reinterpret_cast<R (*)(Targs ...)>(tmp);
@@ -62,7 +64,7 @@ class DynamicLibrary {
     }
 
     private:
-#ifdef WINDOWS
+#ifdef WIN32
     HINSTANCE _lib_instance = nullptr;
 #else
     void *_lib_instance = nullptr;

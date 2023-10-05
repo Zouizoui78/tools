@@ -1,6 +1,5 @@
 #include "tools/utils/Stopwatch.hpp"
-
-#include "spdlog/spdlog.h"
+#include <format>
 
 namespace tools::utils {
 
@@ -13,7 +12,7 @@ uint64_t Stopwatch::get_duration() const {
     return (std::chrono::steady_clock::now() - _start_time_point).count();
 }
 
-void Stopwatch::log_duration() const {
+std::string Stopwatch::dump_duration() const {
     double d = get_duration();
     std::string prefix = "";
     std::string unit = " ns";
@@ -34,7 +33,7 @@ void Stopwatch::log_duration() const {
         unit = "us";
     }
 
-    spdlog::info("{}{:.3f} {}", prefix, d, unit);
+    return std::format("{}{:.3f} {}", prefix, d, unit);
 }
 
 void Stopwatch::reset() {
