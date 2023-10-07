@@ -1,6 +1,6 @@
 set(SOURCES
     src/DynamicLibrary.cpp
-    src/fs.cpp
+    src/file.cpp
     src/Observable.cpp
     src/Scheduler.cpp
     src/Stopwatch.cpp
@@ -11,7 +11,7 @@ set(SOURCES
 
 set(PUBLIC_HEADERS
     include/tools/utils/DynamicLibrary.hpp
-    include/tools/utils/fs.hpp
+    include/tools/utils/file.hpp
     include/tools/utils/Observable.hpp
     include/tools/utils/Scheduler.hpp
     include/tools/utils/Stopwatch.hpp

@@ -6,24 +6,7 @@ namespace test {
 using namespace tools::utils;
 using namespace std::literals;
 
-class TestScheduler: public ::testing::Test
-{
-    protected:
-    TestScheduler() {
-        outputs_path = std::getenv("TEST_OUTPUTS");
-    }
-
-    virtual ~TestScheduler() {}
-
-    virtual void SetUp() {}
-
-    virtual void TearDown() {}
-
-    public:
-    std::string outputs_path;
-};
-
-TEST_F(TestScheduler, test_add_task) {
+TEST(TestScheduler, test_add_task) {
     Scheduler s;
 
     Task task_a;
@@ -53,7 +36,7 @@ TEST_F(TestScheduler, test_add_task) {
     ASSERT_FALSE(s.add_task(Task()));
 }
 
-TEST_F(TestScheduler, test_scheduling) {
+TEST(TestScheduler, test_scheduling) {
     Scheduler s;
     // Needed on windows
     s.set_high_precision(true);

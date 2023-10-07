@@ -1,5 +1,4 @@
 #include "gtest/gtest.h"
-#include "spdlog/spdlog.h"
 
 #include "tools/sdl/WaveformPlayer.hpp"
 #include "tools/utils/Stopwatch.hpp"
@@ -38,8 +37,6 @@ TEST_F(TestWaveformPlayer, test_sinus) {
         auto sin = std::make_shared<Sinus>();
         sin->set_frequency(440 * (i * 2 + 1));
         sin->set_volume(1.0 / (i * 2 + 1));
-        spdlog::info(440 * (i * 2 + 1));
-        spdlog::info(1.0 / (i * 2 + 1));
         generator->add_waveform(sin);
         sounds.push_back(sin);
         std::this_thread::sleep_for(1s);
@@ -60,7 +57,6 @@ TEST_F(TestWaveformPlayer, test_square) {
             square->set_duty_cycle(0.125);
         else
             square->set_duty_cycle(0.125 * i * 2);
-        spdlog::info("Duty cycle = {}", square->get_duty_cycle());
         std::this_thread::sleep_for(1.5s);
     }
 }

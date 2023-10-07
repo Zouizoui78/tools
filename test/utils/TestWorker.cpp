@@ -1,5 +1,4 @@
 #include "gtest/gtest.h"
-#include "spdlog/spdlog.h"
 
 #include "tools/utils/Worker.hpp"
 #include "tools/utils/Stopwatch.hpp"
@@ -8,24 +7,7 @@ namespace test {
 
 using namespace tools::utils;
 
-class TestWorker: public ::testing::Test
-{
-    protected:
-    TestWorker() {
-        outputs_path = std::string(std::getenv("TEST_OUTPUTS"));
-    }
-
-    virtual ~TestWorker() {}
-
-    virtual void SetUp() {}
-
-    virtual void TearDown() {}
-
-    public:
-    std::string outputs_path;
-};
-
-TEST_F(TestWorker, test_task) {
+TEST(TestWorker, test_task) {
     std::atomic<uint8_t> count = 0;
     Worker task([&count]() {
         ++count;
@@ -45,13 +27,12 @@ TEST_F(TestWorker, test_task) {
     ASSERT_EQ(count, 3);
 }
 
-TEST_F(TestWorker, test_change_task) {
+TEST(TestWorker, test_change_task) {
     std::atomic<uint8_t> a = 0;
     std::atomic<uint8_t> b = 0;
 
     Worker task([&a]() {
         ++a;
-        spdlog::debug("Callback called, a = {}", a.load());
     });
 
     task.set_delay_ms(1);
@@ -62,10 +43,7 @@ TEST_F(TestWorker, test_change_task) {
 
     task.set_task([&b]() {
         ++b;
-        spdlog::debug("Callback called, b = {}", b.load());
     });
-
-    spdlog::info("New task set.");
 
     uint8_t backup_a = a;
 
@@ -77,18 +55,17 @@ TEST_F(TestWorker, test_change_task) {
     EXPECT_EQ(a, backup_a);
 }
 
-TEST_F(TestWorker, test_empty_callback) {
+TEST(TestWorker, test_empty_callback) {
     std::function<void ()> fun;
     Worker task(fun);
 
     EXPECT_FALSE(task.is_running());
 
-    spdlog::info("Error is expected here.");
     task.start();
     EXPECT_FALSE(task.is_running());
 }
 
-// TEST_F(TestWorker, test_time_accuracy) {
+// TEST(TestWorker, test_time_accuracy) {
 //     int count = 0;
 //     Stopwatch s("test");
 
@@ -109,7 +86,6 @@ TEST_F(TestWorker, test_empty_callback) {
 //         if (!first_done)
 //             first_done = true;
 //         else {
-//             spdlog::info("{} ms", diff);
 //             EXPECT_NEAR(diff, duration, duration_error);
 //         }
 

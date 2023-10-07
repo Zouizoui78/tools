@@ -24,24 +24,7 @@ public:
     bool test2_called = false;
 };
 
-class TestObservable: public ::testing::Test
-{
-    protected:
-    TestObservable() {
-        outputs_path = std::string(std::getenv("TEST_OUTPUTS"));
-    }
-
-    virtual ~TestObservable() {}
-
-    virtual void SetUp() {}
-
-    virtual void TearDown() {}
-
-    public:
-    std::string outputs_path;
-};
-
-TEST_F(TestObservable, test_getters) {
+TEST(TestObservable, test_getters) {
     DummyObserver observer;
     DummyObserver observer2;
     Observable observable;
@@ -60,7 +43,7 @@ TEST_F(TestObservable, test_getters) {
     ASSERT_EQ(observable.count_observers(EVENT), 2);
 }
 
-TEST_F(TestObservable, test_subscription) {
+TEST(TestObservable, test_subscription) {
     DummyObserver observer;
     Observable observable;
 
@@ -76,7 +59,7 @@ TEST_F(TestObservable, test_subscription) {
     ASSERT_FALSE(observable.is_observer(&observer, EVENT2));
 }
 
-TEST_F(TestObservable, test_notify) {
+TEST(TestObservable, test_notify) {
     DummyObserver observer;
     Observable observable;
 

@@ -5,24 +5,7 @@ namespace test {
 
 using namespace tools::time;
 
-class TestTime: public ::testing::Test
-{
-    protected:
-    TestTime() {
-        outputs_path = std::string(std::getenv("TEST_OUTPUTS"));
-    }
-
-    virtual ~TestTime() {}
-
-    virtual void SetUp() {}
-
-    virtual void TearDown() {}
-
-    public:
-    std::string outputs_path;
-};
-
-TEST_F(TestTime, test_str_to_time) {
+TEST(TestTime, test_str_to_time) {
     // Testing some formats.
     EXPECT_EQ(string_to_time("2022/04/04 12:12:54", "%Y/%m/%d %H:%M:%S"), 1649074374);
     EXPECT_EQ(string_to_time("010322 010544", "%d%m%y %H%M%S"), 1646096744);

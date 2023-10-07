@@ -1,10 +1,10 @@
 #include "gtest/gtest.h"
-#include "spdlog/spdlog.h"
 
 #include "tools/waveform/Constants.hpp"
 #include "tools/waveform/WaveformGenerator.hpp"
 #include "tools/waveform/Waveforms.hpp"
 
+#include <cmath>
 #include <numbers>
 
 namespace test {

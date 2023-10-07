@@ -1,7 +1,5 @@
 #include "gtest/gtest.h"
 #include "tools/utils/DynamicLibrary.hpp"
-
-#include "spdlog/spdlog.h"
 #include <filesystem>
 
 namespace test {
@@ -12,12 +10,10 @@ class TestDynamicLibrary: public ::testing::Test
 {
     protected:
     TestDynamicLibrary() {
-        outputs_path = std::string(std::getenv("TEST_OUTPUTS"));
-
     #ifdef WIN32
-        static std::string dynlib_filename = "libdynlib.dll";
+        std::string dynlib_filename = "libdynlib.dll";
     #else
-        static std::string dynlib_filename = "libdynlib.so";
+        std::string dynlib_filename = "libdynlib.so";
     #endif
 
         dynlib_path =
@@ -32,7 +28,6 @@ class TestDynamicLibrary: public ::testing::Test
     virtual void TearDown() override {}
 
     public:
-    std::string outputs_path;
     std::string dynlib_path;
 };
 

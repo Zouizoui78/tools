@@ -1,5 +1,4 @@
 #include "gtest/gtest.h"
-#include "spdlog/spdlog.h"
 
 #include "tools/sdl/Window.hpp"
 #include "tools/utils/Stopwatch.hpp"
@@ -9,24 +8,7 @@ namespace test {
 
 using namespace tools::sdl;
 
-class TestWindow: public ::testing::Test
-{
-    protected:
-    TestWindow() {
-        outputs_path = std::getenv("TEST_OUTPUTS");
-    }
-
-    virtual ~TestWindow() {}
-
-    virtual void SetUp() {}
-
-    virtual void TearDown() {}
-
-    public:
-    std::string outputs_path;
-};
-
-// TEST_F(TestWindow, test_window) {
+// TEST(TestWindow, test_window) {
 //     Window r;
 
 //     SDL_Rect rect { 100, 100, 100, 100 };
@@ -59,7 +41,7 @@ class TestWindow: public ::testing::Test
 //     t.join();
 // }
 
-// TEST_F(TestWindow, test_multiple_windows) {
+// TEST(TestWindow, test_multiple_windows) {
 //     Window r("test"), r2("test2");
 
 //     r.set_position(SDL_WINDOWPOS_CENTERED, 300);
