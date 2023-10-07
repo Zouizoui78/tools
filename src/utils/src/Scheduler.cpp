@@ -35,7 +35,7 @@ void Scheduler::loop() {
 
             auto now = std::chrono::steady_clock::now();
             if (now > task.next_run) {
-                if (!task.task())
+                task.task();
                 task.next_run = now + task.delay_ns;
             }
         }
