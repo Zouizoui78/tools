@@ -4,6 +4,7 @@
         {
             "name": "base",
             "hidden": true,
+            "generator": "Ninja",
             "binaryDir": "${sourceDir}/build/${presetName}",
             "architecture": { "value": "x64", "strategy": "external" },
             "cacheVariables": {

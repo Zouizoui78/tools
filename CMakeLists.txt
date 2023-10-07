@@ -5,21 +5,20 @@ set (CMAKE_CXX_STANDARD_REQUIRED ON)
 
 project(tools CXX)
 
-option(TOOLS_BUILD_TESTS "Build unit tests" OFF)
-
 add_subdirectory(src)
 
-if((CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME OR MODERN_CMAKE_BUILD_TESTING)
-    AND BUILD_TESTS)
-    include(CTest)
-    find_package(GTest CONFIG REQUIRED)
-    add_subdirectory(test)
+if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+    option(TOOLS_TESTS "Build unit tests" ON)
+    if (TOOLS_TESTS)
+        include(CTest)
+        add_subdirectory(test)
+    endif (TOOLS_TESTS)
 endif()
 
 # For clangd
-if (NOT WIN32)
+if (WIN32)
     add_custom_target(compile_commands_symlink
         ALL
         COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_BINARY_DIR}/compile_commands.json ${CMAKE_CURRENT_SOURCE_DIR}/compile_commands.json
     )
-endif (NOT WIN32)
+endif (WIN32)
