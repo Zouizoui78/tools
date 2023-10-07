@@ -16,9 +16,9 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 endif()
 
 # For clangd
-if (WIN32)
+if (UNIX)
     add_custom_target(compile_commands_symlink
         ALL
         COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_BINARY_DIR}/compile_commands.json ${CMAKE_CURRENT_SOURCE_DIR}/compile_commands.json
     )
-endif (WIN32)
+endif (UNIX)
