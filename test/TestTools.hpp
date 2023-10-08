@@ -3,7 +3,7 @@
 
 #include <filesystem>
 
-namespace tools::test {
+namespace test {
 
 inline std::string get_output_path() {
     std::string output_path = std::getenv("TEST_OUTPUT_DIR");

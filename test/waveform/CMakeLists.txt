@@ -15,5 +15,6 @@ target_link_libraries(test-waveform
 gtest_discover_tests(test-waveform
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
     PROPERTIES
+        LABELS test-waveform
         ENVIRONMENT "TEST_OUTPUT_DIR=build/TestOutput/TestWaveform"
 )

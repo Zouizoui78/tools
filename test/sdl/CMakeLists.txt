@@ -23,5 +23,6 @@ target_link_libraries(test-sdl
 gtest_discover_tests(test-sdl
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
     PROPERTIES
+        LABELS test-sdl
         ENVIRONMENT "TEST_OUTPUT_DIR=build/TestOutput/TestSdl"
 )
