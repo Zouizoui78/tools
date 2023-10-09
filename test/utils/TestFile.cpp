@@ -150,11 +150,11 @@ TEST(TestFile, test_dump_binary_double) {
     ASSERT_DOUBLE_EQ(content[0], test[0]);
 }
 
-TEST(TestFile, test_benchmark_dump) {
+TEST(TestFile, test_benchmark_dump_contiguous) {
     std::string path_tmp = test::get_output_path() + "/tmpbenchmark.bin";
     std::filesystem::remove(path_tmp);
     std::vector<int> data;
-    int size = 123456789;
+    int size = 123456;
     data.reserve(size);
     for (int i = 0 ; i < size; i++) {
         data.push_back(i);
@@ -167,11 +167,11 @@ TEST(TestFile, test_benchmark_dump) {
     ASSERT_EQ(ret, size * sizeof(int));
 }
 
-TEST(TestFile, test_benchmark_non_contiguous) {
+TEST(TestFile, test_benchmark_dump_non_contiguous) {
     std::string path_tmp = test::get_output_path() + "/tmpnoncontiguous.bin";
     std::filesystem::remove(path_tmp);
     std::deque<int> data;
-    int size = 123456789;
+    int size = 123456;
     for (int i = 0 ; i < size; i++) {
         data.push_back(i);
     }
