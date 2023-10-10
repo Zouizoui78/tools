@@ -25,19 +25,6 @@
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release"
             }
-        },
-        {
-            "name": "basewin",
-            "hidden": true,
-            "inherits": ["base"]
-        },
-        {
-            "name": "dbgwin",
-            "inherits": ["basewin", "dbg"]
-        },
-        {
-            "name": "relwin",
-            "inherits": ["basewin", "rel"]
         }
     ],
     "buildPresets": [
@@ -48,14 +35,6 @@
         {
             "name": "rel",
             "configurePreset": "rel"
-        },
-        {
-            "name": "dbgwin",
-            "configurePreset": "dbgwin"
-        },
-        {
-            "name": "relwin",
-            "configurePreset": "relwin"
         }
     ],
     "testPresets": [
@@ -66,14 +45,6 @@
         {
             "name": "rel",
             "configurePreset": "rel"
-        },
-        {
-            "name": "dbgwin",
-            "configurePreset": "dbgwin"
-        },
-        {
-            "name": "relwin",
-            "configurePreset": "relwin"
         }
     ]
 }
