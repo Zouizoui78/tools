@@ -36,7 +36,7 @@ std::vector<T> read_all_binary(const std::string &path) {
 // Return number of written bytes.
 template <typename R>
 requires std::ranges::input_range<R>
-int dump_container(const std::string &path, R&& range) {
+int dump_range(const std::string &path, R&& range) {
     std::ofstream file(path, std::ios::binary);
     if (!file.is_open()) {
         throw new std::runtime_error("Failed to open file {}" + path);
@@ -59,7 +59,7 @@ int dump_container(const std::string &path, R&& range) {
 // Return number of written bytes.
 template <typename R>
 requires std::ranges::contiguous_range<R>
-int dump_container(const std::string &path, R&& range) {
+int dump_range(const std::string &path, R&& range) {
     std::ofstream file(path, std::ios::binary);
     if (!file.is_open()) {
         throw new std::runtime_error("Failed to open file {}" + path);

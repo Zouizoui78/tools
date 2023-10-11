@@ -1,5 +1,6 @@
 set(SRC
     TestDynamicLibrary.cpp
+    TestEndian.cpp
     TestFile.cpp
     TestObservable.cpp
     TestScheduler.cpp
