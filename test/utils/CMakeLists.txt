@@ -1,13 +1,13 @@
 set(SRC
-    TestDynamicLibrary.cpp
-    TestEndian.cpp
-    TestFile.cpp
-    TestObservable.cpp
-    TestScheduler.cpp
-    TestStopwatch.cpp
-    TestStr.cpp
-    TestTime.cpp
-    TestWorker.cpp
+    test_dynamic_library.cpp
+    test_endian.cpp
+    test_file.cpp
+    test_observable.cpp
+    test_scheduler.cpp
+    test_stopwatch.cpp
+    test_str.cpp
+    test_time.cpp
+    test_worker.cpp
 )
 
 add_executable(test-utils ${SRC})
@@ -21,8 +21,8 @@ gtest_discover_tests(test-utils
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
     PROPERTIES
         LABELS test-utils
-        ENVIRONMENT "TEST_OUTPUT_DIR=build/TestOutput/TestUtils"
+        ENVIRONMENT "TEST_OUTPUT_DIR=build/test_output/test_utils"
         ENVIRONMENT "DYNLIB_PATH=${CMAKE_CURRENT_BINARY_DIR}"
 )
 
-add_library(dynlib SHARED ../resources/DynamicLibrary/dynlib.cpp)
+add_library(dynlib SHARED ../resources/dynamic_library/dynlib.cpp)

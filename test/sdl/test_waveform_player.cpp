@@ -1,9 +1,9 @@
 #include "gtest/gtest.h"
 
-#include "tools/sdl/WaveformPlayer.hpp"
-#include "tools/utils/Stopwatch.hpp"
-#include "tools/waveform/AWaveform.hpp"
-#include "tools/waveform/Waveforms.hpp"
+#include "tools/sdl/waveform_player.hpp"
+#include "tools/utils/stopwatch.hpp"
+#include "tools/waveform/awaveform.hpp"
+#include "tools/waveform/waveforms.hpp"
 
 namespace test {
 

@@ -1,5 +1,5 @@
-#include "tools/sdl/WaveformPlayer.hpp"
-#include "tools/waveform/Constants.hpp"
+#include "tools/sdl/waveform_player.hpp"
+#include "tools/waveform/constants.hpp"
 
 namespace tools::sdl {
 

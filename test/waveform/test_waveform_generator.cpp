@@ -1,8 +1,8 @@
 #include "gtest/gtest.h"
 
-#include "tools/waveform/Constants.hpp"
-#include "tools/waveform/WaveformGenerator.hpp"
-#include "tools/waveform/Waveforms.hpp"
+#include "tools/waveform/constants.hpp"
+#include "tools/waveform/waveform_generator.hpp"
+#include "tools/waveform/waveforms.hpp"
 
 #include <cmath>
 #include <numbers>

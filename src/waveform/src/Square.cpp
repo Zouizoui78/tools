@@ -1,4 +1,4 @@
-#include "tools/waveform/Square.hpp"
+#include "tools/waveform/square.hpp"
 
 #include <algorithm>
 

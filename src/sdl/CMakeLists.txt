@@ -1,13 +1,13 @@
 set(SOURCES
-    src/InputMapper.cpp
-    src/WaveformPlayer.cpp
-    src/Window.cpp
+    src/input_mapper.cpp
+    src/waveform_player.cpp
+    src/window.cpp
 )
 
 set(PUBLIC_HEADERS
-    include/tools/sdl/InputMapper.hpp
-    include/tools/sdl/WaveformPlayer.hpp
-    include/tools/sdl/Window.hpp
+    include/tools/sdl/input_mapper.hpp
+    include/tools/sdl/waveform_player.hpp
+    include/tools/sdl/window.hpp
 )
 
 add_library(tools-sdl ${SOURCES} ${PUBLIC_HEADERS})

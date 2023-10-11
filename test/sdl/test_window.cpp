@@ -1,8 +1,8 @@
 #include "gtest/gtest.h"
 
-#include "tools/sdl/Window.hpp"
-#include "tools/utils/Stopwatch.hpp"
-#include "tools/utils/Worker.hpp"
+#include "tools/sdl/window.hpp"
+#include "tools/utils/stopwatch.hpp"
+#include "tools/utils/worker.hpp"
 
 namespace test {
 

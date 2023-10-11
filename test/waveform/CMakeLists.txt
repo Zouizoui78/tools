@@ -1,8 +1,8 @@
 set(SRC
-    TestAWaveform.cpp
-    TestSinus.cpp
-    TestSquare.cpp
-    TestWaveformGenerator.cpp
+    test_awaveform.cpp
+    test_sinus.cpp
+    test_square.cpp
+    test_waveform_generator.cpp
 )
 
 add_executable(test-waveform ${SRC})
@@ -16,5 +16,5 @@ gtest_discover_tests(test-waveform
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
     PROPERTIES
         LABELS test-waveform
-        ENVIRONMENT "TEST_OUTPUT_DIR=build/TestOutput/TestWaveform"
+        ENVIRONMENT "TEST_OUTPUT_DIR=build/test_output/test_waveform"
 )

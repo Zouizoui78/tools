@@ -1,5 +1,5 @@
 #include "gtest/gtest.h"
-#include "tools/utils/DynamicLibrary.hpp"
+#include "tools/utils/dynamic_library.hpp"
 #include <filesystem>
 
 namespace test {

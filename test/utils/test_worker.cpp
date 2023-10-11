@@ -1,7 +1,7 @@
 #include "gtest/gtest.h"
 
-#include "tools/utils/Worker.hpp"
-#include "tools/utils/Stopwatch.hpp"
+#include "tools/utils/worker.hpp"
+#include "tools/utils/stopwatch.hpp"
 
 namespace test {
 

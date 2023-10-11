@@ -1,7 +1,7 @@
 #ifndef WAVEFORMS_HPP
 #define WAVEFORMS_HPP
 
-#include "Sinus.hpp"
-#include "Square.hpp"
+#include "sinus.hpp"
+#include "square.hpp"
 
 #endif // WAVEFORMS_HPP

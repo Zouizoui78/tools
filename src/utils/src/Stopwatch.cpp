@@ -1,4 +1,4 @@
-#include "tools/utils/Stopwatch.hpp"
+#include "tools/utils/stopwatch.hpp"
 #include <format>
 
 namespace tools::utils {

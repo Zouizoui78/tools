@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
 
-#include "tools/sdl/InputMapper.hpp"
+#include "tools/sdl/input_mapper.hpp"
 #include "tools/utils/file.hpp"
 
 namespace test {

@@ -1,4 +1,4 @@
-#include "tools/sdl/Window.hpp"
+#include "tools/sdl/window.hpp"
 
 namespace tools::sdl {
 

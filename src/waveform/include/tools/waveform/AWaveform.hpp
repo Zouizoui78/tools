@@ -1,7 +1,7 @@
 #ifndef AWAVEFORM_HPP
 #define AWAVEFORM_HPP
 
-#include "WaveformTimepoint.hpp"
+#include "waveform_timepoint.hpp"
 
 namespace tools::waveform {
 

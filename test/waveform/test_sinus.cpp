@@ -1,5 +1,5 @@
 #include "gtest/gtest.h"
-#include "tools/waveform/Sinus.hpp"
+#include "tools/waveform/sinus.hpp"
 
 #include <numbers>
 

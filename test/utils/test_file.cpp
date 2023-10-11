@@ -1,8 +1,8 @@
 #include "gtest/gtest.h"
 #include "tools/utils/file.hpp"
-#include "../TestTools.hpp"
+#include "../test_tools.hpp"
 
-#include "tools/utils/Stopwatch.hpp"
+#include "tools/utils/stopwatch.hpp"
 #include <iostream>
 #include <deque>
 

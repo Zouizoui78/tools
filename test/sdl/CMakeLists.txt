@@ -1,13 +1,13 @@
 set(SRC
-    TestInputMapper.cpp
-    TestWindow.cpp
+    test_input_mapper.cpp
+    test_window.cpp
 )
 
 option(TEST_WAVEFORM_PLAYER "Enable waveform player tests" OFF)
 if (TEST_WAVEFORM_PLAYER)
     set(SRC
         ${SRC}
-        TestWaveformPlayer.cpp
+        test_waveform_player.cpp
     )
 endif (TEST_WAVEFORM_PLAYER)
 
@@ -24,5 +24,5 @@ gtest_discover_tests(test-sdl
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
     PROPERTIES
         LABELS test-sdl
-        ENVIRONMENT "TEST_OUTPUT_DIR=build/TestOutput/TestSdl"
+        ENVIRONMENT "TEST_OUTPUT_DIR=build/test_output/test_sdl"
 )

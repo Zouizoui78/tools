@@ -1,8 +1,6 @@
 #ifndef ENDIAN_HPP
 #define ENDIAN_HPP
 
-#include <iostream>
-
 namespace tools::endian {
 
 template <typename T>

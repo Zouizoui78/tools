@@ -3,7 +3,7 @@
 
 #include <memory>
 #include "SDL2/SDL.h"
-#include "tools/waveform/WaveformGenerator.hpp"
+#include "tools/waveform/waveform_generator.hpp"
 
 namespace tools::sdl {
 

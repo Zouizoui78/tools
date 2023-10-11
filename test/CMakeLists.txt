@@ -1,6 +1,12 @@
 find_package(GTest CONFIG REQUIRED)
 include(GoogleTest)
 
-add_subdirectory(sdl)
 add_subdirectory(utils)
-add_subdirectory(waveform)
+
+if (TOOLS_SDL)
+    add_subdirectory(sdl)
+endif (TOOLS_SDL)
+
+if (TOOLS_WAVEFORM)
+    add_subdirectory(waveform)
+endif (TOOLS_WAVEFORM)

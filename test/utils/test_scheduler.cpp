@@ -1,5 +1,5 @@
 #include "gtest/gtest.h"
-#include "tools/utils/Scheduler.hpp"
+#include "tools/utils/scheduler.hpp"
 
 namespace test {
 

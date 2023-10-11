@@ -1,4 +1,4 @@
-#include "tools/utils/Worker.hpp"
+#include "tools/utils/worker.hpp"
 
 namespace tools::utils {
 

@@ -1,4 +1,4 @@
-#include "tools/waveform/Sinus.hpp"
+#include "tools/waveform/sinus.hpp"
 
 #include <cmath>
 #include <numbers>
