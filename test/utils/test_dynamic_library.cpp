@@ -1,5 +1,6 @@
 #include "gtest/gtest.h"
 #include "tools/utils/dynamic_library.hpp"
+
 #include <filesystem>
 
 namespace test {
@@ -10,14 +11,15 @@ class TestDynamicLibrary: public ::testing::Test
 {
     protected:
     TestDynamicLibrary() {
+        std::string dynlib_filename = "libdynlib";
     #ifdef WIN32
-        std::string dynlib_filename = "libdynlib.dll";
+        std::string dynlib_extension = ".dll";
     #else
-        std::string dynlib_filename = "libdynlib.so";
+        std::string dynlib_extension = ".so";
     #endif
 
         dynlib_path =
-            (std::filesystem::path(std::getenv("DYNLIB_PATH")) / dynlib_filename)
+            (std::filesystem::path(std::getenv("DYNLIB_PATH")) / (dynlib_filename + dynlib_extension))
             .string();
     }
 
@@ -31,14 +33,12 @@ class TestDynamicLibrary: public ::testing::Test
     std::string dynlib_path;
 };
 
-TEST_F(TestDynamicLibrary, test_load_library) {
-    DynamicLibrary lib(dynlib_path);
-    ASSERT_TRUE(lib.is_loaded());
+TEST_F(TestDynamicLibrary, test_dynlib_load) {
+    ASSERT_NO_THROW(DynamicLibrary lib(dynlib_path));
 }
 
-TEST_F(TestDynamicLibrary, test_load_function) {
+TEST_F(TestDynamicLibrary, test_dynlib_get_function) {
     DynamicLibrary lib(dynlib_path);
-    ASSERT_TRUE(lib.is_loaded());
 
     auto func_ptr = lib.get_function<bool, const std::string &>("func");
     ASSERT_NE(func_ptr, nullptr);
@@ -53,9 +53,8 @@ TEST_F(TestDynamicLibrary, test_load_function) {
     ASSERT_EQ(lib.get_function<void>("not_a_function"), nullptr);
 }
 
-TEST_F(TestDynamicLibrary, test_call) {
+TEST_F(TestDynamicLibrary, test_dynlib_call) {
     DynamicLibrary lib(dynlib_path);
-    ASSERT_TRUE(lib.is_loaded());
 
     bool ret = false;
     std::string str = "test";
