@@ -15,7 +15,7 @@ target_include_directories(tools-sdl PUBLIC include)
 target_link_libraries(tools-sdl PUBLIC tools-utils tools-waveform)
 
 find_package(SDL2 REQUIRED)
-target_link_libraries(tools-sdl PUBLIC SDL2::SDL2)
+target_link_libraries(tools-sdl PUBLIC SDL2)
 
 find_package(SDL2_ttf REQUIRED)
-target_link_libraries(tools-sdl PUBLIC SDL2_ttf::SDL2_ttf)
+target_link_libraries(tools-sdl PUBLIC SDL2_ttf)
