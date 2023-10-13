@@ -3,7 +3,9 @@
 
 namespace tools::sdl {
 
-WaveformPlayer::WaveformPlayer(std::shared_ptr<tools::waveform::WaveformGenerator> generator) : _generator(generator) {
+WaveformPlayer::WaveformPlayer(
+    std::shared_ptr<tools::waveform::WaveformGenerator> generator)
+    : _generator(generator) {
 #ifdef WIN32
     putenv("SDL_AUDIODRIVER=dsound");
 #endif
@@ -32,7 +34,8 @@ bool WaveformPlayer::init() {
     desired.format = AUDIO_F32SYS;
     desired.channels = 1;
     desired.samples = 512;
-    desired.callback = sdl_callback; // called periodically by SDL to refill the buffer
+    desired.callback =
+        sdl_callback; // called periodically by SDL to refill the buffer
     desired.userdata = this;
 
     _audio_device_id = SDL_OpenAudioDevice(nullptr, 0, &desired, nullptr, 0);
@@ -45,23 +48,20 @@ bool WaveformPlayer::init() {
     return _is_audio_initialized;
 }
 
-bool WaveformPlayer::is_initialized() const {
-    return _is_audio_initialized;
-}
+bool WaveformPlayer::is_initialized() const { return _is_audio_initialized; }
 
-void WaveformPlayer::sdl_callback(void *instance, uint8_t *raw_buffer, int bytes) {
-    WaveformPlayer *player = static_cast<WaveformPlayer *>(instance);
-    float *buffer = reinterpret_cast<float *>(raw_buffer);
+void WaveformPlayer::sdl_callback(void* instance, uint8_t* raw_buffer,
+                                  int bytes) {
+    WaveformPlayer* player = static_cast<WaveformPlayer*>(instance);
+    float* buffer = reinterpret_cast<float*>(raw_buffer);
 
     int32_t len = bytes / sizeof(float);
-    for (int32_t i = 0 ; i < len ; i++) {
+    for (int32_t i = 0; i < len; i++) {
         buffer[i] = static_cast<float>(player->_generator->generate_sample());
     }
 }
 
-void WaveformPlayer::play() const {
-    SDL_PauseAudioDevice(_audio_device_id, 0);
-}
+void WaveformPlayer::play() const { SDL_PauseAudioDevice(_audio_device_id, 0); }
 
 void WaveformPlayer::pause() const {
     SDL_PauseAudioDevice(_audio_device_id, 1);

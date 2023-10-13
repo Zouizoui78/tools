@@ -20,7 +20,8 @@ TEST_F(TestAWaveform, test_ctor) {
     ASSERT_DOUBLE_EQ(w.get_volume(), 1);
     ASSERT_DOUBLE_EQ(w.get_frequency(), 440);
     ASSERT_DOUBLE_EQ(w.get_period(), 1.0 / 440.0);
-    ASSERT_DOUBLE_EQ(w.get_samples_in_period(), tools::waveform::sampling_rate / 440);
+    ASSERT_DOUBLE_EQ(w.get_samples_in_period(),
+                     tools::waveform::sampling_rate / 440);
 }
 
 TEST_F(TestAWaveform, test_set_volume) {

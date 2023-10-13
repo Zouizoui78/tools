@@ -7,7 +7,7 @@ std::atomic<uint8_t> Window::_instances_count = 0;
 
 bool Window::sdl_init() {
     bool ret = true;
-    if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS) < 0) {
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS) < 0) {
         ret = false;
     }
     _sdl_initialized = ret;
@@ -25,7 +25,7 @@ Window::Window() {
     init();
 }
 
-Window::Window(const std::string &title, int width, int height) {
+Window::Window(const std::string& title, int width, int height) {
     _window_title = title;
     _width = width;
     _height = height;
@@ -41,11 +41,11 @@ bool Window::init() {
     if (_instances_count == 0)
         sdl_init();
 
-    if(TTF_Init() != 0) {
+    if (TTF_Init() != 0) {
         return false;
     }
 
-    if(!get_screen_size()) {
+    if (!get_screen_size()) {
         return false;
     }
 
@@ -54,26 +54,17 @@ bool Window::init() {
     if (_height > _screen_height)
         _height = _screen_height;
 
-    _window = SDL_CreateWindow(
-        _window_title.c_str(),
-        SDL_WINDOWPOS_CENTERED,
-        SDL_WINDOWPOS_CENTERED,
-        _width,
-        _height,
-        SDL_WINDOW_RESIZABLE
-    );
+    _window = SDL_CreateWindow(_window_title.c_str(), SDL_WINDOWPOS_CENTERED,
+                               SDL_WINDOWPOS_CENTERED, _width, _height,
+                               SDL_WINDOW_RESIZABLE);
 
-    if(_window == nullptr) {
+    if (_window == nullptr) {
         return false;
     }
 
-    _renderer = SDL_CreateRenderer(
-        _window,
-        -1,
-        SDL_RENDERER_ACCELERATED
-    );
+    _renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_ACCELERATED);
 
-    if(_renderer == nullptr) {
+    if (_renderer == nullptr) {
         return false;
     }
 
@@ -92,24 +83,18 @@ void Window::stop() {
     }
 }
 
-void Window::refresh() {
-    SDL_RenderPresent(_renderer);
-}
+void Window::refresh() { SDL_RenderPresent(_renderer); }
 
 bool Window::clear() {
-    if(SDL_RenderClear(_renderer) == -1) {
+    if (SDL_RenderClear(_renderer) == -1) {
         return false;
     }
     return true;
 }
 
-void Window::set_width(int width) {
-    _width = width;
-}
+void Window::set_width(int width) { _width = width; }
 
-void Window::set_height(int height) {
-    _height = height;
-}
+void Window::set_height(int height) { _height = height; }
 
 void Window::set_size(int width, int height) {
     _width = width;
@@ -121,7 +106,8 @@ void Window::set_position(int x, int y) {
 }
 
 void Window::center() {
-    SDL_SetWindowPosition(_window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
+    SDL_SetWindowPosition(_window, SDL_WINDOWPOS_CENTERED,
+                          SDL_WINDOWPOS_CENTERED);
 }
 
 SDL_Texture* Window::get_render_target() {
@@ -129,18 +115,18 @@ SDL_Texture* Window::get_render_target() {
 }
 
 bool Window::set_render_target(SDL_Texture* dst) {
-    if(SDL_SetRenderTarget(_renderer, dst) == -1) {
+    if (SDL_SetRenderTarget(_renderer, dst) == -1) {
         return false;
     }
     return true;
 }
 
 bool Window::set_viewport(SDL_Rect* rect) {
-    if(rect == nullptr) {
+    if (rect == nullptr) {
         return false;
     }
 
-    if(SDL_RenderSetViewport(_renderer, rect) == -1) {
+    if (SDL_RenderSetViewport(_renderer, rect) == -1) {
         return false;
     }
 
@@ -152,13 +138,7 @@ bool Window::set_draw_color(SDL_Color& color) {
 }
 
 bool Window::set_draw_color(uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
-    if(SDL_SetRenderDrawColor(
-        _renderer,
-        r,
-        g,
-        b,
-        a
-    ) == -1) {
+    if (SDL_SetRenderDrawColor(_renderer, r, g, b, a) == -1) {
         return false;
     }
 
@@ -166,7 +146,7 @@ bool Window::set_draw_color(uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
 }
 
 TTF_Font* Window::load_font(std::string font_path, int size) {
-    if(font_path.empty()) {
+    if (font_path.empty()) {
         return nullptr;
     }
 
@@ -175,83 +155,79 @@ TTF_Font* Window::load_font(std::string font_path, int size) {
 }
 
 SDL_Texture* Window::load_image(std::string img_path) {
-    if(img_path.empty()) {
+    if (img_path.empty()) {
         return nullptr;
     }
 
     SDL_Surface* surface = SDL_LoadBMP(img_path.c_str());
-    if(surface == nullptr) {
+    if (surface == nullptr) {
         return nullptr;
     }
 
     SDL_Texture* texture = surface_to_texture(surface);
-    if(texture == nullptr) {
+    if (texture == nullptr) {
         return nullptr;
     }
 
     return texture;
 }
 
-SDL_Texture* Window::load_text(
-    std::string text,
-    SDL_Color color,
-    TTF_Font* font
-) {
+SDL_Texture* Window::load_text(std::string text, SDL_Color color,
+                               TTF_Font* font) {
     SDL_Surface* surface = nullptr;
-    if(font == nullptr) {
-        if(_default_font == nullptr)
-        {
+    if (font == nullptr) {
+        if (_default_font == nullptr) {
             return nullptr;
         }
         surface = TTF_RenderText_Solid(_default_font, text.c_str(), color);
-    }
-    else {
+    } else {
         surface = TTF_RenderText_Solid(font, text.c_str(), color);
     }
 
-    if(surface == nullptr) {
+    if (surface == nullptr) {
         return nullptr;
     }
 
     SDL_Texture* texture = surface_to_texture(surface);
-    if(texture == nullptr) {
+    if (texture == nullptr) {
         return nullptr;
     }
 
     return texture;
 }
 
-bool Window::render_texture(SDL_Texture* texture, SDL_Rect* dst, SDL_Rect* portion) {
-    if(texture == nullptr) {
+bool Window::render_texture(SDL_Texture* texture, SDL_Rect* dst,
+                            SDL_Rect* portion) {
+    if (texture == nullptr) {
         return false;
     }
 
-    if(SDL_RenderCopy(_renderer, texture, portion, dst) == -1) {
+    if (SDL_RenderCopy(_renderer, texture, portion, dst) == -1) {
         return false;
     }
     return true;
 }
 
 bool Window::crop_texture(SDL_Texture* src, SDL_Texture*& dst, SDL_Rect* rect) {
-    if(src == nullptr) {
+    if (src == nullptr) {
         return false;
     }
 
-    if(rect == nullptr) {
+    if (rect == nullptr) {
         return false;
     }
 
-    if(rect->h == 0 || rect->w == 0) {
+    if (rect->h == 0 || rect->w == 0) {
         return false;
     }
 
     dst = this->create_blank_render_target(rect->w, rect->h);
 
-    if(dst == nullptr) {
+    if (dst == nullptr) {
         return false;
     }
 
-    if(!this->render_to_texture(src, dst, rect)) {
+    if (!this->render_to_texture(src, dst, rect)) {
         return false;
     }
 
@@ -260,7 +236,7 @@ bool Window::crop_texture(SDL_Texture* src, SDL_Texture*& dst, SDL_Rect* rect) {
 
 bool Window::get_screen_size() {
     SDL_DisplayMode mode = SDL_DisplayMode();
-    if(SDL_GetDesktopDisplayMode(0, &mode) == -1) {
+    if (SDL_GetDesktopDisplayMode(0, &mode) == -1) {
         return false;
     }
     _screen_width = mode.w;
@@ -269,12 +245,12 @@ bool Window::get_screen_size() {
 }
 
 SDL_Texture* Window::surface_to_texture(SDL_Surface* surface) {
-    if(surface == nullptr) {
+    if (surface == nullptr) {
         return nullptr;
     }
 
     SDL_Texture* texture = SDL_CreateTextureFromSurface(_renderer, surface);
-    if(texture == nullptr) {
+    if (texture == nullptr) {
         return nullptr;
     }
 
@@ -282,21 +258,22 @@ SDL_Texture* Window::surface_to_texture(SDL_Surface* surface) {
     return texture;
 }
 
-bool Window::render_to_texture(SDL_Texture* src, SDL_Texture* dst, SDL_Rect* dstRect) {
+bool Window::render_to_texture(SDL_Texture* src, SDL_Texture* dst,
+                               SDL_Rect* dstRect) {
     // Backup rendering target.
     SDL_Texture* target = this->get_render_target();
 
     // Set render target to destination texture.
-    if(!this->set_render_target(dst)) {
+    if (!this->set_render_target(dst)) {
         return false;
     }
 
-    if(this->render_texture(src, nullptr, dstRect) == false) {
+    if (this->render_texture(src, nullptr, dstRect) == false) {
         return false;
     }
 
     // Restore rendering target.
-    if(!this->set_render_target(target)) {
+    if (!this->set_render_target(target)) {
         return false;
     }
 
@@ -304,15 +281,16 @@ bool Window::render_to_texture(SDL_Texture* src, SDL_Texture* dst, SDL_Rect* dst
 }
 
 SDL_Texture* Window::create_blank_render_target(int width, int height) {
-    return SDL_CreateTexture(_renderer, SDL_GetWindowPixelFormat(_window), SDL_TEXTUREACCESS_TARGET, width, height);
+    return SDL_CreateTexture(_renderer, SDL_GetWindowPixelFormat(_window),
+                             SDL_TEXTUREACCESS_TARGET, width, height);
 }
 
 bool Window::draw_rectangle(SDL_Rect* rect, bool fill) {
-    if(rect == nullptr) {
+    if (rect == nullptr) {
         return false;
     }
 
-    if(SDL_RenderDrawRect(_renderer, rect) == -1) {
+    if (SDL_RenderDrawRect(_renderer, rect) == -1) {
         return false;
     }
 

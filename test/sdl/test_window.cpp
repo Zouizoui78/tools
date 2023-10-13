@@ -29,8 +29,8 @@ using namespace tools::sdl;
 
 //     w.set_frequency(144);
 
-//     std::cout << "Do you see a red square in a black window ? (y/n)" << std::endl;
-//     std::thread t([&]() {
+//     std::cout << "Do you see a red square in a black window ? (y/n)" <<
+//     std::endl; std::thread t([&]() {
 //         char c;
 //         std::cin >> c;
 //         EXPECT_EQ(c, 'y');
@@ -69,8 +69,8 @@ using namespace tools::sdl;
 
 //     w.set_frequency(10);
 
-//     std::cout << "Do you see a red square in a black window and a green square in a second window ? (y/n)" << std::endl;
-//     std::thread t([&]() {
+//     std::cout << "Do you see a red square in a black window and a green
+//     square in a second window ? (y/n)" << std::endl; std::thread t([&]() {
 //         char c;
 //         std::cin >> c;
 //         EXPECT_EQ(c, 'y');

@@ -10,19 +10,21 @@ namespace tools::utils {
 
 /**
  * @brief The Worker class runs a task in the background.
- * The task is started when start() is called and is repeated until stop() is called.
- * The callback can be changed while the task is running. A mutex is used to change the internal std::function object when it is not called.
+ * The task is started when start() is called and is repeated until stop() is
+ * called. The callback can be changed while the task is running. A mutex is
+ * used to change the internal std::function object when it is not called.
  */
 class Worker {
-    public:
-
+public:
     Worker();
-    Worker(std::function<void ()> task, bool threaded = true);
+    Worker(std::function<void()> task, bool threaded = true);
     ~Worker();
 
     /**
-     * @brief Start the task. A new thread is created and the task starts running in this thread.
-     * @return true => successfully started or already running ; false => invalid callback.
+     * @brief Start the task. A new thread is created and the task starts
+     * running in this thread.
+     * @return true => successfully started or already running ; false =>
+     * invalid callback.
      */
     bool start();
 
@@ -38,10 +40,11 @@ class Worker {
     bool is_running();
 
     /**
-     * @brief Set a new task. A mutex is used to avoid changing the callback while it is called.
+     * @brief Set a new task. A mutex is used to avoid changing the callback
+     * while it is called.
      * @param task New task.
      */
-    bool set_task(std::function<void ()> task);
+    bool set_task(std::function<void()> task);
 
     /**
      * @brief Set the time to wait between two executions of the task.
@@ -50,24 +53,27 @@ class Worker {
     void set_delay_ms(double delay_ms);
 
     /**
-     * @brief Set the frequency at which the worker runs its task. Cannot be greater than 1MHz. If it is, the function treats the argument as 1MHz.
+     * @brief Set the frequency at which the worker runs its task. Cannot be
+     * greater than 1MHz. If it is, the function treats the argument as
+     * 1MHz.
      *
      * @param frequency Worker's frequency.
      */
     void set_frequency(uint32_t frequency);
 
     /**
-     * @brief Tell the worker to schedule its task with a high precision, most likely consuming 100% of its cpu core's time.
+     * @brief Tell the worker to schedule its task with a high precision,
+     * most likely consuming 100% of its cpu core's time.
      *
      * @param high_precision
      */
     void set_high_precision(bool high_precision);
 
-    private:
+private:
     void task_wrapper();
 
     std::atomic<bool> _running = false;
-    std::function<void ()> _task;
+    std::function<void()> _task;
     std::mutex _task_mutex;
     std::thread _thread;
     bool _threaded;

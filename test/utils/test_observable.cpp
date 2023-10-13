@@ -1,5 +1,5 @@
-#include "gtest/gtest.h"
 #include "tools/utils/observable.hpp"
+#include "gtest/gtest.h"
 
 #define EVENT "test"
 #define EVENT2 "test2"
@@ -10,9 +10,10 @@ using namespace tools::utils;
 
 class DummyObserver : public IObserver {
 public:
-    virtual ~DummyObserver () {}
+    virtual ~DummyObserver() {}
 
-    virtual void notify(Observable *sender, const std::string &event_id) override {
+    virtual void notify(Observable* sender,
+                        const std::string& event_id) override {
         (void)sender;
         if (event_id == EVENT)
             test_called = !test_called;

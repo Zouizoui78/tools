@@ -19,7 +19,7 @@ public:
     double get_frequency() const;
 
     // Does nothing if frequency < 1e-9
-    virtual void set_frequency (double frequency);
+    virtual void set_frequency(double frequency);
 
     double get_period() const;
     int16_t get_samples_in_period() const;

@@ -8,17 +8,15 @@ namespace tools::utils {
 
 class Stopwatch {
 
-    public:
-
-    Stopwatch(const std::string &name = "");
+public:
+    Stopwatch(const std::string& name = "");
 
     uint64_t get_duration() const;
     std::string dump_duration() const;
 
     void reset();
 
-    private:
-
+private:
     std::string _name = "";
 
     std::chrono::steady_clock::time_point _start_time_point;

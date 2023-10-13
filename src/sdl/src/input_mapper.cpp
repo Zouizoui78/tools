@@ -10,7 +10,7 @@ void InputMapper::set_mapping(SDL_Keycode key, uint8_t mapped_key) {
     _keymap[key] = mapped_key;
 }
 
-bool InputMapper::set_mapping(const std::string &key, uint8_t mapped_key) {
+bool InputMapper::set_mapping(const std::string& key, uint8_t mapped_key) {
     SDL_Keycode sdl_key = SDL_GetKeyFromName(key.c_str());
     if (sdl_key == SDLK_UNKNOWN) {
         return false;
@@ -19,11 +19,9 @@ bool InputMapper::set_mapping(const std::string &key, uint8_t mapped_key) {
     return true;
 }
 
-void InputMapper::remove_mapping(SDL_Keycode key) {
-    _keymap.erase(key);
-}
+void InputMapper::remove_mapping(SDL_Keycode key) { _keymap.erase(key); }
 
-bool InputMapper::remove_mapping(const std::string &key) {
+bool InputMapper::remove_mapping(const std::string& key) {
     SDL_Keycode sdl_key = SDL_GetKeyFromName(key.c_str());
     if (sdl_key == SDLK_UNKNOWN) {
         return false;
@@ -39,7 +37,7 @@ int InputMapper::map_key(SDL_Keycode key) {
     return value_it->second;
 }
 
-int InputMapper::map_key(const std::string &key) {
+int InputMapper::map_key(const std::string& key) {
     SDL_Keycode sdl_key = SDL_GetKeyFromName(key.c_str());
     if (sdl_key == SDLK_UNKNOWN) {
         return false;

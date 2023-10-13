@@ -5,7 +5,7 @@
 
 namespace tools::time {
 
-time_t string_to_time(const std::string &time, const std::string &format);
+time_t string_to_time(const std::string& time, const std::string& format);
 
 } // namespace tools::time
 

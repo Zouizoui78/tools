@@ -11,15 +11,13 @@ using namespace std::literals;
 using namespace tools::sdl;
 using namespace tools::waveform;
 
-class TestWaveformPlayer: public ::testing::Test {
+class TestWaveformPlayer : public ::testing::Test {
 public:
     std::shared_ptr<WaveformGenerator> generator;
     tools::sdl::WaveformPlayer player;
 
-    TestWaveformPlayer() :
-        generator(std::make_shared<WaveformGenerator>()),
-        player(generator)
-    {}
+    TestWaveformPlayer()
+        : generator(std::make_shared<WaveformGenerator>()), player(generator) {}
 };
 
 TEST_F(TestWaveformPlayer, test_is_playing) {
@@ -33,7 +31,7 @@ TEST_F(TestWaveformPlayer, test_sinus) {
     player.play();
 
     std::vector<std::shared_ptr<AWaveform>> sounds;
-    for (int i = 0 ; i < 6 ; i++) {
+    for (int i = 0; i < 6; i++) {
         auto sin = std::make_shared<Sinus>();
         sin->set_frequency(440 * (i * 2 + 1));
         sin->set_volume(1.0 / (i * 2 + 1));
@@ -52,7 +50,7 @@ TEST_F(TestWaveformPlayer, test_square) {
 
     player.play();
 
-    for (int i = 0 ; i < 4 ; i++) {
+    for (int i = 0; i < 4; i++) {
         if (i == 0)
             square->set_duty_cycle(0.125);
         else
@@ -70,14 +68,14 @@ TEST_F(TestWaveformPlayer, test_setting_changes) {
     auto sound = std::make_shared<Square>();
     generator->add_waveform(sound);
     player.play();
-    for (int i = 0 ; i < 5 ; i++) {
+    for (int i = 0; i < 5; i++) {
         if (sound->get_frequency() == la)
             sound->set_frequency(si);
         else
             sound->set_frequency(la);
         std::this_thread::sleep_for(400ms);
     }
-    for (int i = 0 ; i < 4 ; i++) {
+    for (int i = 0; i < 4; i++) {
         if (i == 0)
             sound->set_duty_cycle(0.125);
         else if (i == 1)

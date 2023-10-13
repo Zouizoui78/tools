@@ -1,7 +1,7 @@
 #include "gtest/gtest.h"
 
-#include "tools/utils/worker.hpp"
 #include "tools/utils/stopwatch.hpp"
+#include "tools/utils/worker.hpp"
 
 namespace test {
 
@@ -9,9 +9,7 @@ using namespace tools::utils;
 
 TEST(TestWorker, test_task) {
     std::atomic<uint8_t> count = 0;
-    Worker task([&count]() {
-        ++count;
-    });
+    Worker task([&count]() { ++count; });
 
     ASSERT_FALSE(task.is_running());
 
@@ -19,7 +17,8 @@ TEST(TestWorker, test_task) {
     task.start();
     ASSERT_TRUE(task.is_running());
 
-    while (count < 3);
+    while (count < 3)
+        ;
 
     task.stop();
     ASSERT_FALSE(task.is_running());
@@ -31,23 +30,21 @@ TEST(TestWorker, test_change_task) {
     std::atomic<uint8_t> a = 0;
     std::atomic<uint8_t> b = 0;
 
-    Worker task([&a]() {
-        ++a;
-    });
+    Worker task([&a]() { ++a; });
 
     task.set_delay_ms(1);
     task.start();
     ASSERT_TRUE(task.is_running());
 
-    while (a < 5);
+    while (a < 5)
+        ;
 
-    task.set_task([&b]() {
-        ++b;
-    });
+    task.set_task([&b]() { ++b; });
 
     uint8_t backup_a = a;
 
-    while (b < 10);
+    while (b < 10)
+        ;
 
     task.stop();
     ASSERT_FALSE(task.is_running());
@@ -56,7 +53,7 @@ TEST(TestWorker, test_change_task) {
 }
 
 TEST(TestWorker, test_empty_callback) {
-    std::function<void ()> fun;
+    std::function<void()> fun;
     Worker task(fun);
 
     EXPECT_FALSE(task.is_running());

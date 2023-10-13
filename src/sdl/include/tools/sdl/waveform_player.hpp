@@ -1,16 +1,17 @@
 #ifndef WAVEFORM_PLAYER_HPP
 #define WAVEFORM_PLAYER_HPP
 
-#include <memory>
 #include "SDL2/SDL.h"
 #include "tools/waveform/waveform_generator.hpp"
+#include <memory>
 
 namespace tools::sdl {
 
 class WaveformPlayer {
 public:
     ~WaveformPlayer();
-    WaveformPlayer(std::shared_ptr<tools::waveform::WaveformGenerator> generator);
+    WaveformPlayer(
+        std::shared_ptr<tools::waveform::WaveformGenerator> generator);
 
     bool is_initialized() const;
 
@@ -24,7 +25,7 @@ private:
     std::shared_ptr<tools::waveform::WaveformGenerator> _generator;
 
     bool init();
-    static void sdl_callback(void *instance, uint8_t *raw_buffer, int bytes);
+    static void sdl_callback(void* instance, uint8_t* raw_buffer, int bytes);
 };
 
 } // namespace tools::sdl

@@ -13,10 +13,11 @@ std::vector<double> synthesize_sinus(int n_samples) {
     double time = 0;
     double volume = tools::waveform::volume_mult;
     std::vector<double> ret;
-    for (int i = 0 ; i < n_samples ; i++) {
+    for (int i = 0; i < n_samples; i++) {
         time = static_cast<double>(i) / tools::waveform::sampling_rate;
         double sample1 = volume * sin(2.0 * std::numbers::pi * 440 * time);
-        double sample2 = volume * 0.3 * sin(2.0 * std::numbers::pi * 440 * 3 * time);
+        double sample2 =
+            volume * 0.3 * sin(2.0 * std::numbers::pi * 440 * 3 * time);
         ret.push_back(sample1 + sample2);
     }
     return ret;
@@ -64,7 +65,7 @@ TEST_F(TestWaveformGenerator, test_sample_generation) {
     auto generator_samples = generator.generate_n_samples(n_samples);
 
     double abs_error = tools::waveform::volume_mult / 1000.0;
-    for (int i = 0 ; i < n_samples ; i++) {
+    for (int i = 0; i < n_samples; i++) {
         ASSERT_NEAR(sinus_samples[i], generator_samples[i], abs_error);
     }
 }

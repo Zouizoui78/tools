@@ -2,7 +2,7 @@
 
 namespace tools::file {
 
-std::string read_all_text(const std::string &path) {
+std::string read_all_text(const std::string& path) {
     std::ifstream file(path);
     if (!file.is_open()) {
         throw std::runtime_error("Failed to open file {}" + path);

@@ -1,5 +1,5 @@
-#include "gtest/gtest.h"
 #include "tools/utils/scheduler.hpp"
+#include "gtest/gtest.h"
 
 namespace test {
 
@@ -11,20 +11,14 @@ TEST(TestScheduler, test_add_task) {
 
     Task task_a;
     task_a.name = "task_a";
-    task_a.task = [&]() {
-            return true;
-    };
+    task_a.task = [&]() { return true; };
 
     Task task_b;
     task_b.name = "task_b";
-    task_b.task = [&]() {
-            return true;
-    };
+    task_b.task = [&]() { return true; };
 
     Task task_c;
-    task_c.task = [&]() {
-            return true;
-    };
+    task_c.task = [&]() { return true; };
 
     Task task_d;
     task_d.name = "task_b";

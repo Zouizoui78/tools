@@ -17,19 +17,17 @@ bool Scheduler::add_task(Task task) {
 
 void Scheduler::start() {
     auto now = std::chrono::steady_clock::now();
-    for (auto &e : _tasks)
+    for (auto& e : _tasks)
         e.next_run = now + e.delay_ns;
     _running = true;
     loop();
 }
 
-void Scheduler::stop() {
-    _running = false;
-}
+void Scheduler::stop() { _running = false; }
 
 void Scheduler::loop() {
     while (is_running()) {
-        for (auto &task : _tasks) {
+        for (auto& task : _tasks) {
             if (!is_running())
                 break;
 
@@ -45,13 +43,9 @@ void Scheduler::loop() {
     }
 }
 
-bool Scheduler::is_running() {
-    return _running;
-}
+bool Scheduler::is_running() { return _running; }
 
-bool Scheduler::get_high_precision() {
-    return _high_precision;
-}
+bool Scheduler::get_high_precision() { return _high_precision; }
 
 void Scheduler::set_high_precision(bool high_precision) {
     _high_precision = high_precision;

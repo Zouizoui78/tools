@@ -12,18 +12,17 @@ class Scheduler;
 
 struct Task {
     std::string name;
-    std::function<bool ()> task;
+    std::function<bool()> task;
     std::chrono::nanoseconds delay_ns;
 
-    private:
+private:
     std::chrono::steady_clock::time_point next_run;
 
     friend Scheduler;
 };
 
 class Scheduler {
-    public:
-
+public:
     Scheduler();
     ~Scheduler();
 
@@ -37,8 +36,7 @@ class Scheduler {
     void set_high_precision(bool high_precision);
     bool get_high_precision();
 
-    private:
-
+private:
     void loop();
 
     bool _running = false;

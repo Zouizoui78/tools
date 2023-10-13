@@ -1,5 +1,5 @@
-#include "gtest/gtest.h"
 #include "tools/waveform/square.hpp"
+#include "gtest/gtest.h"
 
 namespace test {
 

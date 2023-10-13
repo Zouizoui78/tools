@@ -12,12 +12,10 @@ namespace tools::sdl {
 /**
  * This class handles everything directly related to rendering on screen.
  */
-class Window
-{
-    public:
-
+class Window {
+public:
     Window();
-    Window(const std::string &title, int width = 640, int height = 320);
+    Window(const std::string& title, int width = 640, int height = 320);
     ~Window();
 
     /**
@@ -52,7 +50,8 @@ class Window
     /**
      * @brief Set current rendering viewport to the rectangle.
      *
-     * @param rect Rectangle to use as viewport. If nullptr the entire screen is taken as a viewport.
+     * @param rect Rectangle to use as viewport. If nullptr the entire
+     * screen is taken as a viewport.
      * @return Ok or not.
      */
     bool set_viewport(SDL_Rect* rect = nullptr);
@@ -65,7 +64,8 @@ class Window
     void set_default_font(TTF_Font* font) { _default_font = font; }
 
     /**
-     * @brief Set the current rendering color used for rectangles, lines and clear.
+     * @brief Set the current rendering color used for rectangles, lines and
+     * clear.
      *
      * @param color Color to be used.
      * @return Ok or not.
@@ -73,7 +73,8 @@ class Window
     bool set_draw_color(SDL_Color& color);
 
     /**
-     * @brief Set the current rendering color used for rectangles, lines and clear.
+     * @brief Set the current rendering color used for rectangles, lines and
+     * clear.
      *
      * @param r
      * @param g
@@ -109,21 +110,22 @@ class Window
      * @param font Font to use. Default font is used if nullptr.
      * @return texture or nullptr on error.
      */
-    SDL_Texture* load_text(
-        std::string text,
-        SDL_Color color = { 255, 255, 255, 255 },
-        TTF_Font* font = nullptr
-    );
+    SDL_Texture* load_text(std::string text,
+                           SDL_Color color = {255, 255, 255, 255},
+                           TTF_Font* font = nullptr);
 
     /**
      * @brief Render a texture.
      *
      * @param texture The texture to render.
-     * @param dst Part of the rendering target in which the texture is rendered. Whole rendering target if nullptr.
-     * @param portion The portion of the texture to copy to the destination. Entire destination is used if nullptr.
+     * @param dst Part of the rendering target in which the texture is
+     * rendered. Whole rendering target if nullptr.
+     * @param portion The portion of the texture to copy to the destination.
+     * Entire destination is used if nullptr.
      * @return Ok or not.
      */
-    bool render_texture(SDL_Texture* texture, SDL_Rect* dst = nullptr, SDL_Rect* portion = nullptr);
+    bool render_texture(SDL_Texture* texture, SDL_Rect* dst = nullptr,
+                        SDL_Rect* portion = nullptr);
 
     /**
      * @brief Extract a part of a texture.
@@ -159,7 +161,8 @@ class Window
      * @return true Success
      * @return false Failure
      */
-    bool render_to_texture(SDL_Texture* src, SDL_Texture* dst, SDL_Rect* dstRect);
+    bool render_to_texture(SDL_Texture* src, SDL_Texture* dst,
+                           SDL_Rect* dstRect);
 
     /**
      * @brief Create a Blank Render Target object.
@@ -178,9 +181,7 @@ class Window
      */
     bool draw_rectangle(SDL_Rect* rect, bool fill = false);
 
-
-    private:
-
+private:
     /**
      * @brief Renderer initialization.
      *

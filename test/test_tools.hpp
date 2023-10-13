@@ -13,6 +13,6 @@ inline std::string get_output_path() {
     return output_path;
 }
 
-} // namespace tools::test
+} // namespace test
 
 #endif // TEST_TOOLS_HPP

@@ -6,8 +6,8 @@
 
 namespace tools::time {
 
-time_t string_to_time(const std::string &time, const std::string &format) {
-    std::tm tm {};
+time_t string_to_time(const std::string& time, const std::string& format) {
+    std::tm tm{};
     std::istringstream ss(time);
     ss >> std::get_time(&tm, format.c_str());
 #ifdef WIN32

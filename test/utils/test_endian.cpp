@@ -1,5 +1,5 @@
-#include "gtest/gtest.h"
 #include "tools/utils/endian.hpp"
+#include "gtest/gtest.h"
 
 namespace test {
 

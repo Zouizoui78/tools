@@ -4,14 +4,12 @@ namespace tools::utils {
 
 Worker::Worker() {}
 
-Worker::Worker(std::function<void ()> task, bool threaded) {
+Worker::Worker(std::function<void()> task, bool threaded) {
     _task = task;
     _threaded = threaded;
 }
 
-Worker::~Worker() {
-    stop();
-}
+Worker::~Worker() { stop(); }
 
 bool Worker::start() {
     if (_running) {
@@ -25,9 +23,7 @@ bool Worker::start() {
     _running = true;
 
     if (_threaded)
-        _thread = std::thread([this]() {
-            task_wrapper();
-        });
+        _thread = std::thread([this]() { task_wrapper(); });
     else
         task_wrapper();
 
@@ -43,39 +39,41 @@ void Worker::stop() {
     }
 }
 
-bool Worker::is_running() {
-    return _running;
-}
+bool Worker::is_running() { return _running; }
 
 void Worker::task_wrapper() {
     while (_running) {
         std::chrono::steady_clock::time_point sleep_end;
 
         if (!_high_precision)
-            sleep_end = std::chrono::steady_clock::now() + std::chrono::microseconds(_sleep_delay_us);
+            sleep_end = std::chrono::steady_clock::now() +
+                        std::chrono::microseconds(_sleep_delay_us);
 
-        auto wait_end = std::chrono::steady_clock::now() + std::chrono::microseconds(_delay_us);
+        auto wait_end = std::chrono::steady_clock::now() +
+                        std::chrono::microseconds(_delay_us);
 
         try {
             std::lock_guard lock(_task_mutex);
             _task();
-        } catch (const std::bad_function_call &e) {
+        } catch (const std::bad_function_call& e) {
         }
 
-        // If the task is not stopped during sleep, keep sleeping until sleep_end.
-        // We don't sleep for the whole wait duration
-        // to minimize inaccuracy caused by the OS' scheduler.
-        while (!_high_precision && _running && std::chrono::steady_clock::now() < sleep_end) {
+        // If the task is not stopped during sleep, keep sleeping until
+        // sleep_end. We don't sleep for the whole wait duration to minimize
+        // inaccuracy caused by the OS' scheduler.
+        while (!_high_precision && _running &&
+               std::chrono::steady_clock::now() < sleep_end) {
             std::this_thread::sleep_for(std::chrono::microseconds(1));
         }
 
         // Now we "actively wait" until
         // the end of the wait time.
-        while (_running && std::chrono::steady_clock::now() < wait_end);
+        while (_running && std::chrono::steady_clock::now() < wait_end)
+            ;
     }
 }
 
-bool Worker::set_task(std::function<void ()> task) {
+bool Worker::set_task(std::function<void()> task) {
     if (!task) {
         return false;
     }

@@ -1,5 +1,5 @@
-#include "gtest/gtest.h"
 #include "tools/utils/dynamic_library.hpp"
+#include "gtest/gtest.h"
 
 #include <filesystem>
 
@@ -7,20 +7,19 @@ namespace test {
 
 using namespace tools::utils;
 
-class TestDynamicLibrary: public ::testing::Test
-{
-    protected:
+class TestDynamicLibrary : public ::testing::Test {
+protected:
     TestDynamicLibrary() {
         std::string dynlib_filename = "libdynlib";
-    #ifdef WIN32
+#ifdef WIN32
         std::string dynlib_extension = ".dll";
-    #else
+#else
         std::string dynlib_extension = ".so";
-    #endif
+#endif
 
-        dynlib_path =
-            (std::filesystem::path(std::getenv("DYNLIB_PATH")) / (dynlib_filename + dynlib_extension))
-            .string();
+        dynlib_path = (std::filesystem::path(std::getenv("DYNLIB_PATH")) /
+                       (dynlib_filename + dynlib_extension))
+                          .string();
     }
 
     virtual ~TestDynamicLibrary() {}
@@ -29,7 +28,7 @@ class TestDynamicLibrary: public ::testing::Test
 
     virtual void TearDown() override {}
 
-    public:
+public:
     std::string dynlib_path;
 };
 
@@ -40,7 +39,7 @@ TEST_F(TestDynamicLibrary, test_dynlib_load) {
 TEST_F(TestDynamicLibrary, test_dynlib_get_function) {
     DynamicLibrary lib(dynlib_path);
 
-    auto func_ptr = lib.get_function<bool, const std::string &>("func");
+    auto func_ptr = lib.get_function<bool, const std::string&>("func");
     ASSERT_NE(func_ptr, nullptr);
 
     ASSERT_TRUE(func_ptr("test"));
@@ -68,10 +67,11 @@ TEST_F(TestDynamicLibrary, test_dynlib_call) {
     // For example in this case we need the whole signature in the template
     // because otherwise at runtime "nonsense" is passed as a char *,
     // causing a segfault since the function expects an std::string.
-    ret = lib.call<bool, const std::string &>("func", "nonsense");
+    ret = lib.call<bool, const std::string&>("func", "nonsense");
     ASSERT_FALSE(ret);
 
-    ASSERT_THROW(lib.call<bool>("not_a_function", "test"), std::bad_function_call);
+    ASSERT_THROW(lib.call<bool>("not_a_function", "test"),
+                 std::bad_function_call);
     ASSERT_EQ(lib.call<int>("add", 4, 5), 9);
 }
 

@@ -3,7 +3,7 @@
 
 namespace tools::utils {
 
-Stopwatch::Stopwatch(const std::string &name) {
+Stopwatch::Stopwatch(const std::string& name) {
     _name = name;
     reset();
 }
@@ -23,12 +23,10 @@ std::string Stopwatch::dump_duration() const {
     if (d > 1e9) {
         d /= 1e9;
         unit = "s";
-    }
-    else if (d > 1e6) {
+    } else if (d > 1e6) {
         d /= 1e6;
         unit = "ms";
-    }
-    else if (d > 1e3) {
+    } else if (d > 1e3) {
         d /= 1e3;
         unit = "us";
     }
