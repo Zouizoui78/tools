@@ -13,13 +13,14 @@
 namespace tools::utils {
 
 class DynamicLibrary {
-public:
+private:
 #ifdef WIN32
     HINSTANCE _lib_instance = nullptr;
 #else
     void* _lib_instance = nullptr;
 #endif
 
+public:
     ~DynamicLibrary();
 
     DynamicLibrary(const std::string& path);
