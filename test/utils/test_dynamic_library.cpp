@@ -60,7 +60,8 @@ TEST_F(TestDynamicLibrary, test_dynlib_call) {
 
     // We can omit the arguments types in the signature if they are obvious.
     // There are obvious if a declared variable is passed
-    // but not e.g. if we pass "test" directly as an std::string.
+    // but not e.g. if we pass "test" directly as an string literal instead of
+    // an std::string.
     ASSERT_NO_THROW(ret = lib.call<bool>("func", str));
     ASSERT_TRUE(ret);
 
