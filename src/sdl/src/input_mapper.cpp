@@ -19,7 +19,9 @@ bool InputMapper::set_mapping(const std::string& key, uint8_t mapped_key) {
     return true;
 }
 
-void InputMapper::remove_mapping(SDL_Keycode key) { _keymap.erase(key); }
+void InputMapper::remove_mapping(SDL_Keycode key) {
+    _keymap.erase(key);
+}
 
 bool InputMapper::remove_mapping(const std::string& key) {
     SDL_Keycode sdl_key = SDL_GetKeyFromName(key.c_str());

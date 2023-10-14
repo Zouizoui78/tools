@@ -10,7 +10,9 @@ public:
     tools::waveform::Sinus sinus;
 };
 
-double angular_freq(double freq) { return 2.0 * std::numbers::pi * freq; }
+double angular_freq(double freq) {
+    return 2.0 * std::numbers::pi * freq;
+}
 
 TEST_F(TestSinus, test_angular_freq_update) {
     ASSERT_DOUBLE_EQ(sinus.get_angular_freq(),

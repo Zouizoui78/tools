@@ -6,6 +6,10 @@
 #define EXPORT
 #endif
 
-extern "C" EXPORT bool func(const std::string& str) { return str == "test"; }
+extern "C" EXPORT bool func(const std::string& str) {
+    return str == "test";
+}
 
-extern "C" EXPORT int add(int a, int b) { return a + b; }
+extern "C" EXPORT int add(int a, int b) {
+    return a + b;
+}

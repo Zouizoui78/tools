@@ -45,12 +45,16 @@ std::vector<double> WaveformGenerator::generate_n_samples(int n_samples) {
     return ret;
 }
 
-int64_t WaveformGenerator::get_sample_index() const { return _sample_index; }
+int64_t WaveformGenerator::get_sample_index() const {
+    return _sample_index;
+}
 
 void WaveformGenerator::set_sample_index(int64_t sample_index) {
     _sample_index = sample_index;
 }
 
-void WaveformGenerator::reset_sample_index() { set_sample_index(0); }
+void WaveformGenerator::reset_sample_index() {
+    set_sample_index(0);
+}
 
 } // namespace tools::waveform

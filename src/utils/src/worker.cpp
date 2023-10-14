@@ -9,7 +9,9 @@ Worker::Worker(std::function<void()> task, bool threaded) {
     _threaded = threaded;
 }
 
-Worker::~Worker() { stop(); }
+Worker::~Worker() {
+    stop();
+}
 
 bool Worker::start() {
     if (_running) {
@@ -39,7 +41,9 @@ void Worker::stop() {
     }
 }
 
-bool Worker::is_running() { return _running; }
+bool Worker::is_running() {
+    return _running;
+}
 
 void Worker::task_wrapper() {
     while (_running) {

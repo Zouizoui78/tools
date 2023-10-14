@@ -26,8 +26,12 @@ public:
     bool test_called = false;
 
 private:
-    void handle(const IntEvent& event) { test_called = event.value == 1; }
-    void handle(const StrEvent& event) { test_called = event.value == "yes"; }
+    void handle(const IntEvent& event) {
+        test_called = event.value == 1;
+    }
+    void handle(const StrEvent& event) {
+        test_called = event.value == "yes";
+    }
 };
 
 // Observer for IntEvent only
@@ -46,7 +50,9 @@ public:
 // Here we use std::monostate for data-less events
 class DataLessObserver : public IObserver<std::monostate> {
 public:
-    virtual void notify(const std::monostate& nullevent) { called = true; }
+    virtual void notify(const std::monostate& nullevent) {
+        called = true;
+    }
 
     bool called = false;
 };

@@ -83,7 +83,9 @@ void Window::stop() {
     }
 }
 
-void Window::refresh() { SDL_RenderPresent(_renderer); }
+void Window::refresh() {
+    SDL_RenderPresent(_renderer);
+}
 
 bool Window::clear() {
     if (SDL_RenderClear(_renderer) == -1) {
@@ -92,9 +94,13 @@ bool Window::clear() {
     return true;
 }
 
-void Window::set_width(int width) { _width = width; }
+void Window::set_width(int width) {
+    _width = width;
+}
 
-void Window::set_height(int height) { _height = height; }
+void Window::set_height(int height) {
+    _height = height;
+}
 
 void Window::set_size(int width, int height) {
     _width = width;

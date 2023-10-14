@@ -48,7 +48,9 @@ bool WaveformPlayer::init() {
     return _is_audio_initialized;
 }
 
-bool WaveformPlayer::is_initialized() const { return _is_audio_initialized; }
+bool WaveformPlayer::is_initialized() const {
+    return _is_audio_initialized;
+}
 
 void WaveformPlayer::sdl_callback(void* instance, uint8_t* raw_buffer,
                                   int bytes) {
@@ -61,7 +63,9 @@ void WaveformPlayer::sdl_callback(void* instance, uint8_t* raw_buffer,
     }
 }
 
-void WaveformPlayer::play() const { SDL_PauseAudioDevice(_audio_device_id, 0); }
+void WaveformPlayer::play() const {
+    SDL_PauseAudioDevice(_audio_device_id, 0);
+}
 
 void WaveformPlayer::pause() const {
     SDL_PauseAudioDevice(_audio_device_id, 1);

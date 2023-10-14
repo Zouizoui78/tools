@@ -10,13 +10,17 @@ AWaveform::AWaveform() {
     set_frequency(440);
 }
 
-double AWaveform::get_volume() const { return _volume / volume_mult; }
+double AWaveform::get_volume() const {
+    return _volume / volume_mult;
+}
 
 void AWaveform::set_volume(double volume) {
     _volume = std::clamp(volume, 0.0, 1.0) * volume_mult;
 }
 
-double AWaveform::get_frequency() const { return _frequency; }
+double AWaveform::get_frequency() const {
+    return _frequency;
+}
 
 void AWaveform::set_frequency(double frequency) {
     if (frequency < 1e-9)
@@ -26,8 +30,12 @@ void AWaveform::set_frequency(double frequency) {
     _samples_in_period = sampling_rate / _frequency;
 }
 
-double AWaveform::get_period() const { return _period; }
+double AWaveform::get_period() const {
+    return _period;
+}
 
-int16_t AWaveform::get_samples_in_period() const { return _samples_in_period; }
+int16_t AWaveform::get_samples_in_period() const {
+    return _samples_in_period;
+}
 
 } // namespace tools::waveform

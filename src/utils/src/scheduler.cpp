@@ -23,7 +23,9 @@ void Scheduler::start() {
     loop();
 }
 
-void Scheduler::stop() { _running = false; }
+void Scheduler::stop() {
+    _running = false;
+}
 
 void Scheduler::loop() {
     while (is_running()) {
@@ -43,9 +45,13 @@ void Scheduler::loop() {
     }
 }
 
-bool Scheduler::is_running() { return _running; }
+bool Scheduler::is_running() {
+    return _running;
+}
 
-bool Scheduler::get_high_precision() { return _high_precision; }
+bool Scheduler::get_high_precision() {
+    return _high_precision;
+}
 
 void Scheduler::set_high_precision(bool high_precision) {
     _high_precision = high_precision;

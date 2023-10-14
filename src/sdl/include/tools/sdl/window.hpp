@@ -38,11 +38,17 @@ public:
     void set_position(int x, int y);
     void center();
 
-    int get_width() { return _width; }
+    int get_width() {
+        return _width;
+    }
 
-    int get_height() { return _height; }
+    int get_height() {
+        return _height;
+    }
 
-    TTF_Font* get_default_font() { return _default_font; }
+    TTF_Font* get_default_font() {
+        return _default_font;
+    }
 
     SDL_Texture* get_render_target();
     bool set_render_target(SDL_Texture* dst);
@@ -61,7 +67,9 @@ public:
      *
      * @param font Font to set as default.
      */
-    void set_default_font(TTF_Font* font) { _default_font = font; }
+    void set_default_font(TTF_Font* font) {
+        _default_font = font;
+    }
 
     /**
      * @brief Set the current rendering color used for rectangles, lines and
