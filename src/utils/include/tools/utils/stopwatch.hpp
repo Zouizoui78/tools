@@ -7,19 +7,19 @@
 namespace tools::utils {
 
 class Stopwatch {
+private:
+    std::chrono::steady_clock::time_point _start_time_point;
 
 public:
-    Stopwatch(const std::string& name = "");
+    Stopwatch();
 
-    uint64_t get_duration() const;
-    std::string dump_duration() const;
+    template <typename DurationType>
+    DurationType get_duration() const {
+        return std::chrono::duration_cast<DurationType>(
+            std::chrono::steady_clock::now() - _start_time_point);
+    }
 
     void reset();
-
-private:
-    std::string _name = "";
-
-    std::chrono::steady_clock::time_point _start_time_point;
 };
 
 } // namespace tools::utils

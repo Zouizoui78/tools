@@ -168,7 +168,7 @@ TEST(TestFile, test_benchmark_dump_contiguous) {
 
     tools::utils::Stopwatch s;
     int ret = tools::file::dump_range(path_tmp, data);
-    std::cout << s.dump_duration() << std::endl;
+    std::cout << s.get_duration<std::chrono::microseconds>() << std::endl;
 
     ASSERT_EQ(ret, size * sizeof(int));
 }
@@ -184,7 +184,7 @@ TEST(TestFile, test_benchmark_dump_non_contiguous) {
 
     tools::utils::Stopwatch s;
     int ret = tools::file::dump_range(path_tmp, data);
-    std::cout << s.dump_duration() << std::endl;
+    std::cout << s.get_duration<std::chrono::microseconds>() << std::endl;
 
     ASSERT_EQ(ret, size * sizeof(int));
 }
