@@ -14,7 +14,7 @@ public:
     virtual void notify(const Event& event) = 0;
 };
 
-// Observer pattern implementation with a generic type-safe event mechanism.
+// Observer pattern implementation.
 // The observers are added as objects instead of simple handlers to be able to
 // unsubscribe (remove) them.
 template <typename Event>
