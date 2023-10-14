@@ -8,11 +8,10 @@
 
 namespace tools::file {
 
-// Read a file and return its content as a string.
 std::string read_all_text(const std::string& path);
 
-// Read a binary file and copy its content into the returned vector.
-template <typename T> std::vector<T> read_all_binary(const std::string& path) {
+template <typename T>
+std::vector<T> read_all_binary(const std::string& path) {
     std::ifstream file(path, std::ios::binary);
     if (!file.is_open()) {
         throw new std::runtime_error("Failed to open file {}" + path);
@@ -51,7 +50,6 @@ int dump_range(const std::string& path, R&& range) {
                    chunk.size() * type_size);
     };
 
-    // Write data by chunk of 1M elements
     std::ranges::for_each(range | std::views::chunk(1000000), write_chunk);
     return range.size() * type_size;
 }

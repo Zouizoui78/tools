@@ -3,7 +3,8 @@
 
 namespace tools::endian {
 
-template <typename T> T swap_bytes(T in) {
+template <typename T>
+T swap_bytes(T in) {
     T swapped = 0;
     char* swapped_as_char = reinterpret_cast<char*>(&swapped);
     char* in_as_char = reinterpret_cast<char*>(&in);
