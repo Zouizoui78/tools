@@ -1,7 +1,6 @@
 set(SOURCES
     src/dynamic_library.cpp
     src/file.cpp
-    src/observable.cpp
     src/scheduler.cpp
     src/stopwatch.cpp
     src/str.cpp

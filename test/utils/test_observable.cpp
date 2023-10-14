@@ -1,90 +1,139 @@
 #include "tools/utils/observable.hpp"
 #include "gtest/gtest.h"
 
-#define EVENT "test"
-#define EVENT2 "test2"
-
 namespace test {
 
 using namespace tools::utils;
 
-class DummyObserver : public IObserver {
-public:
-    virtual ~DummyObserver() {}
+struct IntEvent {
+    int value = 0;
+};
 
-    virtual void notify(Observable* sender,
-                        const std::string& event_id) override {
-        (void)sender;
-        if (event_id == EVENT)
-            test_called = !test_called;
-        else if (event_id == EVENT2)
-            test2_called = !test2_called;
+struct StrEvent {
+    std::string value = "";
+};
+
+using Event = std::variant<IntEvent, StrEvent>;
+
+// Observer that handles all events
+// Events are dispatched to the right handler with std::visit
+class Observer : public IObserver<Event> {
+public:
+    void notify(const Event& event) override {
+        std::visit([this](const auto& event) { handle(event); }, event);
     }
 
     bool test_called = false;
-    bool test2_called = false;
+
+private:
+    void handle(const IntEvent& event) { test_called = event.value == 1; }
+    void handle(const StrEvent& event) { test_called = event.value == "yes"; }
 };
 
-TEST(TestObservable, test_getters) {
-    DummyObserver observer;
-    DummyObserver observer2;
-    Observable observable;
+// Observer for IntEvent only
+class IntObserver : public IObserver<Event> {
+public:
+    virtual void notify(const Event& event) override {
+        if (const IntEvent* int_event = std::get_if<IntEvent>(&event)) {
+            test_called = int_event->value == 10;
+        }
+    }
 
-    ASSERT_TRUE(observable.subscribe(&observer, EVENT2));
-    ASSERT_FALSE(observable.has_observers(EVENT));
-    ASSERT_EQ(observable.count_observers(EVENT), 0);
+    bool test_called = false;
+};
 
-    ASSERT_FALSE(observable.is_observer(&observer, EVENT));
-    ASSERT_TRUE(observable.subscribe(&observer, EVENT));
-    ASSERT_TRUE(observable.has_observers(EVENT));
-    ASSERT_TRUE(observable.is_observer(&observer, EVENT));
+// We cannot use void as an event type
+// Here we use std::monostate for data-less events
+class DataLessObserver : public IObserver<std::monostate> {
+public:
+    virtual void notify(const std::monostate& nullevent) { called = true; }
 
-    ASSERT_EQ(observable.count_observers(EVENT), 1);
-    ASSERT_TRUE(observable.subscribe(&observer2, EVENT));
-    ASSERT_EQ(observable.count_observers(EVENT), 2);
+    bool called = false;
+};
+
+TEST(TestObservable, test_observable_subscription) {
+    Observer observer;
+    Observable<Event> observable;
+
+    ASSERT_TRUE(observable.add_observer(&observer));
+    ASSERT_FALSE(observable.add_observer(&observer));
+
+    ASSERT_TRUE(observable.remove_observer(&observer));
+    ASSERT_FALSE(observable.remove_observer(&observer));
 }
 
-TEST(TestObservable, test_subscription) {
-    DummyObserver observer;
-    Observable observable;
+TEST(TestObservable, test_observable_notify) {
+    Observer observer;
+    Observable<Event> observable;
 
-    ASSERT_FALSE(observable.is_observer(&observer, EVENT));
+    observable.add_observer(&observer);
+    ASSERT_FALSE(observer.test_called);
 
-    ASSERT_TRUE(observable.subscribe(&observer, EVENT));
-    ASSERT_TRUE(observable.subscribe(&observer, EVENT2));
-    ASSERT_TRUE(observable.is_observer(&observer, EVENT));
-    ASSERT_TRUE(observable.is_observer(&observer, EVENT2));
+    IntEvent int_e{.value = 0};
+    observable.notify_observers(int_e);
+    ASSERT_FALSE(observer.test_called);
 
-    ASSERT_TRUE(observable.unsubscribe(&observer));
-    ASSERT_FALSE(observable.is_observer(&observer, EVENT));
-    ASSERT_FALSE(observable.is_observer(&observer, EVENT2));
+    int_e.value = 1;
+    observable.notify_observers(int_e);
+    ASSERT_TRUE(observer.test_called);
+
+    StrEvent str_e{.value = "nope"};
+    observable.notify_observers(str_e);
+    ASSERT_FALSE(observer.test_called);
+
+    str_e.value = "yes";
+    observable.notify_observers(str_e);
+    ASSERT_TRUE(observer.test_called);
 }
 
-TEST(TestObservable, test_notify) {
-    DummyObserver observer;
-    Observable observable;
-
-    observable.subscribe(&observer, EVENT);
-    observable.subscribe(&observer, EVENT2);
-
+TEST(TestObservable, test_observable_intevent) {
+    IntObserver observer;
+    Observable<Event> observable;
+    observable.add_observer(&observer);
     ASSERT_FALSE(observer.test_called);
-    ASSERT_FALSE(observer.test2_called);
 
-    observable.notify_observers("not an event");
-
-    // Nothing should have changed.
-    ASSERT_FALSE(observer.test_called);
-    ASSERT_FALSE(observer.test2_called);
-
-    observable.notify_observers(EVENT);
+    IntEvent e{.value = 10};
+    observable.notify_observers(e);
 
     ASSERT_TRUE(observer.test_called);
-    ASSERT_FALSE(observer.test2_called);
+}
 
-    observable.notify_observers(EVENT2);
+TEST(TestObservable, test_observable_both_observers) {
+    Observable<Event> observable;
+
+    Observer observer;
+    IntObserver int_observer;
+
+    observable.add_observer(&observer);
+    observable.add_observer(&int_observer);
+
+    IntEvent e{.value = 1};
+    observable.notify_observers(e);
 
     ASSERT_TRUE(observer.test_called);
-    ASSERT_TRUE(observer.test2_called);
+    ASSERT_FALSE(int_observer.test_called);
+
+    e.value = 10;
+    observable.notify_observers(e);
+
+    ASSERT_FALSE(observer.test_called);
+    ASSERT_TRUE(int_observer.test_called);
+
+    StrEvent str_event{.value = "yes"};
+    observable.notify_observers(str_event);
+
+    ASSERT_TRUE(observer.test_called);
+    ASSERT_TRUE(int_observer.test_called);
+}
+
+TEST(TestObservable, test_observable_data_less_observer) {
+    Observable<std::monostate> observable;
+    DataLessObserver observer;
+    observable.add_observer(&observer);
+
+    ASSERT_FALSE(observer.called);
+    observable.notify_observers({});
+    ASSERT_TRUE(observer.called);
 }
 
 } // namespace test
