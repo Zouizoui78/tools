@@ -6,15 +6,17 @@
 
 namespace tools::time {
 
-time_t string_to_time(const std::string& time, const std::string& format) {
+std::chrono::system_clock::time_point
+string_to_time(const std::string& time_str, const std::string& format) {
     std::tm tm{};
-    std::istringstream ss(time);
+    std::istringstream ss(time_str);
     ss >> std::get_time(&tm, format.c_str());
 #ifdef WIN32
-    return _mkgmtime(&tm);
+    auto time = _mkgmtime(&tm);
 #else
-    return timegm(&tm);
+    auto time = timegm(&tm);
 #endif
+    return std::chrono::system_clock::from_time_t(time);
 }
 
 } // namespace tools::time
