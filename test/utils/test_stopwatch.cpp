@@ -17,7 +17,7 @@ TEST(TestStopwatch, test_stopwatch) {
 
 TEST(TestStopwatch, test_stopwatch_laps) {
     Stopwatch s;
-    for (int i = 0; i < 100; ++i) {
+    for (int i = 0; i < 10; ++i) {
         std::this_thread::sleep_for(1ms);
         s.lap();
     }

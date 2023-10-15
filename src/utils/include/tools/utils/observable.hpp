@@ -31,7 +31,7 @@ public:
         });
     }
 
-    // Return false if the observer is already registered
+    // Return false if the observer is already registered.
     bool add_observer(IObserver<Event>* observer) {
         std::lock_guard lock(_observers_mutex);
         if (std::ranges::find(_observers, observer) != _observers.end()) {
@@ -41,7 +41,7 @@ public:
         return true;
     }
 
-    // Return false if the observer is not found
+    // Return false if the observer is not found.
     bool remove_observer(IObserver<Event>* observer) {
         std::lock_guard lock(_observers_mutex);
         if (auto it = std::ranges::find(_observers, observer);

@@ -49,17 +49,17 @@ TEST(TestWorker, test_change_task) {
     task.stop();
     ASSERT_FALSE(task.is_running());
 
-    EXPECT_EQ(a, backup_a);
+    ASSERT_EQ(a, backup_a);
 }
 
 TEST(TestWorker, test_empty_callback) {
     std::function<void()> fun;
     Worker task(fun);
 
-    EXPECT_FALSE(task.is_running());
+    ASSERT_FALSE(task.is_running());
 
     task.start();
-    EXPECT_FALSE(task.is_running());
+    ASSERT_FALSE(task.is_running());
 }
 
 // TEST(TestWorker, test_time_accuracy) {
@@ -83,7 +83,7 @@ TEST(TestWorker, test_empty_callback) {
 //         if (!first_done)
 //             first_done = true;
 //         else {
-//             EXPECT_NEAR(diff, duration, duration_error);
+//             ASSERT_NEAR(diff, duration, duration_error);
 //         }
 
 //         ++count;
