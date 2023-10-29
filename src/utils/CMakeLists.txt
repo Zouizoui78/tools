@@ -1,22 +1,18 @@
 set(SOURCES
     src/dynamic_library.cpp
     src/file.cpp
-    src/scheduler.cpp
     src/stopwatch.cpp
     src/str.cpp
     src/time.cpp
-    src/worker.cpp
 )
 
 set(PUBLIC_HEADERS
     include/tools/utils/dynamic_library.hpp
     include/tools/utils/file.hpp
     include/tools/utils/observable.hpp
-    include/tools/utils/scheduler.hpp
     include/tools/utils/stopwatch.hpp
     include/tools/utils/str.hpp
     include/tools/utils/time.hpp
-    include/tools/utils/worker.hpp
 )
 
 add_library(tools-utils ${SOURCES} ${PUBLIC_HEADERS})

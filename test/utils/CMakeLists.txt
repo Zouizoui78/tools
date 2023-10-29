@@ -3,11 +3,9 @@ set(SRC
     test_endian.cpp
     test_file.cpp
     test_observable.cpp
-    test_scheduler.cpp
     test_stopwatch.cpp
     test_str.cpp
     test_time.cpp
-    test_worker.cpp
 )
 
 add_executable(test-utils ${SRC})
