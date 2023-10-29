@@ -25,7 +25,7 @@ bool WaveformGenerator::remove_waveform(std::shared_ptr<AWaveform> waveform) {
 
 double WaveformGenerator::generate_sample() {
     double ret = 0;
-    double time = static_cast<double>(_sample_index) / sampling_rate;
+    double time = static_cast<double>(_sample_index) / constants::sampling_rate;
     {
         std::lock_guard lock(_mutex);
         for (auto waveform : _waveforms) {

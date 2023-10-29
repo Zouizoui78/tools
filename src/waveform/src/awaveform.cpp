@@ -11,11 +11,11 @@ AWaveform::AWaveform() {
 }
 
 double AWaveform::get_volume() const {
-    return _volume / volume_mult;
+    return _volume / constants::volume_mult;
 }
 
 void AWaveform::set_volume(double volume) {
-    _volume = std::clamp(volume, 0.0, 1.0) * volume_mult;
+    _volume = std::clamp(volume, 0.0, 1.0) * constants::volume_mult;
 }
 
 double AWaveform::get_frequency() const {
@@ -27,7 +27,7 @@ void AWaveform::set_frequency(double frequency) {
         return;
     _frequency = frequency;
     _period = 1.0 / frequency;
-    _samples_in_period = sampling_rate / _frequency;
+    _samples_in_period = constants::sampling_rate / _frequency;
 }
 
 double AWaveform::get_period() const {

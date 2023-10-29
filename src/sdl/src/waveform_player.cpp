@@ -30,7 +30,7 @@ bool WaveformPlayer::init() {
     }
 
     SDL_AudioSpec desired;
-    desired.freq = tools::waveform::sampling_rate;
+    desired.freq = tools::waveform::constants::sampling_rate;
     desired.format = AUDIO_F32SYS;
     desired.channels = 1;
     desired.samples = 512;

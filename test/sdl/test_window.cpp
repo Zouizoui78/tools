@@ -2,7 +2,6 @@
 
 #include "tools/sdl/window.hpp"
 #include "tools/utils/stopwatch.hpp"
-#include "tools/utils/worker.hpp"
 
 namespace test {
 
