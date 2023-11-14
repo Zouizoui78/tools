@@ -14,11 +14,3 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
         add_subdirectory(test)
     endif (TOOLS_TESTS)
 endif()
-
-# For clangd
-if (UNIX)
-    add_custom_target(compile_commands_symlink
-        ALL
-        COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_BINARY_DIR}/compile_commands.json ${CMAKE_CURRENT_SOURCE_DIR}/compile_commands.json
-    )
-endif (UNIX)
