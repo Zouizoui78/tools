@@ -24,6 +24,8 @@ public:
     template <typename DurationType>
     std::vector<DurationType> get_laps() const {
         std::vector<DurationType> ret;
+        ret.emplace_back(std::chrono::duration_cast<DurationType>(
+            _laps[0] - _start_time_point));
         for (auto it = std::next(_laps.begin()); it != _laps.end(); ++it) {
             ret.emplace_back(
                 std::chrono::duration_cast<DurationType>(*it - *(it - 1)));
