@@ -17,14 +17,17 @@ TEST(TestStopwatch, test_stopwatch) {
 
 TEST(TestStopwatch, test_stopwatch_laps) {
     Stopwatch s;
+    auto next_lap = s.get_duration<microseconds>() + 1ms;
     for (int i = 0; i < 10; ++i) {
-        std::this_thread::sleep_for(1ms);
+        while (s.get_duration<microseconds>() < next_lap)
+            ;
         s.lap();
+        next_lap = s.get_duration<microseconds>() + 1ms;
     }
 
     auto laps = s.get_laps<microseconds>();
     auto mean = std::accumulate(laps.begin(), laps.end(), 0us) / laps.size();
-    ASSERT_TRUE(1ms < mean && mean < 1100us);
+    ASSERT_TRUE(995us < mean && mean < 1005us);
 }
 
 } // namespace test
