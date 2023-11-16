@@ -31,6 +31,7 @@ public:
         return ret;
     }
 
+    // Set start time point to current time and clear internal laps vector.
     void reset();
 };
 
