@@ -1,10 +1,12 @@
 #include "tools/utils/str.hpp"
 
 #include <stdexcept>
+#include <type_traits>
 
 namespace tools::str {
 
 template <typename T, typename Callable>
+requires std::is_invocable_v<Callable, std::string>
 std::optional<T> from_string(const std::string& str, Callable func) {
     try {
         return func(str);

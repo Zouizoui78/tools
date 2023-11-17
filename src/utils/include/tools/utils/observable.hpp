@@ -15,7 +15,7 @@ public:
 };
 
 // Observer pattern implementation.
-// The observers are added as objects instead of simple handlers to be able to
+// References to observers are saved instead of callbacks to be able to
 // unsubscribe (remove) them.
 template <typename Event>
 class Observable final {
