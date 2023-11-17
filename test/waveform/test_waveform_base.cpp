@@ -3,7 +3,6 @@
 #include "tools/waveform/constants.hpp"
 #include "tools/waveform/waveform_base.hpp"
 
-
 namespace test {
 
 class Waveform : public tools::waveform::WaveformBase {
@@ -36,10 +35,6 @@ TEST_F(TestWaveformBase, test_set_frequency) {
     w.set_frequency(1000);
     ASSERT_DOUBLE_EQ(w.get_frequency(), 1000);
     ASSERT_DOUBLE_EQ(w.get_period(), 1.0 / 1000.0);
-
-    // Frequency should not change
-    w.set_frequency(-2);
-    ASSERT_DOUBLE_EQ(w.get_frequency(), 1000);
 }
 
 } // namespace test

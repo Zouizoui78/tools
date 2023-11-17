@@ -1,7 +1,7 @@
 set(SRC
-    test_awaveform.cpp
     test_sinus.cpp
     test_square.cpp
+    test_waveform_base.cpp
     test_waveform_generator.cpp
 )
 

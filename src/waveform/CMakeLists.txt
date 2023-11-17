@@ -1,7 +1,7 @@
 set(SOURCES
-    src/waveform_base.cpp
     src/sinus.cpp
     src/square.cpp
+    src/waveform_base.cpp
     src/waveform_generator.cpp
 )
 
