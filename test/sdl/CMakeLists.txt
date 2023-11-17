@@ -3,13 +3,12 @@ set(SRC
     test_window.cpp
 )
 
-option(TEST_WAVEFORM_PLAYER "Enable waveform player tests" OFF)
-if (TEST_WAVEFORM_PLAYER)
+if (TOOLS_WAVEFORM_PLAYER_TESTS)
     set(SRC
         ${SRC}
         test_waveform_player.cpp
     )
-endif (TEST_WAVEFORM_PLAYER)
+endif (TOOLS_WAVEFORM_PLAYER_TESTS)
 
 add_executable(test-sdl ${SRC})
 
