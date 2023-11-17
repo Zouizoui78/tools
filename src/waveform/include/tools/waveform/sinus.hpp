@@ -1,11 +1,11 @@
 #ifndef SINUS_HPP
 #define SINUS_HPP
 
-#include "awaveform.hpp"
+#include "waveform_base.hpp"
 
 namespace tools::waveform {
 
-class Sinus : public AWaveform {
+class Sinus : public WaveformBase {
 public:
     Sinus();
     virtual double synthesize(WaveformTimepoint timepoint) const override;

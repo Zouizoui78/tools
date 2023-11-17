@@ -10,7 +10,7 @@ struct WaveformTimepoint {
     double time;
 
     // Index of the sample starting from 0 at the beginning of the synthesis
-    int64_t sample_n;
+    int sample_n;
 };
 
 } // namespace tools::waveform

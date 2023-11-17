@@ -5,7 +5,7 @@
 
 namespace tools::waveform {
 
-bool WaveformGenerator::add_waveform(std::shared_ptr<AWaveform> waveform) {
+bool WaveformGenerator::add_waveform(const WaveformBase* waveform) {
     std::lock_guard lock(_mutex);
     auto it = std::find(_waveforms.begin(), _waveforms.end(), waveform);
     if (it != _waveforms.end())
@@ -14,7 +14,7 @@ bool WaveformGenerator::add_waveform(std::shared_ptr<AWaveform> waveform) {
     return true;
 }
 
-bool WaveformGenerator::remove_waveform(std::shared_ptr<AWaveform> waveform) {
+bool WaveformGenerator::remove_waveform(const WaveformBase* waveform) {
     std::lock_guard lock(_mutex);
     auto it = std::find(_waveforms.begin(), _waveforms.end(), waveform);
     if (it == _waveforms.end())
@@ -45,11 +45,11 @@ std::vector<double> WaveformGenerator::generate_n_samples(int n_samples) {
     return ret;
 }
 
-int64_t WaveformGenerator::get_sample_index() const {
+int WaveformGenerator::get_sample_index() const {
     return _sample_index;
 }
 
-void WaveformGenerator::set_sample_index(int64_t sample_index) {
+void WaveformGenerator::set_sample_index(int sample_index) {
     _sample_index = sample_index;
 }
 

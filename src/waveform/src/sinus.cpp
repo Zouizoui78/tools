@@ -5,7 +5,7 @@
 
 namespace tools::waveform {
 
-Sinus::Sinus() : AWaveform() {
+Sinus::Sinus() {
     update_angular_freq();
 }
 
@@ -14,7 +14,7 @@ double Sinus::synthesize(WaveformTimepoint timepoint) const {
 }
 
 void Sinus::set_frequency(double frequency) {
-    AWaveform::set_frequency(frequency);
+    WaveformBase::set_frequency(frequency);
     update_angular_freq();
 }
 

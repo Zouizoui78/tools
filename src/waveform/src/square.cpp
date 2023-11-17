@@ -4,7 +4,7 @@
 
 namespace tools::waveform {
 
-Square::Square() : AWaveform() {
+Square::Square() {
     set_duty_cycle(0.5);
 }
 
@@ -15,7 +15,7 @@ double Square::synthesize(WaveformTimepoint timepoint) const {
 }
 
 void Square::set_frequency(double frequency) {
-    AWaveform::set_frequency(frequency);
+    WaveformBase::set_frequency(frequency);
     update_sampling_duty_cycle();
 }
 
@@ -28,7 +28,7 @@ void Square::set_duty_cycle(double duty_cycle) {
     update_sampling_duty_cycle();
 }
 
-int16_t Square::get_sampling_duty_cycle() const {
+int Square::get_sampling_duty_cycle() const {
     return _sampling_duty_cycle;
 }
 

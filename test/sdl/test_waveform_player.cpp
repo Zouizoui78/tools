@@ -1,8 +1,6 @@
 #include "gtest/gtest.h"
 
 #include "tools/sdl/waveform_player.hpp"
-#include "tools/utils/stopwatch.hpp"
-#include "tools/waveform/awaveform.hpp"
 #include "tools/waveform/waveforms.hpp"
 
 namespace test {
@@ -30,13 +28,13 @@ TEST_F(TestWaveformPlayer, test_sinus) {
     ASSERT_TRUE(player.is_initialized());
     player.play();
 
-    std::vector<std::shared_ptr<AWaveform>> sounds;
+    std::vector<std::unique_ptr<WaveformBase>> sounds;
     for (int i = 0; i < 6; i++) {
-        auto sin = std::make_shared<Sinus>();
-        sin->set_frequency(440 * (i * 2 + 1));
-        sin->set_volume(1.0 / (i * 2 + 1));
-        generator->add_waveform(sin);
-        sounds.push_back(sin);
+        sounds.emplace_back(std::make_unique<Sinus>());
+        auto& sin = *(sounds.back());
+        sin.set_frequency(440 * (i * 2 + 1));
+        sin.set_volume(1.0 / (i * 2 + 1));
+        generator->add_waveform(&sin);
         std::this_thread::sleep_for(1s);
     }
 }
@@ -44,17 +42,17 @@ TEST_F(TestWaveformPlayer, test_sinus) {
 TEST_F(TestWaveformPlayer, test_square) {
     ASSERT_TRUE(player.is_initialized());
 
-    auto square = std::make_shared<Square>();
-    square->set_frequency(261.63);
-    generator->add_waveform(square);
+    Square square;
+    square.set_frequency(261.63);
+    generator->add_waveform(&square);
 
     player.play();
 
     for (int i = 0; i < 4; i++) {
         if (i == 0)
-            square->set_duty_cycle(0.125);
+            square.set_duty_cycle(0.125);
         else
-            square->set_duty_cycle(0.125 * i * 2);
+            square.set_duty_cycle(0.125 * i * 2);
         std::this_thread::sleep_for(1.5s);
     }
 }
@@ -65,25 +63,25 @@ TEST_F(TestWaveformPlayer, test_setting_changes) {
     double la = 440;
     double si = 494;
 
-    auto sound = std::make_shared<Square>();
-    generator->add_waveform(sound);
+    Square sound;
+    generator->add_waveform(&sound);
     player.play();
     for (int i = 0; i < 5; i++) {
-        if (sound->get_frequency() == la)
-            sound->set_frequency(si);
+        if (sound.get_frequency() == la)
+            sound.set_frequency(si);
         else
-            sound->set_frequency(la);
+            sound.set_frequency(la);
         std::this_thread::sleep_for(400ms);
     }
     for (int i = 0; i < 4; i++) {
         if (i == 0)
-            sound->set_duty_cycle(0.125);
+            sound.set_duty_cycle(0.125);
         else if (i == 1)
-            sound->set_duty_cycle(0.25);
+            sound.set_duty_cycle(0.25);
         else if (i == 2)
-            sound->set_duty_cycle(0.5);
+            sound.set_duty_cycle(0.5);
         else {
-            sound->set_duty_cycle(0.75);
+            sound.set_duty_cycle(0.75);
         }
         std::this_thread::sleep_for(400ms);
     }
