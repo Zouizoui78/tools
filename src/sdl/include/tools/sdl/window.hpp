@@ -205,7 +205,7 @@ private:
     static bool sdl_init();
     static void sdl_cleanup();
     static std::atomic<bool> _sdl_initialized;
-    static std::atomic<uint8_t> _instances_count;
+    static std::atomic<int> _instances_count;
 
     bool _initialized = false;
 

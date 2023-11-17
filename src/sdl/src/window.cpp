@@ -3,7 +3,7 @@
 namespace tools::sdl {
 
 std::atomic<bool> Window::_sdl_initialized = false;
-std::atomic<uint8_t> Window::_instances_count = 0;
+std::atomic<int> Window::_instances_count = 0;
 
 bool Window::sdl_init() {
     bool ret = true;

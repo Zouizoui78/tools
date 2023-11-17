@@ -12,7 +12,7 @@ namespace tools::waveform {
 class WaveformGenerator {
 public:
     // Return false if waveform is already registered.
-    // The generator doesn't take ownership.
+    // Do not take ownership.
     bool add_waveform(const WaveformBase* waveform);
 
     // Return false if waveform not found.
