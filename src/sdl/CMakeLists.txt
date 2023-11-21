@@ -1,11 +1,13 @@
 set(SOURCES
     src/input_mapper.cpp
+    src/sdl_audio_device.cpp
     src/waveform_player.cpp
     src/window.cpp
 )
 
 set(PUBLIC_HEADERS
     include/tools/sdl/input_mapper.hpp
+    include/tools/sdl/sdl_audio_device.hpp
     include/tools/sdl/waveform_player.hpp
     include/tools/sdl/window.hpp
 )

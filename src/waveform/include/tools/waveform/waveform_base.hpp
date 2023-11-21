@@ -7,6 +7,13 @@ namespace tools::waveform {
 
 class WaveformBase {
 public:
+    virtual ~WaveformBase() noexcept = default;
+
+    WaveformBase(const WaveformBase& other) = default;
+    WaveformBase(WaveformBase&& other) = default;
+    WaveformBase& operator=(const WaveformBase& other) = default;
+    WaveformBase& operator=(WaveformBase&& other) = default;
+
     WaveformBase();
 
     virtual double synthesize(WaveformTimepoint timepoint) const = 0;

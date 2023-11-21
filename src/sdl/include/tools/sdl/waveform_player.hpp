@@ -1,7 +1,7 @@
 #ifndef WAVEFORM_PLAYER_HPP
 #define WAVEFORM_PLAYER_HPP
 
-#include "SDL2/SDL.h"
+#include "sdl_audio_device.hpp"
 #include "tools/waveform/waveform_generator.hpp"
 #include <memory>
 
@@ -9,13 +9,7 @@ namespace tools::sdl {
 
 class WaveformPlayer {
 public:
-    ~WaveformPlayer();
-
     WaveformPlayer();
-    WaveformPlayer(const WaveformPlayer& other) = delete;
-    WaveformPlayer(WaveformPlayer&& other) = default;
-    WaveformPlayer& operator=(const WaveformPlayer& other) = delete;
-    WaveformPlayer& operator=(WaveformPlayer&& other) = default;
 
     // Return false if waveform is already registered.
     // Do not take ownership.
@@ -29,11 +23,10 @@ public:
     bool is_paused() const;
 
 private:
-    SDL_AudioDeviceID _audio_device_id = 0;
-    tools::waveform::WaveformGenerator _generator;
-
-    void init();
     static void sdl_callback(void* instance, uint8_t* raw_buffer, int bytes);
+
+    SDLAudioDevice _audio_device;
+    tools::waveform::WaveformGenerator _generator;
 };
 
 } // namespace tools::sdl
