@@ -3,9 +3,6 @@
 
 namespace tools::sdl {
 
-InputMapper::InputMapper() {}
-InputMapper::~InputMapper() {}
-
 void InputMapper::set_mapping(SDL_Keycode key, int mapped_key) {
     _keymap[key] = mapped_key;
 }

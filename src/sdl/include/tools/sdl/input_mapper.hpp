@@ -9,9 +9,6 @@ namespace tools::sdl {
 
 class InputMapper {
 public:
-    InputMapper();
-    ~InputMapper();
-
     // Already existing mappings are overwritten.
     void set_mapping(SDL_Keycode key, int mapped_value);
 

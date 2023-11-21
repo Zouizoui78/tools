@@ -21,7 +21,7 @@ private:
 #endif
 
 public:
-    ~DynamicLibrary();
+    ~DynamicLibrary() noexcept;
 
     DynamicLibrary(const std::string& path);
     DynamicLibrary(const DynamicLibrary& other) = delete;
