@@ -7,77 +7,47 @@ namespace test {
 
 using namespace tools::sdl;
 
-// TEST(TestWindow, test_window) {
-//     Window r;
+TEST(TestWindow, test_window) {
+    Window r;
 
-//     SDL_Rect rect { 100, 100, 100, 100 };
+    SDL_Rect rect{100, 100, 100, 100};
+    r.set_draw_color(0, 0, 0);
+    r.clear();
+    r.set_draw_color(255, 0, 0);
+    r.draw_rectangle(&rect, true);
+    r.refresh();
 
-//     SDL_Event event;
-//     tools::utils::Worker w([&]() {
-//         while (SDL_PollEvent(&event)) {
-//             if (event.type == SDL_QUIT)
-//                 w.stop();
-//         }
+    std::cout << "Do you see a red square in a black window ? (y/n)"
+              << std::endl;
+    char c;
+    std::cin >> c;
+    EXPECT_EQ(c, 'y');
+}
 
-//         r.set_draw_color(0, 0, 0);
-//         r.clear();
-//         r.set_draw_color(255, 0, 0);
-//         r.draw_rectangle(&rect, true);
-//         r.refresh();
-//     }, false);
+TEST(TestWindow, test_multiple_windows) {
+    Window r("test"), r2("test2");
 
-//     w.set_frequency(144);
+    r.set_position(SDL_WINDOWPOS_CENTERED, 300);
+    r2.set_position(SDL_WINDOWPOS_CENTERED, 700);
 
-//     std::cout << "Do you see a red square in a black window ? (y/n)" <<
-//     std::endl; std::thread t([&]() {
-//         char c;
-//         std::cin >> c;
-//         EXPECT_EQ(c, 'y');
-//         w.stop();
-//     });
+    r.set_draw_color(255, 0, 0);
+    r2.set_draw_color(0, 255, 0);
 
-//     w.start();
-//     t.join();
-// }
+    SDL_Rect rect{100, 100, 100, 100};
 
-// TEST(TestWindow, test_multiple_windows) {
-//     Window r("test"), r2("test2");
+    r.draw_rectangle(&rect, true);
+    r2.draw_rectangle(&rect, true);
 
-//     r.set_position(SDL_WINDOWPOS_CENTERED, 300);
-//     r2.set_position(SDL_WINDOWPOS_CENTERED, 700);
+    r.refresh();
+    r2.refresh();
 
-//     r.set_draw_color(255, 0, 0);
-//     r2.set_draw_color(0, 255, 0);
+    std::cout << "Do you see a red square in a black window and a green square "
+                 "in a second window ? (y / n) "
+              << std::endl;
 
-//     SDL_Rect rect { 100, 100, 100, 100 };
-
-//     r.draw_rectangle(&rect, true);
-//     r2.draw_rectangle(&rect, true);
-
-//     r.refresh();
-//     r2.refresh();
-
-//     SDL_Event event;
-//     tools::utils::Worker w([&]() {
-//         while (SDL_PollEvent(&event)) {
-//             if (event.window.event == SDL_WINDOWEVENT_CLOSE) {
-//                 w.stop();
-//             }
-//         }
-//     }, false);
-
-//     w.set_frequency(10);
-
-//     std::cout << "Do you see a red square in a black window and a green
-//     square in a second window ? (y/n)" << std::endl; std::thread t([&]() {
-//         char c;
-//         std::cin >> c;
-//         EXPECT_EQ(c, 'y');
-//         w.stop();
-//     });
-
-//     w.start();
-//     t.join();
-// }
+    char c;
+    std::cin >> c;
+    EXPECT_EQ(c, 'y');
+}
 
 } // namespace test

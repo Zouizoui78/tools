@@ -1,6 +1,5 @@
 set(SRC
     test_input_mapper.cpp
-    test_window.cpp
 )
 
 if (TOOLS_WAVEFORM_PLAYER_TESTS)
@@ -9,6 +8,13 @@ if (TOOLS_WAVEFORM_PLAYER_TESTS)
         test_waveform_player.cpp
     )
 endif (TOOLS_WAVEFORM_PLAYER_TESTS)
+
+if (TOOLS_WINDOW_TESTS)
+    set(SRC
+        ${SRC}
+        test_window.cpp
+    )
+endif (TOOLS_WINDOW_TESTS)
 
 add_executable(test-sdl ${SRC})
 
