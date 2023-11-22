@@ -5,11 +5,6 @@
 
 namespace tools::waveform {
 
-WaveformBase::WaveformBase() {
-    set_volume(1);
-    set_frequency(440);
-}
-
 double WaveformBase::get_volume() const {
     return _volume / constants::volume_mult;
 }

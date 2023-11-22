@@ -12,8 +12,6 @@ using namespace tools::waveform;
 class TestWaveformPlayer : public ::testing::Test {
 public:
     tools::sdl::WaveformPlayer player;
-
-    TestWaveformPlayer() {}
 };
 
 TEST_F(TestWaveformPlayer, test_is_paused) {
@@ -43,13 +41,17 @@ TEST_F(TestWaveformPlayer, test_square) {
 
     player.play();
 
-    for (int i = 0; i < 4; i++) {
-        if (i == 0)
-            square.set_duty_cycle(0.125);
-        else
-            square.set_duty_cycle(0.125 * i * 2);
-        std::this_thread::sleep_for(1.5s);
-    }
+    square.set_duty_cycle(0.125);
+    std::this_thread::sleep_for(1.5s);
+
+    square.set_duty_cycle(0.25);
+    std::this_thread::sleep_for(1.5s);
+
+    square.set_duty_cycle(0.5);
+    std::this_thread::sleep_for(1.5s);
+
+    square.set_duty_cycle(0.75);
+    std::this_thread::sleep_for(1.5s);
 }
 
 TEST_F(TestWaveformPlayer, test_setting_changes) {
@@ -57,6 +59,7 @@ TEST_F(TestWaveformPlayer, test_setting_changes) {
     double si = 494;
 
     Square sound;
+    sound.set_frequency(la);
     player.add_waveform(&sound);
     player.play();
     for (int i = 0; i < 5; i++) {

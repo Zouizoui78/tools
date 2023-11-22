@@ -22,12 +22,6 @@ protected:
                           .string();
     }
 
-    virtual ~TestDynamicLibrary() {}
-
-    virtual void SetUp() override {}
-
-    virtual void TearDown() override {}
-
 public:
     std::string dynlib_path;
 };

@@ -11,6 +11,14 @@ template <typename Event>
 class IObserver {
 public:
     virtual ~IObserver() noexcept = default;
+
+    IObserver(const IObserver& other) = delete;
+    IObserver(IObserver&& other) = delete;
+    IObserver& operator=(const IObserver& other) = delete;
+    IObserver& operator=(IObserver&& other) = delete;
+
+    IObserver() = default;
+
     virtual void notify(const Event& event) = 0;
 };
 

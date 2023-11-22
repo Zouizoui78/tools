@@ -37,7 +37,7 @@ private:
 // Observer for IntEvent only
 class IntObserver : public IObserver<Event> {
 public:
-    virtual void notify(const Event& event) override {
+    void notify(const Event& event) override {
         if (const IntEvent* int_event = std::get_if<IntEvent>(&event)) {
             test_called = int_event->value == 10;
         }
@@ -50,7 +50,7 @@ public:
 // Here we use std::monostate for data-less events
 class DataLessObserver : public IObserver<std::monostate> {
 public:
-    virtual void notify(const std::monostate& nullevent) {
+    void notify(const std::monostate& nullevent) override {
         called = true;
     }
 

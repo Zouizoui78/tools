@@ -3,9 +3,7 @@
 
 namespace test {
 
-class TestStr : public ::testing::Test {};
-
-TEST_F(TestStr, test_stoi) {
+TEST(TestStr, test_stoi) {
     ASSERT_EQ(tools::str::stoi("24"), 24);
     ASSERT_EQ(tools::str::stoi("24.3"), 24);
     ASSERT_EQ(tools::str::stoi("   24"), 24);
@@ -17,7 +15,7 @@ TEST_F(TestStr, test_stoi) {
               std::nullopt); // out_of_range
 }
 
-TEST_F(TestStr, test_stod) {
+TEST(TestStr, test_stod) {
     ASSERT_DOUBLE_EQ(tools::str::stod("24").value(), 24);
     ASSERT_DOUBLE_EQ(tools::str::stod("24.3").value(), 24.3);
     ASSERT_DOUBLE_EQ(tools::str::stod("   24").value(), 24);

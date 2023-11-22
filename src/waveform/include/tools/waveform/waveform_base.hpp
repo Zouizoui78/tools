@@ -1,6 +1,7 @@
 #ifndef WAVEFORM_BASE_HPP
 #define WAVEFORM_BASE_HPP
 
+#include "constants.hpp"
 #include "waveform_timepoint.hpp"
 
 namespace tools::waveform {
@@ -9,19 +10,19 @@ class WaveformBase {
 public:
     virtual ~WaveformBase() noexcept = default;
 
-    WaveformBase(const WaveformBase& other) = default;
-    WaveformBase(WaveformBase&& other) = default;
-    WaveformBase& operator=(const WaveformBase& other) = default;
-    WaveformBase& operator=(WaveformBase&& other) = default;
+    WaveformBase(const WaveformBase& other) = delete;
+    WaveformBase(WaveformBase&& other) = delete;
+    WaveformBase& operator=(const WaveformBase& other) = delete;
+    WaveformBase& operator=(WaveformBase&& other) = delete;
 
-    WaveformBase();
+    WaveformBase() = default;
 
     virtual double synthesize(WaveformTimepoint timepoint) const = 0;
 
     double get_volume() const;
 
     // Clamp volume to [0, 1]
-    virtual void set_volume(double volume);
+    void set_volume(double volume);
 
     double get_frequency() const;
 
@@ -31,10 +32,10 @@ public:
     int get_samples_in_period() const;
 
 protected:
-    double _volume;
-    double _frequency;
-    double _period;
-    int _samples_in_period;
+    double _volume = constants::volume_mult;
+    double _frequency = 1;
+    double _period = 1;
+    int _samples_in_period = constants::sampling_rate;
 };
 
 } // namespace tools::waveform
