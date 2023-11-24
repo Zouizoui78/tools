@@ -2,15 +2,23 @@
 #include "tools/waveform/constants.hpp"
 
 #include <stdexcept>
+#include <utility>
 
 namespace tools::sdl {
 
 SDLAudioDevice::~SDLAudioDevice() {
     if (_audio_device_id != 0) {
         SDL_CloseAudioDevice(_audio_device_id);
-        _audio_device_id = 0;
+        SDL_QuitSubSystem(SDL_INIT_AUDIO);
     }
-    SDL_QuitSubSystem(SDL_INIT_AUDIO);
+}
+
+SDLAudioDevice::SDLAudioDevice(SDLAudioDevice&& other)
+    : _audio_device_id(std::exchange(_audio_device_id, 0)) {}
+
+SDLAudioDevice& SDLAudioDevice::operator=(SDLAudioDevice&& other) {
+    std::swap(_audio_device_id, other._audio_device_id);
+    return *this;
 }
 
 SDLAudioDevice::SDLAudioDevice(SDL_AudioCallback audio_callback) {

@@ -1,5 +1,6 @@
 set(SRC
     test_input_mapper.cpp
+    test_sdl_audio_device.cpp
 )
 
 if (TOOLS_WAVEFORM_PLAYER_TESTS)
