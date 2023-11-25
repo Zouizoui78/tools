@@ -6,9 +6,7 @@ namespace tools::sdl {
 WaveformPlayer::WaveformPlayer()
     : _audio_device(std::make_unique<SDLAudioDevice>(
           std::bind_front(&WaveformPlayer::sdl_callback, this))),
-      _generator() {
-    pause();
-}
+      _generator() {}
 
 bool WaveformPlayer::add_waveform(
     const tools::waveform::WaveformBase* waveform) {
