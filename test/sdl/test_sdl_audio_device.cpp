@@ -13,4 +13,11 @@ TEST(TestSDLAudioDevice, test_lifetime_management) {
     ASSERT_FALSE(std::is_move_assignable_v<tools::sdl::SDLAudioDevice>);
 }
 
+TEST(TestSDLAudioDevice, test_ctor) {
+    ASSERT_THROW(std::make_unique<SDLAudioDevice>(SDLAudioCallback()),
+                 std::runtime_error);
+    ASSERT_NO_THROW(
+        std::make_unique<SDLAudioDevice>([](uint8_t* buffer, int len) {}));
+}
+
 } // namespace test

@@ -13,9 +13,12 @@ SDLAudioDevice::~SDLAudioDevice() {
     }
 }
 
-SDLAudioDevice::SDLAudioDevice(
-    std::function<void(uint8_t* raw_buffer, int len)> sdl_callback)
+SDLAudioDevice::SDLAudioDevice(SDLAudioCallback&& sdl_callback)
     : _sdl_callback(sdl_callback) {
+    if (!_sdl_callback) {
+        throw std::runtime_error("SDLAudioDevice : Invalid callback");
+    }
+
 #ifdef WIN32
     putenv("SDL_AUDIODRIVER=dsound");
 #endif

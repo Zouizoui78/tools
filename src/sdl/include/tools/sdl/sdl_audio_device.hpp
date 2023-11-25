@@ -6,16 +6,17 @@
 
 namespace tools::sdl {
 
+using SDLAudioCallback = std::function<void(uint8_t* raw_buffer, int len)>;
+
 class SDLAudioDevice {
 private:
     SDL_AudioDeviceID _audio_device_id = 0;
-    std::function<void(uint8_t* raw_buffer, int len)> _sdl_callback;
+    SDLAudioCallback _sdl_callback;
 
     static void sdl_callback(void* raw_instance, uint8_t* raw_buffer, int len);
 
 public:
-    SDLAudioDevice(
-        std::function<void(uint8_t* raw_buffer, int len)> sdl_callback);
+    SDLAudioDevice(SDLAudioCallback&& sdl_callback);
 
     ~SDLAudioDevice() noexcept;
     SDLAudioDevice(const SDLAudioDevice& other) = delete;
