@@ -9,8 +9,8 @@ class Square : public WaveformBase {
 public:
     Square();
 
-    virtual double synthesize(WaveformTimepoint timepoint) const override;
-    virtual void set_frequency(double frequency) override;
+    double synthesize(WaveformTimepoint timepoint) const override;
+    void set_frequency(double frequency) override;
 
     double get_duty_cycle() const;
 

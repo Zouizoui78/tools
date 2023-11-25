@@ -8,8 +8,8 @@ namespace tools::waveform {
 class Sinus : public WaveformBase {
 public:
     Sinus();
-    virtual double synthesize(WaveformTimepoint timepoint) const override;
-    virtual void set_frequency(double frequency) override;
+    double synthesize(WaveformTimepoint timepoint) const override;
+    void set_frequency(double frequency) override;
     double get_angular_freq() const;
 
 private:
