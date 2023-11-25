@@ -28,7 +28,7 @@ double WaveformGenerator::generate_sample() {
     double time = static_cast<double>(_sample_index) / constants::sampling_rate;
     {
         std::lock_guard lock(_mutex);
-        for (auto waveform : _waveforms) {
+        for (const WaveformBase* waveform : _waveforms) {
             ret += waveform->synthesize(WaveformTimepoint{time, _sample_index});
         }
     }

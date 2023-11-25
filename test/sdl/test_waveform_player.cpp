@@ -14,6 +14,13 @@ public:
     tools::sdl::WaveformPlayer player;
 };
 
+TEST_F(TestWaveformPlayer, test_lifetime_management) {
+    ASSERT_FALSE(std::is_copy_constructible_v<tools::sdl::WaveformPlayer>);
+    ASSERT_FALSE(std::is_copy_assignable_v<tools::sdl::WaveformPlayer>);
+    ASSERT_FALSE(std::is_move_constructible_v<tools::sdl::WaveformPlayer>);
+    ASSERT_FALSE(std::is_move_assignable_v<tools::sdl::WaveformPlayer>);
+}
+
 TEST_F(TestWaveformPlayer, test_is_paused) {
     ASSERT_TRUE(player.is_paused());
     player.play();
@@ -26,10 +33,10 @@ TEST_F(TestWaveformPlayer, test_sinus) {
     std::vector<std::unique_ptr<WaveformBase>> sounds;
     for (int i = 0; i < 6; i++) {
         sounds.emplace_back(std::make_unique<Sinus>());
-        auto& sin = *(sounds.back());
-        sin.set_frequency(440 * (i * 2 + 1));
-        sin.set_volume(1.0 / (i * 2 + 1));
-        player.add_waveform(&sin);
+        auto sin = sounds.back().get();
+        sin->set_frequency(440 * (i * 2 + 1));
+        sin->set_volume(1.0 / (i * 2 + 1));
+        player.add_waveform(sin);
         std::this_thread::sleep_for(1s);
     }
 }

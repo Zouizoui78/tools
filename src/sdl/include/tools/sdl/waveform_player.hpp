@@ -23,9 +23,9 @@ public:
     bool is_paused() const;
 
 private:
-    static void sdl_callback(void* instance, uint8_t* raw_buffer, int bytes);
+    void sdl_callback(uint8_t* raw_buffer, int len);
 
-    SDLAudioDevice _audio_device;
+    std::unique_ptr<SDLAudioDevice> _audio_device;
     tools::waveform::WaveformGenerator _generator;
 };
 
