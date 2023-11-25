@@ -5,8 +5,10 @@
 
 namespace test {
 
-class Waveform : public tools::waveform::WaveformBase {
-    double synthesize(tools::waveform::WaveformTimepoint timepoint) const {
+using namespace tools::waveform;
+
+class Waveform : public WaveformBase {
+    double synthesize(WaveformTimepoint timepoint) const {
         return timepoint.time;
     }
 };

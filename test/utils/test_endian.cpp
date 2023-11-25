@@ -3,26 +3,28 @@
 
 namespace test {
 
+using namespace tools::endian;
+
 TEST(TestEndian, test_endian_swap_bytes) {
     int in = 0x01020304;
-    int out = tools::endian::swap(in);
+    int out = swap(in);
     ASSERT_EQ(out, 0x04030201);
 
     int16_t in16 = 0xaabb;
-    int16_t out16 = tools::endian::swap(in16);
+    int16_t out16 = swap(in16);
     ASSERT_EQ(out16, static_cast<int16_t>(0xbbaa));
 
     double d = 1.234;
-    double dout = tools::endian::swap(d);
+    double dout = swap(d);
     ASSERT_NE(d, dout);
-    dout = tools::endian::swap(dout);
+    dout = swap(dout);
     ASSERT_EQ(d, dout);
 }
 
 TEST(TestEndian, test_endian_range) {
     std::vector<int16_t> in{static_cast<int16_t>(0xaabb),
                             static_cast<int16_t>(0xccdd)};
-    auto out = tools::endian::swap_range(in);
+    auto out = swap_range(in);
     ASSERT_EQ(out[0], static_cast<int16_t>(0xbbaa));
     ASSERT_EQ(out[1], static_cast<int16_t>(0xddcc));
 }

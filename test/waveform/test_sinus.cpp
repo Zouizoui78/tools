@@ -5,9 +5,11 @@
 
 namespace test {
 
+using namespace tools::waveform;
+
 class TestSinus : public ::testing::Test {
 public:
-    tools::waveform::Sinus sinus;
+    Sinus sinus;
 };
 
 double angular_freq(double freq) {

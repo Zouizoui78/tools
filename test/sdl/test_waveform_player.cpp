@@ -11,14 +11,14 @@ using namespace tools::waveform;
 
 class TestWaveformPlayer : public ::testing::Test {
 public:
-    tools::sdl::WaveformPlayer player;
+    WaveformPlayer player;
 };
 
 TEST_F(TestWaveformPlayer, test_lifetime_management) {
-    ASSERT_FALSE(std::is_copy_constructible_v<tools::sdl::WaveformPlayer>);
-    ASSERT_FALSE(std::is_copy_assignable_v<tools::sdl::WaveformPlayer>);
-    ASSERT_FALSE(std::is_move_constructible_v<tools::sdl::WaveformPlayer>);
-    ASSERT_FALSE(std::is_move_assignable_v<tools::sdl::WaveformPlayer>);
+    ASSERT_FALSE(std::is_copy_constructible_v<WaveformPlayer>);
+    ASSERT_FALSE(std::is_copy_assignable_v<WaveformPlayer>);
+    ASSERT_FALSE(std::is_move_constructible_v<WaveformPlayer>);
+    ASSERT_FALSE(std::is_move_assignable_v<WaveformPlayer>);
 }
 
 TEST_F(TestWaveformPlayer, test_is_paused) {

@@ -3,9 +3,11 @@
 
 namespace test {
 
+using namespace tools::waveform;
+
 class TestSquare : public ::testing::Test {
 public:
-    tools::waveform::Square square;
+    Square square;
 };
 
 TEST_F(TestSquare, test_set_duty_cycle) {
