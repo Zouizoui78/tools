@@ -12,6 +12,7 @@ option(TOOLS_WAVEFORM_PLAYER_TESTS "Enable waveform player tests" OFF)
 option(TOOLS_WINDOW_TESTS "Enable sdl window tests" OFF)
 
 add_subdirectory(src)
+add_subdirectory(external)
 
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
     option(TOOLS_TESTS "Build unit tests" ON)

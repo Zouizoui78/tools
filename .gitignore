@@ -264,4 +264,3 @@ cython_debug/
 #.idea/
 
 .vscode
-external
