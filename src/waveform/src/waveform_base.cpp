@@ -10,7 +10,7 @@ double WaveformBase::get_volume() const {
 }
 
 void WaveformBase::set_volume(double volume) {
-    _volume = std::clamp(volume, 0.0, 1.0) * constants::volume_mult;
+    _volume = std::clamp(volume, -1.0, 1.0) * constants::volume_mult;
 }
 
 double WaveformBase::get_frequency() const {

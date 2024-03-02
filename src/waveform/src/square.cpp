@@ -24,7 +24,7 @@ double Square::get_duty_cycle() const {
 }
 
 void Square::set_duty_cycle(double duty_cycle) {
-    _duty_cycle = std::clamp(duty_cycle, 0.01, 0.99);
+    _duty_cycle = std::clamp(duty_cycle, 0.0, 1.0);
     update_sampling_duty_cycle();
 }
 
