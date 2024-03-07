@@ -17,7 +17,7 @@ DynamicLibrary::DynamicLibrary(const std::string& path) {
     }
 }
 
-DynamicLibrary::~DynamicLibrary() {
+DynamicLibrary::~DynamicLibrary() noexcept {
 #ifdef WIN32
     FreeLibrary(_lib_instance);
 #else

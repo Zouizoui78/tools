@@ -2,6 +2,7 @@
 #define STOPWATCH_HPP
 
 #include <chrono>
+#include <vector>
 
 namespace tools::utils {
 
