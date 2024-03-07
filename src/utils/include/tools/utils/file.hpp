@@ -30,11 +30,17 @@ std::vector<T> read_all_binary(const std::string& path) {
     return content;
 }
 
-// Dump the data in the range into a binary file.
+template <typename T>
+concept non_contiguous = !std::ranges::contiguous_range<T>;
+
+// Dump the data from the range into a binary file.
+// Data is copied by chunk into a temporary chunk_size-long vector
+// to reduce the numbers of write calls.
 // Return number of written bytes.
 template <typename R>
-requires std::ranges::input_range<R>
-int dump_range(const std::string& path, R&& range) {
+requires non_contiguous<R>
+int dump_range(const std::string& path, R&& range,
+               int64_t chunk_size = 1000000) {
     std::ofstream file(path, std::ios::binary);
     if (!file.is_open()) {
         throw new std::runtime_error("Failed to open file {}" + path);
@@ -50,11 +56,19 @@ int dump_range(const std::string& path, R&& range) {
                    chunk.size() * type_size);
     };
 
-    std::ranges::for_each(range | std::views::chunk(1000000), write_chunk);
+    for (size_t i = 0; i < range.size();) {
+        if (i + chunk_size > range.size()) {
+            write_chunk(std::ranges::subrange(range.begin() + i, range.end()));
+        } else {
+            write_chunk(std::views::counted(range.begin() + i, chunk_size));
+        }
+        i += chunk_size;
+    }
+    // std::ranges::for_each(range | std::views::counted(), write_chunk);
     return range.size() * type_size;
 }
 
-// Dump the contiguous data in the range into a binary file.
+// Dump the contiguous data from the range into a binary file.
 // Return number of written bytes.
 template <typename R>
 requires std::ranges::contiguous_range<R>
