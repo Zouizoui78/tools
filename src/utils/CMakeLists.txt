@@ -3,6 +3,7 @@ set(SOURCES
     src/file.cpp
     src/stopwatch.cpp
     src/str.cpp
+    src/thread_pool.cpp
     src/time.cpp
 )
 
@@ -12,6 +13,7 @@ set(PUBLIC_HEADERS
     include/tools/utils/observable.hpp
     include/tools/utils/stopwatch.hpp
     include/tools/utils/str.hpp
+    include/tools/utils/thread_pool.hpp
     include/tools/utils/time.hpp
 )
 
