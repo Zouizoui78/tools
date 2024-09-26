@@ -11,10 +11,10 @@ TEST(TestThreadPool, test_thread_pool) {
     std::atomic<bool> test = false;
 
     ThreadPool pool;
-    pool.enqueue_tasks({[&test] {
+    pool.enqueue([&test] {
         std::cout << "setting variable" << std::endl;
         test = true;
-    }});
+    });
     pool.wait();
     std::cout << "done waiting" << std::endl;
 
@@ -32,10 +32,12 @@ TEST(TestThreadPool, test_multiple_tasks) {
          }}});
 
     ThreadPool pool;
-    pool.enqueue_tasks(tasks);
-    pool.wait();
+    pool.enqueue_multiple(tasks);
+    pool.enqueue_multiple(
+        {[&counter] { ++counter; }, [&counter] { counter += 2; }});
 
-    ASSERT_EQ(counter, tasks.size());
+    pool.wait();
+    ASSERT_EQ(counter, 6);
 }
 
 } // namespace test

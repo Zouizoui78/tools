@@ -37,8 +37,19 @@ public:
     // This function does not clear the task queue.
     void stop(bool wait = false);
 
-    template <std::ranges::input_range TaskListT = std::initializer_list<Task>>
-    void enqueue_tasks(TaskListT&& task_list) {
+    template <std::invocable F>
+    void enqueue(F&& task) {
+        {
+            std::scoped_lock lock(_mutex);
+            _tasks.emplace(std::move(task));
+        }
+
+        _tasks_cv.notify_one();
+    }
+
+    template <std::ranges::input_range R = std::initializer_list<Task>>
+    requires std::invocable<std::ranges::range_value_t<R>>
+    void enqueue_multiple(R&& task_list) {
         {
             std::scoped_lock lock(_mutex);
             for (auto& task : task_list) {
