@@ -1,0 +1,5 @@
+{
+    "cmake.configureSettings": {
+        "TOOLS_TESTS": "ON"
+    }
+}
