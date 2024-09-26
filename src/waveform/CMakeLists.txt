@@ -15,5 +15,5 @@ set(PUBLIC_HEADERS
     include/tools/waveform/waveforms.hpp
 )
 
-add_library(tools-waveform ${SOURCES} ${PUBLIC_HEADERS})
-target_include_directories(tools-waveform PUBLIC include)
+target_sources(tools PRIVATE ${SOURCES} ${PUBLIC_HEADERS})
+target_include_directories(tools PUBLIC include)

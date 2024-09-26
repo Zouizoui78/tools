@@ -17,5 +17,5 @@ set(PUBLIC_HEADERS
     include/tools/utils/time.hpp
 )
 
-add_library(tools-utils ${SOURCES} ${PUBLIC_HEADERS})
-target_include_directories(tools-utils PUBLIC include)
+target_sources(tools PRIVATE ${SOURCES} ${PUBLIC_HEADERS})
+target_include_directories(tools PUBLIC include)

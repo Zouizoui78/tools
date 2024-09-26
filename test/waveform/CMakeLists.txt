@@ -5,16 +5,4 @@ set(SRC
     test_waveform_generator.cpp
 )
 
-add_executable(test-waveform ${SRC})
-
-target_link_libraries(test-waveform
-    PRIVATE GTest::gtest_main
-    PRIVATE tools-waveform
-)
-
-gtest_discover_tests(test-waveform
-    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
-    PROPERTIES
-        LABELS test-waveform
-        ENVIRONMENT "TEST_OUTPUT_DIR=build/test_output/test_waveform"
-)
+target_sources(test-tools PRIVATE ${SRC})

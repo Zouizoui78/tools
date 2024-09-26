@@ -8,19 +8,6 @@ set(SRC
     test_time.cpp
 )
 
-add_executable(test-utils ${SRC})
-
-target_link_libraries(test-utils
-    PRIVATE GTest::gtest_main
-    PRIVATE tools-utils
-)
-
-gtest_discover_tests(test-utils
-    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
-    PROPERTIES
-        LABELS test-utils
-        ENVIRONMENT "TEST_OUTPUT_DIR=build/test_output/test_utils"
-        ENVIRONMENT "DYNLIB_PATH=${CMAKE_CURRENT_BINARY_DIR}"
-)
+target_sources(test-tools PRIVATE ${SRC})
 
 add_library(dynlib SHARED ../resources/dynamic_library/dynlib.cpp)
