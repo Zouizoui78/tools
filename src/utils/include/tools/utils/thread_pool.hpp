@@ -13,7 +13,6 @@ namespace tools {
 
 class ThreadPool {
 public:
-    // Calls start() if start == true.
     ThreadPool(bool start = true);
     ThreadPool(int thread_count);
 
@@ -25,8 +24,6 @@ public:
     ThreadPool(ThreadPool&& other) = delete;
     ThreadPool& operator=(ThreadPool&& other) = delete;
 
-    // Is a move_only_function to store capturing lambdas in the internal
-    // queue.
     using Task = std::move_only_function<void()>;
 
     // Starts <thread_count> threads waiting for tasks.
@@ -42,16 +39,17 @@ public:
 
     template <std::invocable F>
     auto enqueue(F&& f) -> std::future<decltype(f())> {
-        using return_type = decltype(f());
-        std::packaged_task<return_type()> task(std::forward<F>(f));
-        std::future<return_type> future = task.get_future();
+        using return_t = decltype(f());
+
+        auto task = std::packaged_task<return_t()>(std::forward<F>(f));
+        auto future = task.get_future();
 
         {
             std::scoped_lock lock(_mutex);
 
             // The lambda must be mutable because calling task modifies its
             // state by updating the associated std::future.
-            _tasks.emplace([task = std::move(task)]() mutable { task(); });
+            _tasks.emplace([task = std::move(task)] mutable { task(); });
         }
 
         _tasks_cv.notify_one();
@@ -59,19 +57,15 @@ public:
     }
 
     // Blocks until all the enqueued tasks are completed.
+    // Does nothing if the pool is not running as it would block forever if the
+    // task queue is not empty.
     void wait() const;
 
 private:
     void thread_task();
 
     std::vector<std::jthread> _threads;
-
-    // Set to false by start().
-    // Used to stop the threads when set to false.
     std::atomic<bool> _running = false;
-
-    // Keeps track of the currently processing tasks.
-    // Used to wait until all pending tasks are done.
     std::atomic<int> _active_tasks = 0;
 
     std::queue<Task> _tasks;

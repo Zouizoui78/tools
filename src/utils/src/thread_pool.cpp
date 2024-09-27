@@ -79,13 +79,17 @@ void ThreadPool::thread_task() {
 
         task();
         --_active_tasks;
-
         _tasks_cv.notify_all();
     }
 }
 
 void ThreadPool::wait() const {
     std::unique_lock lock(_mutex);
+
+    if (!_running) {
+        return;
+    }
+
     _tasks_cv.wait(lock,
                    [this] { return _tasks.empty() && _active_tasks == 0; });
 }
