@@ -1,6 +1,5 @@
 #include "tools/utils/dynamic_library.hpp"
 
-#include <format>
 #include <stdexcept>
 
 namespace tools::utils {
@@ -12,8 +11,8 @@ DynamicLibrary::DynamicLibrary(const std::string& path) {
     _lib_instance = dlopen(path.c_str(), RTLD_LAZY);
 #endif
     if (_lib_instance == nullptr) {
-        throw std::runtime_error(std::format(
-            "Failed to load library '{}'. Check that this file exist.", path));
+        throw std::runtime_error("Failed to load library '" + path +
+                                 "'. Check that this file exist.");
     }
 }
 

@@ -12,7 +12,7 @@ ThreadPool::ThreadPool(int thread_count) {
     start(thread_count);
 }
 
-ThreadPool::~ThreadPool() {
+ThreadPool::~ThreadPool() noexcept {
     stop();
 }
 
