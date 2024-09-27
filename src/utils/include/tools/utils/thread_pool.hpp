@@ -3,6 +3,7 @@
 
 #include <condition_variable>
 #include <functional>
+#include <future>
 #include <mutex>
 #include <queue>
 #include <ranges>
@@ -24,7 +25,9 @@ public:
     ThreadPool(ThreadPool&& other) = delete;
     ThreadPool& operator=(ThreadPool&& other) = delete;
 
-    typedef std::function<void()> Task;
+    // Is a move_only_function to store capturing lambdas in the internal
+    // queue.
+    using Task = std::move_only_function<void()>;
 
     // Starts <thread_count> threads waiting for tasks.
     // Does nothing is the thread pool is already running.
@@ -38,26 +41,21 @@ public:
     void stop(bool wait = false);
 
     template <std::invocable F>
-    void enqueue(F&& task) {
+    auto enqueue(F&& f) -> std::future<decltype(f())> {
+        using return_type = decltype(f());
+        std::packaged_task<return_type()> task(std::forward<F>(f));
+        std::future<return_type> future = task.get_future();
+
         {
             std::scoped_lock lock(_mutex);
-            _tasks.emplace(std::move(task));
+
+            // The lambda must be mutable because calling task modifies its
+            // state by updating the associated std::future.
+            _tasks.emplace([task = std::move(task)]() mutable { task(); });
         }
 
         _tasks_cv.notify_one();
-    }
-
-    template <std::ranges::input_range R = std::initializer_list<Task>>
-    requires std::invocable<std::ranges::range_value_t<R>>
-    void enqueue_multiple(R&& task_list) {
-        {
-            std::scoped_lock lock(_mutex);
-            for (auto& task : task_list) {
-                _tasks.emplace(std::move(task));
-            }
-        }
-
-        _tasks_cv.notify_all();
+        return future;
     }
 
     // Blocks until all the enqueued tasks are completed.

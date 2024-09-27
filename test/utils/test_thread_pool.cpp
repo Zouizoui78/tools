@@ -8,7 +8,7 @@ namespace test {
 using namespace tools;
 
 TEST(TestThreadPool, test_thread_pool) {
-    std::atomic<bool> test = false;
+    bool test = false;
 
     ThreadPool pool;
     pool.enqueue([&test] {
@@ -21,23 +21,14 @@ TEST(TestThreadPool, test_thread_pool) {
     ASSERT_TRUE(test);
 }
 
-TEST(TestThreadPool, test_multiple_tasks) {
-    std::atomic<int> counter = 0;
-
-    std::vector<ThreadPool::Task> tasks(
-        {3, {[&counter] {
-             std::cout << "Incrementing counter from thread "
-                       << std::this_thread::get_id() << std::endl;
-             ++counter;
-         }}});
+TEST(TestThreadPool, test_returning_task) {
+    int counter = 0;
 
     ThreadPool pool;
-    pool.enqueue_multiple(tasks);
-    pool.enqueue_multiple(
-        {[&counter] { ++counter; }, [&counter] { counter += 2; }});
+    auto future = pool.enqueue([counter] { return counter + 1; });
 
-    pool.wait();
-    ASSERT_EQ(counter, 6);
+    int new_counter = future.get();
+    ASSERT_EQ(new_counter, counter + 1);
 }
 
 } // namespace test
