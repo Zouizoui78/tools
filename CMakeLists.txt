@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.17)
+cmake_minimum_required(VERSION 3.13)
 
 set (CMAKE_CXX_STANDARD 23)
 set (CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -13,7 +13,10 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
     if (TOOLS_TESTS)
         include(CTest)
         add_subdirectory(test)
-        target_compile_options(tools PRIVATE --coverage)
-        target_link_libraries(tools PRIVATE gcov)
+
+        if (UNIX)
+            target_compile_options(tools PRIVATE --coverage)
+            target_link_libraries(tools PRIVATE gcov)
+        endif (UNIX)
     endif (TOOLS_TESTS)
 endif()

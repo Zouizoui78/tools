@@ -1,6 +1,8 @@
 #include "tools/utils/observable.hpp"
 #include "gtest/gtest.h"
 
+#include <variant>
+
 namespace test {
 
 using namespace tools::utils;

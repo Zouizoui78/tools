@@ -49,7 +49,7 @@ public:
 
             // The lambda must be mutable because calling task modifies its
             // state by updating the associated std::future.
-            _tasks.emplace([task = std::move(task)] mutable { task(); });
+            _tasks.emplace([task = std::move(task)]() mutable { task(); });
         }
 
         _tasks_cv.notify_one();
