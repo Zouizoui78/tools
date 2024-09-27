@@ -2,12 +2,6 @@
 
 namespace tools {
 
-ThreadPool::ThreadPool(bool start) {
-    if (start) {
-        this->start();
-    }
-}
-
 ThreadPool::ThreadPool(int thread_count) {
     start(thread_count);
 }

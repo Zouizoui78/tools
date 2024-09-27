@@ -13,8 +13,7 @@ namespace tools {
 
 class ThreadPool {
 public:
-    ThreadPool(bool start = true);
-    ThreadPool(int thread_count);
+    ThreadPool(int thread_count = std::thread::hardware_concurrency());
 
     ~ThreadPool() noexcept;
 
