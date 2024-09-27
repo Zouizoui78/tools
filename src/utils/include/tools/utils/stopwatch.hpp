@@ -17,14 +17,12 @@ public:
     void lap();
 
     template <typename DurationType = std::chrono::nanoseconds>
-    requires std::is_convertible_v<DurationType, std::chrono::nanoseconds>
     DurationType get_duration() const {
         return std::chrono::duration_cast<DurationType>(
             std::chrono::steady_clock::now() - _start_time_point);
     }
 
     template <typename DurationType = std::chrono::nanoseconds>
-    requires std::is_convertible_v<DurationType, std::chrono::nanoseconds>
     std::vector<DurationType> get_laps() const {
         std::vector<DurationType> ret;
         ret.emplace_back(std::chrono::duration_cast<DurationType>(
