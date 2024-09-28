@@ -14,27 +14,50 @@ private:
 public:
     Stopwatch();
 
+    struct Lap {
+        double duration;
+        double global_duration;
+    };
+
     void lap();
 
-    template <typename DurationType = std::chrono::nanoseconds>
-    DurationType get_duration() const {
-        return std::chrono::duration_cast<DurationType>(
-            std::chrono::steady_clock::now() - _start_time_point);
+    template <typename Duration = std::chrono::seconds>
+    double get_duration() const {
+        using namespace std::chrono;
+        return duration_cast<duration<double, typename Duration::period>>(
+                   steady_clock::now() - _start_time_point)
+            .count();
     }
 
-    template <typename DurationType = std::chrono::nanoseconds>
-    std::vector<DurationType> get_laps() const {
-        std::vector<DurationType> ret;
-        ret.emplace_back(std::chrono::duration_cast<DurationType>(
-            _laps[0] - _start_time_point));
+    template <typename Duration = std::chrono::seconds>
+    std::vector<Lap> get_laps() const {
+        using namespace std::chrono;
+        using duration_cast_type = duration<double, typename Duration::period>;
+
+        std::vector<Lap> ret;
+        duration_cast_type global_duration;
+
+        Lap lap;
+        lap.duration =
+            duration_cast<duration_cast_type>(_laps[0] - _start_time_point)
+                .count();
+        lap.global_duration = lap.duration;
+        ret.push_back(lap);
+
         for (auto it = std::next(_laps.begin()); it != _laps.end(); ++it) {
-            ret.emplace_back(
-                std::chrono::duration_cast<DurationType>(*it - *(it - 1)));
+            Lap lap;
+            lap.duration =
+                duration_cast<duration_cast_type>(*it - *(it - 1)).count();
+            lap.global_duration =
+                duration_cast<duration_cast_type>(*it - _start_time_point)
+                    .count();
+            ret.push_back(lap);
         }
+
         return ret;
     }
 
-    // Set start time point to current time and clear internal laps vector.
+    // Set start time point to current time and clear stored laps.
     void reset();
 };
 

@@ -3,6 +3,7 @@ set(SRC
     test_endian.cpp
     test_file.cpp
     test_observable.cpp
+    test_stopwatch.cpp
     test_str.cpp
     test_thread_pool.cpp
     test_time.cpp
