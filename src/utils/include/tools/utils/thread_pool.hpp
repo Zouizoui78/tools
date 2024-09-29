@@ -61,7 +61,7 @@ public:
     void wait() const;
 
 private:
-    void thread_task();
+    void thread_loop();
 
     std::vector<std::jthread> _threads;
     std::atomic<bool> _running = false;

@@ -25,7 +25,7 @@ void ThreadPool::start(int thread_count) {
         _running = true;
 
         for (int i = 0; i < thread_count; ++i) {
-            _threads.emplace_back(&ThreadPool::thread_task, this);
+            _threads.emplace_back(&ThreadPool::thread_loop, this);
         }
     }
 }
@@ -49,7 +49,7 @@ void ThreadPool::stop(bool wait) {
     _threads.clear();
 }
 
-void ThreadPool::thread_task() {
+void ThreadPool::thread_loop() {
     while (_running) {
         Task task;
 
