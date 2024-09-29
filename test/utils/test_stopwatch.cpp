@@ -36,11 +36,8 @@ TEST(TestStopwatch, test_laps) {
     }
 
     auto laps = sw.get_laps<milliseconds>();
-    for (utils::Stopwatch::Lap& lap : laps) {
-        printf("%f\n", lap.duration);
-    }
 
-    ASSERT_EQ(laps.size(), 10);
+    ASSERT_EQ(laps.size(), laps_count);
     for (int i = 0; i < laps.size(); ++i) {
         int margin = 10;
         ASSERT_NEAR(laps[i].duration, sleep_duration_ms, 10);
