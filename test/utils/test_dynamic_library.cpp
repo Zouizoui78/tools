@@ -11,7 +11,7 @@ class TestDynamicLibrary : public ::testing::Test {
 protected:
     TestDynamicLibrary() {
         std::string dynlib_filename = "libdynlib";
-#ifdef WIN32
+#ifdef _WIN32
         std::string dynlib_extension = ".dll";
 #else
         std::string dynlib_extension = ".so";

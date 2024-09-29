@@ -11,7 +11,7 @@ string_to_time(const std::string& time_str, const std::string& format) {
     std::tm tm{};
     std::istringstream ss(time_str);
     ss >> std::get_time(&tm, format.c_str());
-#ifdef WIN32
+#ifdef _WIN32
     auto time = _mkgmtime(&tm);
 #else
     auto time = timegm(&tm);

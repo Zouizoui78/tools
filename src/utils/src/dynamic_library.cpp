@@ -5,7 +5,7 @@
 namespace tools::utils {
 
 DynamicLibrary::DynamicLibrary(const std::string& path) {
-#ifdef WIN32
+#ifdef _WIN32
     _lib_instance = LoadLibraryA(path.c_str());
 #else
     _lib_instance = dlopen(path.c_str(), RTLD_LAZY);
@@ -17,7 +17,7 @@ DynamicLibrary::DynamicLibrary(const std::string& path) {
 }
 
 DynamicLibrary::~DynamicLibrary() noexcept {
-#ifdef WIN32
+#ifdef _WIN32
     FreeLibrary(_lib_instance);
 #else
     dlclose(_lib_instance);

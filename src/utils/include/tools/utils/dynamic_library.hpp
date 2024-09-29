@@ -4,7 +4,7 @@
 #include <functional>
 #include <string>
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <windows.h>
 #else
 #include <dlfcn.h>
@@ -14,7 +14,7 @@ namespace tools::utils {
 
 class DynamicLibrary {
 private:
-#ifdef WIN32
+#ifdef _WIN32
     HINSTANCE _lib_instance = nullptr;
 #else
     void* _lib_instance = nullptr;
@@ -34,7 +34,7 @@ public:
 
     template <typename R, typename... Targs>
     Func<R, Targs...> get_function(const std::string& function_name) const {
-#ifdef WIN32
+#ifdef _WIN32
         return reinterpret_cast<R (*)(Targs...)>(
             GetProcAddress(_lib_instance, function_name.c_str()));
 #else
