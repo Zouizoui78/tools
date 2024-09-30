@@ -10,7 +10,7 @@ using namespace tools::utils;
 class TestDynamicLibrary : public ::testing::Test {
 protected:
     TestDynamicLibrary() {
-        dynlib_path = std::filesystem::path(std::getenv("DYNLIB_PATH"));
+        dynlib_path = std::getenv("DYNLIB_PATH");
     }
 
 public:
