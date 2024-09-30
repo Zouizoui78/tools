@@ -10,16 +10,7 @@ using namespace tools::utils;
 class TestDynamicLibrary : public ::testing::Test {
 protected:
     TestDynamicLibrary() {
-        std::string dynlib_filename = "libdynlib";
-#ifdef _WIN32
-        std::string dynlib_extension = ".dll";
-#else
-        std::string dynlib_extension = ".so";
-#endif
-
-        dynlib_path = (std::filesystem::path(std::getenv("DYNLIB_PATH")) /
-                       (dynlib_filename + dynlib_extension))
-                          .string();
+        dynlib_path = std::filesystem::path(std::getenv("DYNLIB_PATH"));
     }
 
 public:

@@ -20,7 +20,6 @@ target_link_libraries(test-tools
 gtest_discover_tests(test-tools
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
     PROPERTIES
-        LABELS test-tools
         ENVIRONMENT "TEST_OUTPUT_DIR=build/test_output"
-        ENVIRONMENT "DYNLIB_PATH=${CMAKE_CURRENT_BINARY_DIR}/utils"
+        ENVIRONMENT "DYNLIB_PATH=$<TARGET_FILE:dynlib>"
 )
