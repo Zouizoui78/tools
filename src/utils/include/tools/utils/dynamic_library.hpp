@@ -29,7 +29,8 @@ public:
     DynamicLibrary &operator=(const DynamicLibrary &other) = delete;
     DynamicLibrary &operator=(DynamicLibrary &&other) = default;
 
-    template <typename R, typename... Targs> using Func = R (*)(Targs...);
+    template <typename R, typename... Targs>
+    using Func = R (*)(Targs...);
 
     template <typename R, typename... Targs>
     Func<R, Targs...> get_function(const std::string &function_name) const {

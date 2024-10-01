@@ -10,7 +10,8 @@ namespace tools::file {
 
 std::string read_all_text(const std::string &path);
 
-template <typename T> std::vector<T> read_all_binary(const std::string &path) {
+template <typename T>
+std::vector<T> read_all_binary(const std::string &path) {
     std::ifstream file(path, std::ios::binary);
     if (!file.is_open()) {
         throw new std::runtime_error("Failed to open file {}" + path);

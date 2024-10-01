@@ -7,7 +7,8 @@
 
 namespace tools::utils {
 
-template <typename Event> class IObserver {
+template <typename Event>
+class IObserver {
 public:
     virtual ~IObserver() noexcept = default;
 
@@ -24,7 +25,8 @@ public:
 // Observer pattern implementation.
 // References to observers are saved instead of callbacks to be able to
 // unsubscribe (remove) them.
-template <typename Event> class Observable final {
+template <typename Event>
+class Observable final {
 private:
     std::vector<IObserver<Event> *> _observers;
     std::mutex _observers_mutex;
