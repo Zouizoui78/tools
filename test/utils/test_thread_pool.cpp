@@ -16,13 +16,12 @@ TEST(TestThreadPool, test_thread_pool) {
 }
 
 TEST(TestThreadPool, test_returning_task) {
-    int counter = 0;
+    std::string test_str("test");
 
     ThreadPool pool;
-    auto future = pool.enqueue([counter] { return counter + 1; });
+    auto future = pool.enqueue([test_str] { return test_str; });
 
-    int new_counter = future.get();
-    ASSERT_EQ(new_counter, counter + 1);
+    ASSERT_EQ(future.get(), test_str);
 }
 
 TEST(TestThreadPool, test_spam) {
