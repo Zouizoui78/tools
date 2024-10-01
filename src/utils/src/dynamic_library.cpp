@@ -4,7 +4,7 @@
 
 namespace tools::utils {
 
-DynamicLibrary::DynamicLibrary(const std::string& path) {
+DynamicLibrary::DynamicLibrary(const std::string &path) {
 #ifdef _WIN32
     _lib_instance = LoadLibraryA(path.c_str());
 #else

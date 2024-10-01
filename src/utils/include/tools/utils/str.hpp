@@ -6,8 +6,8 @@
 
 namespace tools::str {
 
-std::optional<int> stoi(const std::string& str);
-std::optional<double> stod(const std::string& str);
+std::optional<int> stoi(const std::string &str);
+std::optional<double> stod(const std::string &str);
 
 } // namespace tools::str
 

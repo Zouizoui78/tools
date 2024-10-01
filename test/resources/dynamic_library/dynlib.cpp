@@ -6,7 +6,7 @@
 #define EXPORT
 #endif
 
-extern "C" EXPORT bool func(const std::string& str) {
+extern "C" EXPORT bool func(const std::string &str) {
     return str == "test";
 }
 

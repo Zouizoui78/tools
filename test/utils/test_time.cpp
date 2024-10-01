@@ -25,8 +25,9 @@ TEST(TestTime, test_str_to_time) {
 
     for (int i = 1; i <= 31; ++i) {
         std::string to_test = std::to_string(i) + date;
-        if (i < 10)
+        if (i < 10) {
             to_test = "0" + to_test;
+        }
         ASSERT_EQ(string_to_time(to_test, date_format),
                   date_start + 86400s * (i - 1));
     }

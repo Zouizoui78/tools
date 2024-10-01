@@ -17,11 +17,11 @@ public:
 
     ~ThreadPool() noexcept;
 
-    ThreadPool(const ThreadPool& other) = delete;
-    ThreadPool& operator=(const ThreadPool& other) = delete;
+    ThreadPool(const ThreadPool &other) = delete;
+    ThreadPool &operator=(const ThreadPool &other) = delete;
 
-    ThreadPool(ThreadPool&& other) = delete;
-    ThreadPool& operator=(ThreadPool&& other) = delete;
+    ThreadPool(ThreadPool &&other) = delete;
+    ThreadPool &operator=(ThreadPool &&other) = delete;
 
     using Task = std::move_only_function<void()>;
 
@@ -37,7 +37,7 @@ public:
     void stop(bool wait = false);
 
     template <std::invocable F>
-    auto enqueue(F&& f) -> std::future<decltype(f())> {
+    auto enqueue(F &&f) -> std::future<decltype(f())> {
         using return_t = decltype(f());
 
         auto task = std::packaged_task<return_t()>(std::forward<F>(f));
@@ -48,7 +48,9 @@ public:
 
             // The lambda must be mutable because calling task modifies its
             // state by updating the associated std::future.
-            _tasks.emplace([task = std::move(task)]() mutable { task(); });
+            _tasks.emplace([task = std::move(task)]() mutable {
+                task();
+            });
         }
 
         _tasks_cv.notify_one();

@@ -17,23 +17,22 @@ private:
 #ifdef _WIN32
     HINSTANCE _lib_instance = nullptr;
 #else
-    void* _lib_instance = nullptr;
+    void *_lib_instance = nullptr;
 #endif
 
 public:
     ~DynamicLibrary() noexcept;
 
-    DynamicLibrary(const std::string& path);
-    DynamicLibrary(const DynamicLibrary& other) = delete;
-    DynamicLibrary(DynamicLibrary&& other) = default;
-    DynamicLibrary& operator=(const DynamicLibrary& other) = delete;
-    DynamicLibrary& operator=(DynamicLibrary&& other) = default;
+    DynamicLibrary(const std::string &path);
+    DynamicLibrary(const DynamicLibrary &other) = delete;
+    DynamicLibrary(DynamicLibrary &&other) = default;
+    DynamicLibrary &operator=(const DynamicLibrary &other) = delete;
+    DynamicLibrary &operator=(DynamicLibrary &&other) = default;
+
+    template <typename R, typename... Targs> using Func = R (*)(Targs...);
 
     template <typename R, typename... Targs>
-    using Func = R (*)(Targs...);
-
-    template <typename R, typename... Targs>
-    Func<R, Targs...> get_function(const std::string& function_name) const {
+    Func<R, Targs...> get_function(const std::string &function_name) const {
 #ifdef _WIN32
         return reinterpret_cast<R (*)(Targs...)>(
             GetProcAddress(_lib_instance, function_name.c_str()));
@@ -44,10 +43,11 @@ public:
     }
 
     template <typename R, typename... Targs>
-    R call(const std::string& function_name, Targs... args) const {
+    R call(const std::string &function_name, Targs... args) const {
         Func<R, Targs...> func = get_function<R, Targs...>(function_name);
-        if (func == nullptr)
+        if (func == nullptr) {
             throw std::bad_function_call();
+        }
         return func(args...);
     }
 };

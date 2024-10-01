@@ -7,11 +7,11 @@
 namespace tools::endian {
 
 template <typename T>
-requires std::is_fundamental_v<T>
+    requires std::is_fundamental_v<T>
 T swap(T in) {
     T swapped = 0;
-    char* swapped_as_char = reinterpret_cast<char*>(&swapped);
-    char* in_as_char = reinterpret_cast<char*>(&in);
+    char *swapped_as_char = reinterpret_cast<char *>(&swapped);
+    char *in_as_char = reinterpret_cast<char *>(&in);
     auto type_size = sizeof(T);
 
     for (int i = 0; i < type_size; i++) {
@@ -21,11 +21,11 @@ T swap(T in) {
 }
 
 template <typename R>
-requires std::ranges::input_range<R> &&
-         std::is_fundamental_v<std::ranges::range_value_t<R>>
+    requires std::ranges::input_range<R> &&
+             std::is_fundamental_v<std::ranges::range_value_t<R>>
 R swap_range(R in) {
     R out{in};
-    for (auto& e : out) {
+    for (auto &e : out) {
         e = swap(e);
     }
     return out;

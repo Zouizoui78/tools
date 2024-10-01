@@ -10,10 +10,10 @@ class WaveformBase {
 public:
     virtual ~WaveformBase() noexcept = default;
 
-    WaveformBase(const WaveformBase& other) = delete;
-    WaveformBase(WaveformBase&& other) = delete;
-    WaveformBase& operator=(const WaveformBase& other) = delete;
-    WaveformBase& operator=(WaveformBase&& other) = delete;
+    WaveformBase(const WaveformBase &other) = delete;
+    WaveformBase(WaveformBase &&other) = delete;
+    WaveformBase &operator=(const WaveformBase &other) = delete;
+    WaveformBase &operator=(WaveformBase &&other) = delete;
 
     WaveformBase() = default;
 

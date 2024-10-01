@@ -7,7 +7,7 @@
 namespace tools::time {
 
 std::chrono::system_clock::time_point
-string_to_time(const std::string& time_str, const std::string& format) {
+string_to_time(const std::string &time_str, const std::string &format) {
     std::tm tm{};
     std::istringstream ss(time_str);
     ss >> std::get_time(&tm, format.c_str());

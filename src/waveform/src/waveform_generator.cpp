@@ -5,20 +5,22 @@
 
 namespace tools::waveform {
 
-bool WaveformGenerator::add_waveform(const WaveformBase* waveform) {
+bool WaveformGenerator::add_waveform(const WaveformBase *waveform) {
     std::lock_guard lock(_mutex);
     auto it = std::find(_waveforms.begin(), _waveforms.end(), waveform);
-    if (it != _waveforms.end())
+    if (it != _waveforms.end()) {
         return false;
+    }
     _waveforms.push_back(waveform);
     return true;
 }
 
-bool WaveformGenerator::remove_waveform(const WaveformBase* waveform) {
+bool WaveformGenerator::remove_waveform(const WaveformBase *waveform) {
     std::lock_guard lock(_mutex);
     auto it = std::find(_waveforms.begin(), _waveforms.end(), waveform);
-    if (it == _waveforms.end())
+    if (it == _waveforms.end()) {
         return false;
+    }
     _waveforms.erase(it);
     return true;
 }
@@ -28,7 +30,7 @@ double WaveformGenerator::generate_sample() {
     double time = static_cast<double>(_sample_index) / constants::sampling_rate;
     {
         std::lock_guard lock(_mutex);
-        for (const WaveformBase* waveform : _waveforms) {
+        for (const WaveformBase *waveform : _waveforms) {
             ret += waveform->synthesize(WaveformTimepoint{time, _sample_index});
         }
     }

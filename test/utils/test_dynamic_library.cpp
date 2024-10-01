@@ -24,7 +24,7 @@ TEST_F(TestDynamicLibrary, test_dynlib_load) {
 TEST_F(TestDynamicLibrary, test_dynlib_get_function) {
     DynamicLibrary lib(dynlib_path);
 
-    auto func_ptr = lib.get_function<bool, const std::string&>("func");
+    auto func_ptr = lib.get_function<bool, const std::string &>("func");
     ASSERT_NE(func_ptr, nullptr);
 
     ASSERT_TRUE(func_ptr("test"));
@@ -53,7 +53,7 @@ TEST_F(TestDynamicLibrary, test_dynlib_call) {
     // For example in this case we need the whole signature in the template
     // because otherwise at runtime "nonsense" is passed as a char *,
     // causing a segfault since the function expects an std::string.
-    ret = lib.call<bool, const std::string&>("func", "nonsense");
+    ret = lib.call<bool, const std::string &>("func", "nonsense");
     ASSERT_FALSE(ret);
 
     ASSERT_THROW(lib.call<bool>("not_a_function", "test"),

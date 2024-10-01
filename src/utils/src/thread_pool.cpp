@@ -55,8 +55,9 @@ void ThreadPool::thread_loop() {
 
         {
             std::unique_lock lock(_mutex);
-            _tasks_cv.wait(lock,
-                           [this] { return !_running || !_tasks.empty(); });
+            _tasks_cv.wait(lock, [this] {
+                return !_running || !_tasks.empty();
+            });
 
             if (!_running) {
                 return;
@@ -84,8 +85,9 @@ void ThreadPool::wait() const {
         return;
     }
 
-    _tasks_cv.wait(lock,
-                   [this] { return _tasks.empty() && _active_tasks == 0; });
+    _tasks_cv.wait(lock, [this] {
+        return _tasks.empty() && _active_tasks == 0;
+    });
 }
 
 } // namespace tools

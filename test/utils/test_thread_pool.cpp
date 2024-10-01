@@ -9,7 +9,9 @@ TEST(TestThreadPool, test_thread_pool) {
     std::atomic<bool> test = false;
 
     ThreadPool pool;
-    pool.enqueue([&test] { test = true; });
+    pool.enqueue([&test] {
+        test = true;
+    });
 
     pool.wait();
     ASSERT_TRUE(test);
@@ -19,7 +21,9 @@ TEST(TestThreadPool, test_returning_task) {
     std::string test_str("test");
 
     ThreadPool pool;
-    auto future = pool.enqueue([test_str] { return test_str; });
+    auto future = pool.enqueue([test_str] {
+        return test_str;
+    });
 
     ASSERT_EQ(future.get(), test_str);
 }
@@ -31,7 +35,9 @@ TEST(TestThreadPool, test_spam) {
     ThreadPool pool;
 
     for (int i = 0; i < job_count; ++i) {
-        pool.enqueue([&counter] { ++counter; });
+        pool.enqueue([&counter] {
+            ++counter;
+        });
     }
 
     pool.wait();

@@ -21,17 +21,21 @@ using Event = std::variant<IntEvent, StrEvent>;
 // Events are dispatched to the right handler with std::visit
 class Observer : public IObserver<Event> {
 public:
-    void notify(const Event& event) override {
-        std::visit([this](const auto& event) { handle(event); }, event);
+    void notify(const Event &event) override {
+        std::visit(
+            [this](const auto &event) {
+                handle(event);
+            },
+            event);
     }
 
     bool test_called = false;
 
 private:
-    void handle(const IntEvent& event) {
+    void handle(const IntEvent &event) {
         test_called = event.value == 1;
     }
-    void handle(const StrEvent& event) {
+    void handle(const StrEvent &event) {
         test_called = event.value == "yes";
     }
 };
@@ -39,8 +43,8 @@ private:
 // Observer for IntEvent only
 class IntObserver : public IObserver<Event> {
 public:
-    void notify(const Event& event) override {
-        if (const IntEvent* int_event = std::get_if<IntEvent>(&event)) {
+    void notify(const Event &event) override {
+        if (const IntEvent *int_event = std::get_if<IntEvent>(&event)) {
             test_called = int_event->value == 10;
         }
     }
@@ -52,7 +56,7 @@ public:
 // Here we use std::monostate for data-less events
 class DataLessObserver : public IObserver<std::monostate> {
 public:
-    void notify(const std::monostate& nullevent) override {
+    void notify(const std::monostate &nullevent) override {
         called = true;
     }
 
