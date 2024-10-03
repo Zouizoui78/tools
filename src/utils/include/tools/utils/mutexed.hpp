@@ -2,6 +2,7 @@
 #define MUTEXED_HPP
 
 #include <mutex>
+#include <stdexcept>
 
 namespace tools {
 
