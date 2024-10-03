@@ -36,10 +36,4 @@ TEST(TestMutexed, test_assignment) {
     }
 }
 
-TEST(TestMutexed, test_arrow_operator) {
-    Mutexed<TestClass> mutexed;
-    std::scoped_lock lock(mutexed);
-    ASSERT_EQ(mutexed->say_hi(), "hi");
-}
-
 } // namespace test

@@ -18,7 +18,6 @@ struct StrEvent {
 using Event = std::variant<IntEvent, StrEvent>;
 
 // Observer that handles all events
-// Events are dispatched to the right handler with std::visit
 class Observer : public IObserver<Event> {
 public:
     void notify(const Event &event) override {
@@ -62,17 +61,6 @@ public:
 
     bool called = false;
 };
-
-TEST(TestObservable, test_observable_subscription) {
-    Observer observer;
-    Observable<Event> observable;
-
-    ASSERT_TRUE(observable.add_observer(&observer));
-    ASSERT_FALSE(observable.add_observer(&observer));
-
-    ASSERT_TRUE(observable.remove_observer(&observer));
-    ASSERT_FALSE(observable.remove_observer(&observer));
-}
 
 TEST(TestObservable, test_observable_notify) {
     Observer observer;
@@ -146,6 +134,23 @@ TEST(TestObservable, test_observable_data_less_observer) {
     ASSERT_FALSE(observer.called);
     observable.notify_observers({});
     ASSERT_TRUE(observer.called);
+}
+
+TEST(TestObservable, test_add_remove_observable) {
+    Observable<Event> observable;
+    Observer observer;
+    ASSERT_FALSE(observer.test_called);
+
+    observable.add_observer(&observer);
+
+    StrEvent e{.value = "yes"};
+    observable.notify_observers(e);
+    ASSERT_TRUE(observer.test_called);
+
+    observer.test_called = false;
+    observable.remove_observer(&observer);
+    observable.notify_observers(e);
+    ASSERT_FALSE(observer.test_called);
 }
 
 } // namespace test

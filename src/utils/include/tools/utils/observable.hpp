@@ -2,8 +2,9 @@
 #define OBSERVABLE_HPP
 
 #include <algorithm>
-#include <mutex>
 #include <vector>
+
+#include "mutexed.hpp"
 
 namespace tools::utils {
 
@@ -22,42 +23,41 @@ public:
     virtual void notify(const Event &event) = 0;
 };
 
-// Observer pattern implementation.
-// References to observers are saved instead of callbacks to be able to
-// unsubscribe (remove) them.
 template <typename Event>
 class Observable final {
 private:
-    std::vector<IObserver<Event> *> _observers;
-    std::mutex _observers_mutex;
+    Mutexed<std::vector<IObserver<Event> *>> _observers;
+    Mutexed<std::vector<IObserver<Event> *>> _observers_to_remove;
 
 public:
     void notify_observers(const Event &event) {
-        std::lock_guard lock(_observers_mutex);
-        std::ranges::for_each(_observers, [&event](IObserver<Event> *observer) {
-            observer->notify(event);
-        });
+        {
+            std::scoped_lock lock_observers(_observers);
+            std::scoped_lock lock_to_remove(_observers_to_remove);
+
+            std::erase_if(*_observers, [this](IObserver<Event> *current_obs) {
+                return std::ranges::contains(*_observers_to_remove,
+                                             current_obs);
+            });
+
+            _observers_to_remove->clear();
+        }
+
+        std::scoped_lock lock(_observers);
+        std::ranges::for_each(*_observers,
+                              [&event](IObserver<Event> *observer) {
+                                  observer->notify(event);
+                              });
     }
 
-    // Return false if the observer is already registered.
-    bool add_observer(IObserver<Event> *observer) {
-        std::lock_guard lock(_observers_mutex);
-        if (std::ranges::find(_observers, observer) != _observers.end()) {
-            return false;
-        }
-        _observers.push_back(observer);
-        return true;
+    void add_observer(IObserver<Event> *observer) {
+        std::scoped_lock lock(_observers);
+        _observers->push_back(observer);
     }
 
-    // Return false if the observer is not found.
-    bool remove_observer(IObserver<Event> *observer) {
-        std::lock_guard lock(_observers_mutex);
-        if (auto it = std::ranges::find(_observers, observer);
-            it != _observers.end()) {
-            _observers.erase(it);
-            return true;
-        }
-        return false;
+    void remove_observer(IObserver<Event> *observer) {
+        std::scoped_lock lock_to_remove(_observers_to_remove);
+        (*_observers_to_remove).emplace_back(observer);
     };
 };
 
