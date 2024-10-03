@@ -31,9 +31,10 @@ private:
 
 public:
     void notify_observers(const Event &event) {
+        std::scoped_lock observer_lock(_observers);
+
         {
-            std::scoped_lock lock_observers(_observers);
-            std::scoped_lock lock_to_remove(_observers_to_remove);
+            std::scoped_lock to_remove_lock(_observers_to_remove);
 
             std::erase_if(*_observers, [this](IObserver<Event> *current_obs) {
                 return std::ranges::contains(*_observers_to_remove,
@@ -43,7 +44,6 @@ public:
             _observers_to_remove->clear();
         }
 
-        std::scoped_lock lock(_observers);
         std::ranges::for_each(*_observers,
                               [&event](IObserver<Event> *observer) {
                                   observer->notify(event);
@@ -57,7 +57,7 @@ public:
 
     void remove_observer(IObserver<Event> *observer) {
         std::scoped_lock lock_to_remove(_observers_to_remove);
-        (*_observers_to_remove).emplace_back(observer);
+        _observers_to_remove->emplace_back(observer);
     };
 };
 
