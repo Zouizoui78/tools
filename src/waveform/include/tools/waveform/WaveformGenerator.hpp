@@ -5,7 +5,7 @@
 #include <mutex>
 #include <vector>
 
-#include "waveform_base.hpp"
+#include "WaveformBase.hpp"
 
 namespace tools::waveform {
 

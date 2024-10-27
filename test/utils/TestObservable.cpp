@@ -1,4 +1,4 @@
-#include "tools/utils/observable.hpp"
+#include "tools/utils/Observable.hpp"
 #include "gtest/gtest.h"
 
 #include <variant>

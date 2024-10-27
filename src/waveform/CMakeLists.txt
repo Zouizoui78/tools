@@ -1,18 +1,18 @@
 set(SOURCES
-    src/sinus.cpp
-    src/square.cpp
-    src/waveform_base.cpp
-    src/waveform_generator.cpp
+    src/Sinus.cpp
+    src/Square.cpp
+    src/WaveformBase.cpp
+    src/WaveformGenerator.cpp
 )
 
 set(PUBLIC_HEADERS
-    include/tools/waveform/waveform_base.hpp
+    include/tools/waveform/WaveformBase.hpp
     include/tools/waveform/constants.hpp
-    include/tools/waveform/sinus.hpp
-    include/tools/waveform/square.hpp
-    include/tools/waveform/waveform_generator.hpp
-    include/tools/waveform/waveform_timepoint.hpp
-    include/tools/waveform/waveforms.hpp
+    include/tools/waveform/Sinus.hpp
+    include/tools/waveform/Square.hpp
+    include/tools/waveform/WaveformGenerator.hpp
+    include/tools/waveform/WaveformTimepoint.hpp
+    include/tools/waveform/Waveforms.hpp
 )
 
 target_sources(tools PRIVATE ${SOURCES} ${PUBLIC_HEADERS})

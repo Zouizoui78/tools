@@ -1,4 +1,4 @@
-#include "tools/waveform/waveform_base.hpp"
+#include "tools/waveform/WaveformBase.hpp"
 #include "tools/waveform/constants.hpp"
 
 #include <algorithm>

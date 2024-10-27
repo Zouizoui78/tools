@@ -1,19 +1,19 @@
 set(SOURCES
-    src/dynamic_library.cpp
+    src/DynamicLibrary.cpp
     src/file.cpp
-    src/stopwatch.cpp
+    src/Stopwatch.cpp
     src/str.cpp
-    src/thread_pool.cpp
+    src/ThreadPool.cpp
     src/time.cpp
 )
 
 set(PUBLIC_HEADERS
-    include/tools/utils/dynamic_library.hpp
+    include/tools/utils/DynamicLibrary.hpp
     include/tools/utils/file.hpp
-    include/tools/utils/observable.hpp
-    include/tools/utils/stopwatch.hpp
+    include/tools/utils/Observable.hpp
+    include/tools/utils/Stopwatch.hpp
     include/tools/utils/str.hpp
-    include/tools/utils/thread_pool.hpp
+    include/tools/utils/ThreadPool.hpp
     include/tools/utils/time.hpp
 )
 

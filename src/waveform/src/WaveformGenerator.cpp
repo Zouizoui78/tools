@@ -1,4 +1,4 @@
-#include "tools/waveform/waveform_generator.hpp"
+#include "tools/waveform/WaveformGenerator.hpp"
 #include "tools/waveform/constants.hpp"
 
 #include <algorithm>

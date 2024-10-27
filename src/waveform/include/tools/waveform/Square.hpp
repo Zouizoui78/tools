@@ -1,7 +1,7 @@
 #ifndef SQUARE_HPP
 #define SQUARE_HPP
 
-#include "waveform_base.hpp"
+#include "WaveformBase.hpp"
 
 namespace tools::waveform {
 

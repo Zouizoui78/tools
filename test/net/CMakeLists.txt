@@ -1,5 +1,5 @@
 set(SRC
-    test_dns.cpp
+    TestDNS.cpp
 )
 
 target_sources(test-tools PRIVATE ${SRC})

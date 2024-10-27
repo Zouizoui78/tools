@@ -1,7 +1,7 @@
 #ifndef SINUS_HPP
 #define SINUS_HPP
 
-#include "waveform_base.hpp"
+#include "WaveformBase.hpp"
 
 namespace tools::waveform {
 

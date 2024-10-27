@@ -1,7 +1,7 @@
 #include "gtest/gtest.h"
 
+#include "tools/waveform/WaveformBase.hpp"
 #include "tools/waveform/constants.hpp"
-#include "tools/waveform/waveform_base.hpp"
 
 namespace test {
 

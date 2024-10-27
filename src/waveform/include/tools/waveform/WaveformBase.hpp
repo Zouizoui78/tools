@@ -1,8 +1,8 @@
 #ifndef WAVEFORM_BASE_HPP
 #define WAVEFORM_BASE_HPP
 
+#include "WaveformTimepoint.hpp"
 #include "constants.hpp"
-#include "waveform_timepoint.hpp"
 
 namespace tools::waveform {
 
