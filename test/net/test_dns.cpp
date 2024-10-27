@@ -13,6 +13,8 @@ TEST(TestDNS, test_dns_lookup_str) {
 
     auto lookup_result = tools::net::dns_lookup_str("one.one.one.one");
 
+    ASSERT_EQ(lookup_result.size(), 4);
+
     for (const auto &addr : lookup_result) {
         EXPECT_TRUE(std::ranges::contains(expected, addr));
     }

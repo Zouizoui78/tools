@@ -6,9 +6,9 @@
 
 namespace tools::net {
 
-std::vector<struct addrinfo> dns_lookup(const std::string &hostname) {
+std::vector<IPAddr> dns_lookup(const std::string &hostname) {
     struct addrinfo *result;
-    std::vector<struct addrinfo> ret;
+    std::vector<IPAddr> ret;
 
     // Without this getaddrinfo returns duplicated addresses : one for each
     // socket type, doubled if an IPV6 address is found.
@@ -25,31 +25,38 @@ std::vector<struct addrinfo> dns_lookup(const std::string &hostname) {
         return ret;
     }
 
-    for (struct addrinfo *ai = result; ai != nullptr; ai = ai->ai_next) {
-        ret.push_back(*ai);
+    for (const struct addrinfo *ai = result; ai != nullptr; ai = ai->ai_next) {
+        ret.emplace_back(ai);
     }
+
+    freeaddrinfo(result);
 
     return ret;
 }
 
 std::vector<std::string> dns_lookup_str(const std::string &hostname) {
     std::vector<std::string> ret;
-    std::vector<struct addrinfo> addrinfos = dns_lookup(hostname);
 
-    for (const struct addrinfo &ai : addrinfos) {
-        void *actual_addr =
-            ai.ai_family == AF_INET
-                ? static_cast<void *>(
-                      &(reinterpret_cast<sockaddr_in *>(ai.ai_addr)->sin_addr))
-                : static_cast<void *>(&(
-                      reinterpret_cast<sockaddr_in6 *>(ai.ai_addr)->sin6_addr));
+    for (const IPAddr &addr : dns_lookup(hostname)) {
+        const void *concrete_addr = nullptr;
+        int addr_len = 0;
 
-        ret.emplace_back(
-            ai.ai_family == AF_INET ? INET_ADDRSTRLEN : INET6_ADDRSTRLEN, '\0');
+        switch (addr.addr.sa_family) {
+        case AF_INET:
+            concrete_addr = &(addr.addr4.sin_addr);
+            addr_len = INET_ADDRSTRLEN;
+            break;
+        case AF_INET6:
+            concrete_addr = &(addr.addr6.sin6_addr);
+            addr_len = INET6_ADDRSTRLEN;
+            break;
+        }
+
+        ret.emplace_back(addr_len, '\0');
         std::string &str = ret.back();
 
-        if (inet_ntop(ai.ai_family, actual_addr, str.data(), str.size()) ==
-            nullptr) {
+        if (inet_ntop(addr.addr.sa_family, concrete_addr, str.data(),
+                      str.size()) == nullptr) {
             std::println(stderr, "inet_ntop error: {}", strerror(errno));
         }
 
