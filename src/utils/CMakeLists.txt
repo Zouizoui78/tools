@@ -10,7 +10,6 @@ set(SOURCES
 set(PUBLIC_HEADERS
     include/tools/utils/dynamic_library.hpp
     include/tools/utils/file.hpp
-    include/tools/utils/mutexed.hpp
     include/tools/utils/observable.hpp
     include/tools/utils/stopwatch.hpp
     include/tools/utils/str.hpp
