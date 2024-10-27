@@ -9,9 +9,11 @@
 #include <ranges>
 #include <thread>
 
-namespace tools {
+#include "IService.hpp"
 
-class ThreadPool {
+namespace tools::utils {
+
+class ThreadPool : public IService {
 public:
     ThreadPool(int thread_count = std::thread::hardware_concurrency());
 
@@ -25,16 +27,19 @@ public:
 
     using Task = std::move_only_function<void()>;
 
-    // Starts <thread_count> threads waiting for tasks.
-    // Does nothing is the thread pool is already running.
-    // Does nothing if thread_count < 1.
-    void start(int thread_count = std::thread::hardware_concurrency());
+    ServiceState get_state() const override;
+
+    // Starts threads waiting for tasks.
+    // Does nothing is the thread pool is already running (state is STARTING or
+    // RUNNING).
+    void start() override;
 
     // Stops the threads created by start().
-    // Does nothing if the thread pool is not running.
-    // If wait = true, calls wait() before stopping the threads.
-    // This function does not clear the task queue.
-    void stop(bool wait = false);
+    // Does nothing if the thread pool is not running (state is STOPPING or
+    // STOPPED). This function does not clear the task queue. It also doesn't
+    // wait for all the tasks in the queue to be processed, so make sure to call
+    // wait() if you need all enqueued tasks to be done before stopping.
+    void stop() override;
 
     template <std::invocable F>
     auto enqueue(F &&f) -> std::future<decltype(f())> {
@@ -65,15 +70,18 @@ public:
 private:
     void thread_loop();
 
+    int _thread_count;
+
     std::vector<std::jthread> _threads;
-    std::atomic<bool> _running = false;
     std::atomic<int> _active_tasks = 0;
 
     std::queue<Task> _tasks;
     mutable std::mutex _mutex;
     mutable std::condition_variable _tasks_cv;
+
+    std::atomic<ServiceState> _state;
 };
 
-} // namespace tools
+} // namespace tools::utils
 
 #endif // THREAD_POOL_HPP

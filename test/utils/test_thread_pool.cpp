@@ -3,7 +3,7 @@
 
 namespace test {
 
-using namespace tools;
+using namespace tools::utils;
 
 TEST(TestThreadPool, test_thread_pool) {
     std::atomic<bool> test = false;

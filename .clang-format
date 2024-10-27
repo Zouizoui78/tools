@@ -1,6 +1,7 @@
 BasedOnStyle: llvm
 
 AccessModifierOffset: -4
+AllowShortEnumsOnASingleLine: No
 AllowShortLambdasOnASingleLine: Empty
 AllowShortFunctionsOnASingleLine: Empty
 AlwaysBreakTemplateDeclarations: Yes

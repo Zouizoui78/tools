@@ -1,48 +1,44 @@
 #include "tools/utils/thread_pool.hpp"
 
-namespace tools {
+namespace tools::utils {
 
-ThreadPool::ThreadPool(int thread_count) {
-    start(thread_count);
+ThreadPool::ThreadPool(int thread_count) : _thread_count(thread_count) {
+    start();
 }
 
 ThreadPool::~ThreadPool() noexcept {
     stop();
 }
 
-void ThreadPool::start(int thread_count) {
-    if (thread_count < 1) {
-        return;
-    }
+ServiceState ThreadPool::get_state() const {
+    return _state;
+}
 
+void ThreadPool::start() {
     {
         std::scoped_lock lock(_mutex);
 
-        if (_running) {
+        if (_state == ServiceState::RUNNING) {
             return;
         }
 
-        _running = true;
+        _state = ServiceState::RUNNING;
 
-        for (int i = 0; i < thread_count; ++i) {
+        for (int i = 0; i < _thread_count; ++i) {
             _threads.emplace_back(&ThreadPool::thread_loop, this);
         }
     }
 }
 
-void ThreadPool::stop(bool wait) {
-    if (wait) {
-        this->wait();
-    }
-
+void ThreadPool::stop() {
     {
         std::scoped_lock lock(_mutex);
 
-        if (!_running) {
+        if (_state == ServiceState::STOPPED) {
             return;
         }
 
-        _running = false;
+        _state = ServiceState::STOPPED;
     }
 
     _tasks_cv.notify_all();
@@ -50,16 +46,16 @@ void ThreadPool::stop(bool wait) {
 }
 
 void ThreadPool::thread_loop() {
-    while (_running) {
+    while (_state == ServiceState::RUNNING) {
         Task task;
 
         {
             std::unique_lock lock(_mutex);
             _tasks_cv.wait(lock, [this] {
-                return !_running || !_tasks.empty();
+                return _state == ServiceState::STOPPED || !_tasks.empty();
             });
 
-            if (!_running) {
+            if (_state == ServiceState::STOPPED) {
                 return;
             }
 
@@ -81,7 +77,7 @@ void ThreadPool::thread_loop() {
 void ThreadPool::wait() const {
     std::unique_lock lock(_mutex);
 
-    if (!_running) {
+    if (_state == ServiceState::STOPPED) {
         return;
     }
 
@@ -90,4 +86,4 @@ void ThreadPool::wait() const {
     });
 }
 
-} // namespace tools
+} // namespace tools::utils
