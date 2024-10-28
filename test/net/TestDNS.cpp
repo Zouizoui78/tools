@@ -14,8 +14,6 @@ public:
         WSAData wsaData;
         int err = WSAStartup(MAKEWORD(2, 2), &wsaData);
         if (err != 0) {
-            /* Tell the user that we could not find a usable */
-            /* Winsock DLL.                                  */
             throw std::runtime_error("WSAStartup failed with error: " +
                                      std::to_string(err));
         }
