@@ -1,5 +1,13 @@
+#if defined(_WIN32)
+#include <WS2tcpip.h>
+#include <WinSock2.h>
+
+
+#elif defined(__linux__)
 #include <arpa/inet.h>
 #include <netdb.h>
+
+#endif
 
 namespace tools::net {
 

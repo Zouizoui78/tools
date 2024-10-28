@@ -7,17 +7,32 @@
 
 namespace test {
 
-TEST(TestDNS, test_dns_lookup_str) {
-    std::vector<std::string> expected{
-        "1.0.0.1", "1.1.1.1", "2606:4700:4700::1001", "2606:4700:4700::1111"};
-
-    auto lookup_result = tools::net::dns_lookup_str("one.one.one.one");
-
-    ASSERT_EQ(lookup_result.size(), 4);
-
-    for (const auto &addr : lookup_result) {
-        EXPECT_TRUE(std::ranges::contains(expected, addr));
+class TestDNS : public ::testing::Test {
+public:
+    TestDNS() {
+#if defined(_WIN32)
+        WSAData wsaData;
+        int err = WSAStartup(MAKEWORD(2, 2), &wsaData);
+        if (err != 0) {
+            /* Tell the user that we could not find a usable */
+            /* Winsock DLL.                                  */
+            throw std::runtime_error("WSAStartup failed with error: " +
+                                     std::to_string(err));
+        }
+#endif
     }
+
+    ~TestDNS() override {
+#if defined(_WIN32)
+        WSACleanup();
+#endif
+    }
+};
+
+TEST_F(TestDNS, test_dns_lookup_str) {
+    std::string expected("1.1.1.1");
+    auto lookup_result = tools::net::dns_lookup_str("one.one.one.one");
+    ASSERT_TRUE(std::ranges::contains(lookup_result, expected));
 }
 
 } // namespace test

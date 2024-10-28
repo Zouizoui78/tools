@@ -10,3 +10,7 @@ set(PUBLIC_HEADERS
 
 target_sources(tools PRIVATE ${SOURCES} ${PUBLIC_HEADERS})
 target_include_directories(tools PUBLIC include)
+
+if (WIN32)
+    target_link_libraries(tools PRIVATE Ws2_32)
+endif()

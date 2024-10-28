@@ -87,7 +87,7 @@ TEST(TestFile, test_dump_binary_uint8) {
     std::filesystem::remove(path_tmp);
     std::vector<uint8_t> test{0x56, 0x20, 0x12, 0x78, 0x94, 0x65, 0x12, 0x30};
 
-    int ret = dump_range(path_tmp, test);
+    size_t ret = dump_range(path_tmp, test);
 
     ASSERT_EQ(ret, 8);
     ASSERT_EQ(read_all_binary<uint8_t>(path_tmp), test);
@@ -98,7 +98,7 @@ TEST(TestFile, test_dump_binary_uint16) {
     std::filesystem::remove(path_tmp);
     std::vector<uint16_t> test{0x2056, 0x7812, 0x6594, 0x3012};
 
-    int ret = dump_range(path_tmp, test);
+    size_t ret = dump_range(path_tmp, test);
 
     ASSERT_EQ(ret, 8);
     ASSERT_EQ(read_all_binary<uint16_t>(path_tmp), test);
@@ -109,7 +109,7 @@ TEST(TestFile, test_dump_binary_uint32) {
     std::filesystem::remove(path_tmp);
     std::vector<uint32_t> test{0x78122056, 0x30126594};
 
-    int ret = dump_range(path_tmp, test);
+    size_t ret = dump_range(path_tmp, test);
 
     ASSERT_EQ(ret, 8);
     ASSERT_EQ(read_all_binary<uint32_t>(path_tmp), test);
@@ -120,7 +120,7 @@ TEST(TestFile, test_dump_binary_uint64) {
     std::filesystem::remove(path_tmp);
     std::vector<uint64_t> test{0x3012659478122056};
 
-    int ret = dump_range(path_tmp, test);
+    size_t ret = dump_range(path_tmp, test);
 
     ASSERT_EQ(ret, 8);
     ASSERT_EQ(read_all_binary<uint64_t>(path_tmp), test);
@@ -131,7 +131,7 @@ TEST(TestFile, test_dump_binary_float) {
     std::filesystem::remove(path_tmp);
     std::vector<float> test{1.18551748762e+34, 5.32588417812e-10};
 
-    int ret = dump_range(path_tmp, test);
+    size_t ret = dump_range(path_tmp, test);
 
     ASSERT_EQ(ret, 8);
     auto content = read_all_binary<float>(path_tmp);
@@ -145,7 +145,7 @@ TEST(TestFile, test_dump_binary_double) {
     std::filesystem::remove(path_tmp);
     std::vector<double> test{3.9719459310071480e-77};
 
-    int ret = dump_range(path_tmp, test);
+    size_t ret = dump_range(path_tmp, test);
 
     ASSERT_EQ(ret, 8);
     auto content = read_all_binary<double>(path_tmp);
@@ -163,7 +163,7 @@ TEST(TestFile, test_benchmark_dump_contiguous) {
     }
 
     tools::utils::Stopwatch s;
-    int ret = dump_range(path_tmp, data);
+    size_t ret = dump_range(path_tmp, data);
     std::cout << s.get_duration<std::chrono::microseconds>() << std::endl;
 
     ASSERT_EQ(ret, size * sizeof(int));
@@ -179,7 +179,7 @@ TEST(TestFile, test_benchmark_dump_non_contiguous) {
     }
 
     tools::utils::Stopwatch s;
-    int ret = dump_range(path_tmp, data);
+    size_t ret = dump_range(path_tmp, data);
     std::cout << s.get_duration<std::chrono::microseconds>() << std::endl;
 
     ASSERT_EQ(ret, size * sizeof(int));

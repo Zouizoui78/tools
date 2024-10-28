@@ -39,8 +39,8 @@ concept non_contiguous = !std::ranges::contiguous_range<T>;
 // Return number of written bytes.
 template <typename R>
     requires non_contiguous<R>
-int dump_range(const std::string &path, R &&range,
-               int64_t chunk_size = 1000000) {
+size_t dump_range(const std::string &path, R &&range,
+                  int64_t chunk_size = 1000000) {
     std::ofstream file(path, std::ios::binary);
     if (!file.is_open()) {
         throw new std::runtime_error("Failed to open file {}" + path);
@@ -73,7 +73,7 @@ int dump_range(const std::string &path, R &&range,
 // Return number of written bytes.
 template <typename R>
     requires std::ranges::contiguous_range<R>
-int dump_range(const std::string &path, R &&range) {
+size_t dump_range(const std::string &path, R &&range) {
     std::ofstream file(path, std::ios::binary);
     if (!file.is_open()) {
         throw new std::runtime_error("Failed to open file {}" + path);
