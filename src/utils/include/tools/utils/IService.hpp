@@ -1,3 +1,6 @@
+#ifndef ISERVICE_HPP
+#define ISERVICE_HPP
+
 namespace tools::utils {
 
 enum class ServiceState {
@@ -22,3 +25,5 @@ public:
 };
 
 } // namespace tools::utils
+
+#endif

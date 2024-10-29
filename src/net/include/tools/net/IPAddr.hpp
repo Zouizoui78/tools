@@ -1,7 +1,9 @@
+#ifndef IP_ADDR_HPP
+#define IP_ADDR_HPP
+
 #if defined(_WIN32)
 #include <WS2tcpip.h>
 #include <WinSock2.h>
-
 
 #elif defined(__linux__)
 #include <arpa/inet.h>
@@ -20,3 +22,5 @@ union IPAddr {
 };
 
 } // namespace tools::net
+
+#endif

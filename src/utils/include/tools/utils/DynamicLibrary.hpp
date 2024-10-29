@@ -1,5 +1,5 @@
-#ifndef DynamicLibrary_HPP
-#define DynamicLibrary_HPP
+#ifndef DYNAMIC_LIBRARY_HPP
+#define DYNAMIC_LIBRARY_HPP
 
 #include <functional>
 #include <string>
@@ -55,4 +55,4 @@ public:
 
 } // namespace tools::utils
 
-#endif // DynamicLibrary_HPP
+#endif // DYNAMIC_LIBRARY_HPP

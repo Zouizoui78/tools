@@ -1,3 +1,6 @@
+#ifndef DNS_HPP
+#define DNS_HPP
+
 #include <string>
 #include <vector>
 
@@ -12,3 +15,5 @@ std::vector<IPAddr> dns_lookup(const std::string &hostname);
 std::vector<std::string> dns_lookup_str(const std::string &hostname);
 
 } // namespace tools::net
+
+#endif
