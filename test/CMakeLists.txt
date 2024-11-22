@@ -9,8 +9,8 @@ FetchContent_MakeAvailable(googletest)
 include(GoogleTest)
 
 add_executable(test-tools)
+add_subdirectory(misc)
 add_subdirectory(net)
-add_subdirectory(utils)
 add_subdirectory(waveform)
 
 target_link_libraries(test-tools

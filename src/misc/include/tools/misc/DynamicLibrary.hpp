@@ -10,7 +10,7 @@
 #include <dlfcn.h>
 #endif
 
-namespace tools::utils {
+namespace tools {
 
 class DynamicLibrary {
 private:
@@ -53,6 +53,6 @@ public:
     }
 };
 
-} // namespace tools::utils
+} // namespace tools
 
 #endif // DYNAMIC_LIBRARY_HPP

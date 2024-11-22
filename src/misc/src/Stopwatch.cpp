@@ -1,6 +1,6 @@
-#include "tools/utils/Stopwatch.hpp"
+#include "tools/misc/Stopwatch.hpp"
 
-namespace tools::utils {
+namespace tools {
 
 using namespace std::chrono;
 
@@ -15,4 +15,4 @@ void Stopwatch::reset() {
     _start_time_point = steady_clock::now();
 }
 
-} // namespace tools::utils
+} // namespace tools

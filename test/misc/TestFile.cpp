@@ -1,8 +1,8 @@
 #include "../test_tools.hpp"
-#include "tools/utils/file.hpp"
+#include "tools/misc/file.hpp"
 #include "gtest/gtest.h"
 
-#include "tools/utils/Stopwatch.hpp"
+#include "tools/misc/Stopwatch.hpp"
 #include <deque>
 #include <iostream>
 
@@ -162,7 +162,7 @@ TEST(TestFile, test_benchmark_dump_contiguous) {
         data.push_back(i);
     }
 
-    tools::utils::Stopwatch s;
+    tools::Stopwatch s;
     size_t ret = dump_range(path_tmp, data);
     std::cout << s.get_duration<std::chrono::microseconds>() << std::endl;
 
@@ -178,7 +178,7 @@ TEST(TestFile, test_benchmark_dump_non_contiguous) {
         data.push_back(i);
     }
 
-    tools::utils::Stopwatch s;
+    tools::Stopwatch s;
     size_t ret = dump_range(path_tmp, data);
     std::cout << s.get_duration<std::chrono::microseconds>() << std::endl;
 

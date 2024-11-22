@@ -1,3 +1,3 @@
 add_subdirectory(net)
-add_subdirectory(utils)
+add_subdirectory(misc)
 add_subdirectory(waveform)

@@ -1,4 +1,4 @@
-#include "tools/utils/str.hpp"
+#include "tools/misc/str.hpp"
 #include "gtest/gtest.h"
 
 namespace test {

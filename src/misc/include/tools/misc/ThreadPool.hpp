@@ -11,7 +11,7 @@
 
 #include "IService.hpp"
 
-namespace tools::utils {
+namespace tools {
 
 class ThreadPool : public IService {
 public:
@@ -82,6 +82,6 @@ private:
     std::atomic<ServiceState> _state;
 };
 
-} // namespace tools::utils
+} // namespace tools
 
 #endif // THREAD_POOL_HPP

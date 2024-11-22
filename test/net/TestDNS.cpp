@@ -7,6 +7,8 @@
 
 namespace test {
 
+using namespace tools::net;
+
 class TestDNS : public ::testing::Test {
 public:
     TestDNS() {
@@ -27,10 +29,17 @@ public:
     }
 };
 
-TEST_F(TestDNS, test_dns_lookup_str) {
+TEST_F(TestDNS, test_lookup) {
     std::string expected("1.1.1.1");
-    auto lookup_result = tools::net::dns_lookup_str("one.one.one.one");
-    ASSERT_TRUE(std::ranges::contains(lookup_result, expected));
+    auto lookup_result = tools::net::dns::lookup("one.one.one.one");
+    ASSERT_TRUE(lookup_result);
+    for (const auto &addr : *lookup_result) {
+        std::println("{}", addr.str());
+    }
+    ASSERT_TRUE(
+        std::ranges::find_if(*lookup_result, [&expected](const IPAddr &addr) {
+            return addr.str() == expected;
+        }) != lookup_result->end());
 }
 
 } // namespace test

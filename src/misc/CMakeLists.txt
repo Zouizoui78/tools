@@ -8,13 +8,13 @@ set(SOURCES
 )
 
 set(PUBLIC_HEADERS
-    include/tools/utils/DynamicLibrary.hpp
-    include/tools/utils/file.hpp
-    include/tools/utils/Observable.hpp
-    include/tools/utils/Stopwatch.hpp
-    include/tools/utils/str.hpp
-    include/tools/utils/ThreadPool.hpp
-    include/tools/utils/time.hpp
+    include/tools/misc/DynamicLibrary.hpp
+    include/tools/misc/file.hpp
+    include/tools/misc/Observable.hpp
+    include/tools/misc/Stopwatch.hpp
+    include/tools/misc/str.hpp
+    include/tools/misc/ThreadPool.hpp
+    include/tools/misc/time.hpp
 )
 
 target_sources(tools PRIVATE ${SOURCES} ${PUBLIC_HEADERS})

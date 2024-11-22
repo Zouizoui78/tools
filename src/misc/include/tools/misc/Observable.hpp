@@ -5,7 +5,7 @@
 #include <mutex>
 #include <vector>
 
-namespace tools::utils {
+namespace tools {
 
 template <typename Event>
 class IObserver {
@@ -23,7 +23,7 @@ public:
 };
 
 template <typename Event>
-class Observable final {
+class Observable {
 private:
     std::vector<IObserver<Event> *> _observers;
     std::mutex _observers_mutex;
@@ -61,6 +61,6 @@ public:
     };
 };
 
-} // namespace tools::utils
+} // namespace tools
 
 #endif // OBSERVABLE_HPP

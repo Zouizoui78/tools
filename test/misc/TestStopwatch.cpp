@@ -1,4 +1,4 @@
-#include "tools/utils/Stopwatch.hpp"
+#include "tools/misc/Stopwatch.hpp"
 #include "gtest/gtest.h"
 
 #include <thread>
@@ -12,7 +12,7 @@ TEST(TestStopwatch, test_get_duration) {
     int sleep_duration_ms = 50;
     int sleep_duration_us = 50000;
 
-    utils::Stopwatch sw;
+    Stopwatch sw;
     std::this_thread::sleep_for(milliseconds(sleep_duration_ms));
     auto count1 = sw.get_duration<milliseconds>();
 
@@ -28,7 +28,7 @@ TEST(TestStopwatch, test_laps) {
     int sleep_duration_ms = 10;
     int laps_count = 10;
 
-    utils::Stopwatch sw;
+    Stopwatch sw;
 
     for (int i = 0; i < laps_count; ++i) {
         std::this_thread::sleep_for(milliseconds(sleep_duration_ms));

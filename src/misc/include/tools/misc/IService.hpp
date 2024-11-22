@@ -1,7 +1,7 @@
 #ifndef ISERVICE_HPP
 #define ISERVICE_HPP
 
-namespace tools::utils {
+namespace tools {
 
 enum class ServiceState {
     STOPPED,
@@ -24,6 +24,6 @@ public:
     virtual ~IService() = default;
 };
 
-} // namespace tools::utils
+} // namespace tools
 
 #endif

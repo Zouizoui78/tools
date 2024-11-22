@@ -1,11 +1,11 @@
-#include "tools/utils/DynamicLibrary.hpp"
+#include "tools/misc/DynamicLibrary.hpp"
 #include "gtest/gtest.h"
 
 #include <filesystem>
 
 namespace test {
 
-using namespace tools::utils;
+using namespace tools;
 
 class TestDynamicLibrary : public ::testing::Test {
 protected:

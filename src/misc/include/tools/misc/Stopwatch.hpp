@@ -4,7 +4,7 @@
 #include <chrono>
 #include <vector>
 
-namespace tools::utils {
+namespace tools {
 
 class Stopwatch {
 private:
@@ -61,6 +61,6 @@ public:
     void reset();
 };
 
-} // namespace tools::utils
+} // namespace tools
 
 #endif // STOPWATCH_HPP

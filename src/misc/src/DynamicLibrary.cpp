@@ -1,8 +1,8 @@
-#include "tools/utils/DynamicLibrary.hpp"
+#include "tools/misc/DynamicLibrary.hpp"
 
 #include <stdexcept>
 
-namespace tools::utils {
+namespace tools {
 
 DynamicLibrary::DynamicLibrary(const std::string &path) {
 #ifdef _WIN32
@@ -25,4 +25,4 @@ DynamicLibrary::~DynamicLibrary() noexcept {
     _lib_instance = nullptr;
 }
 
-} // namespace tools::utils
+} // namespace tools

@@ -1,19 +1,28 @@
 #ifndef DNS_HPP
 #define DNS_HPP
 
+#if defined(_WIN32)
+#include <WinSock2.h>
+
+#elif defined(__linux__)
+#include <arpa/inet.h>
+
+#endif
+
+#include <expected>
 #include <string>
 #include <vector>
 
 #include "IPAddr.hpp"
+#include "IPFamily.hpp"
 
-namespace tools::net {
+namespace tools::net::dns {
 
-// Return an empty vector if the hostname doesn't exist.
-std::vector<IPAddr> dns_lookup(const std::string &hostname);
+// Wrapper calling getaddrinfo. The addresses are stored in
+// the returned vector. For error codes and explanations, see `man getaddrinfo`.
+std::expected<std::vector<IPAddr>, int>
+lookup(std::string_view hostname, IPFamily family = IPFamily::UNSPEC);
 
-// Return an empty vector if the hostname doesn't exist.
-std::vector<std::string> dns_lookup_str(const std::string &hostname);
-
-} // namespace tools::net
+} // namespace tools::net::dns
 
 #endif

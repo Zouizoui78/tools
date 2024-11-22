@@ -4,7 +4,7 @@ Various tools I use in some projects.
 
 ## Modules
 
-- utils : Random stuff
+- misc : Random stuff
 - waveform : Classes to generate waveforms samples
 
 ## Build

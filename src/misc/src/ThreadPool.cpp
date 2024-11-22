@@ -1,6 +1,6 @@
-#include "tools/utils/ThreadPool.hpp"
+#include "tools/misc/ThreadPool.hpp"
 
-namespace tools::utils {
+namespace tools {
 
 ThreadPool::ThreadPool(int thread_count) : _thread_count(thread_count) {
     start();
@@ -86,4 +86,4 @@ void ThreadPool::wait() const {
     });
 }
 
-} // namespace tools::utils
+} // namespace tools

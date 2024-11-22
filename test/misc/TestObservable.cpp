@@ -1,11 +1,11 @@
-#include "tools/utils/Observable.hpp"
+#include "tools/misc/Observable.hpp"
 #include "gtest/gtest.h"
 
 #include <variant>
 
 namespace test {
 
-using namespace tools::utils;
+using namespace tools;
 
 struct IntEvent {
     int value = 0;

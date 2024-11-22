@@ -1,9 +1,9 @@
-#include "tools/utils/ThreadPool.hpp"
+#include "tools/misc/ThreadPool.hpp"
 #include "gtest/gtest.h"
 
 namespace test {
 
-using namespace tools::utils;
+using namespace tools;
 
 TEST(TestThreadPool, test_thread_pool) {
     std::atomic<bool> test = false;
