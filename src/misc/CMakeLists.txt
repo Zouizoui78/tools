@@ -5,6 +5,7 @@ set(SOURCES
     src/str.cpp
     src/ThreadPool.cpp
     src/time.cpp
+    src/UUID.cpp
 )
 
 set(PUBLIC_HEADERS
@@ -15,6 +16,7 @@ set(PUBLIC_HEADERS
     include/tools/misc/str.hpp
     include/tools/misc/ThreadPool.hpp
     include/tools/misc/time.hpp
+    include/tools/misc/UUID.hpp
 )
 
 target_sources(tools PRIVATE ${SOURCES} ${PUBLIC_HEADERS})
