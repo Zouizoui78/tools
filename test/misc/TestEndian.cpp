@@ -10,9 +10,9 @@ TEST(TestEndian, test_endian_swap_bytes) {
     int out = swap(in);
     ASSERT_EQ(out, 0x04030201);
 
-    int16_t in16 = 0xaabb;
-    int16_t out16 = swap(in16);
-    ASSERT_EQ(out16, static_cast<int16_t>(0xbbaa));
+    uint16_t in16 = 0xaabb;
+    uint16_t out16 = swap(in16);
+    ASSERT_EQ(out16, static_cast<uint16_t>(0xbbaa));
 
     double d = 1.234;
     double dout = swap(d);

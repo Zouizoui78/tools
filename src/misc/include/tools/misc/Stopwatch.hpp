@@ -35,7 +35,6 @@ public:
         using duration_cast_type = duration<double, typename Duration::period>;
 
         std::vector<Lap> ret;
-        duration_cast_type global_duration;
 
         Lap lap;
         lap.duration =
