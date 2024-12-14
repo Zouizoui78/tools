@@ -10,6 +10,19 @@
             "args": [
                 "${cmake.testArgs}"
             ]
+        },
+        {
+            "name": "(Windows) Launch",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "program": "${cmake.testProgram}",
+            "args": [
+                "${cmake.testArgs}"
+            ],
+            "stopAtEntry": false,
+            "cwd": "${fileDirname}",
+            "environment": [],
+            "console": "externalTerminal"
         }
     ]
 }

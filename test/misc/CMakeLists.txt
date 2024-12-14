@@ -14,6 +14,8 @@ target_sources(test-tools PRIVATE ${SRC})
 
 add_library(dynlib SHARED ../resources/DynamicLibrary/dynlib.cpp)
 
-if (UNIX)
+if (WIN32)
+    target_link_libraries(test-tools PRIVATE Rpcrt4)
+else()
     target_link_libraries(test-tools PRIVATE uuid)
-endif (UNIX)
+endif ()
