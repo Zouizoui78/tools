@@ -1,8 +1,5 @@
 #include "tools/net/dns.hpp"
 
-#include <cstring>
-#include <print>
-
 #if defined(_WIN32)
 #include <WinSock2.h>
 
@@ -19,10 +16,9 @@ std::expected<std::vector<IPAddr>, int> lookup(std::string_view hostname,
     // each socket type, doubled if an IPV6 address is found. So we filter the
     // addresses to the ones which are usable for internet sockets, which makes
     // sense since we're performing a DNS lookup.
-    struct addrinfo hints {
-        .ai_family = static_cast<int>(family), .ai_socktype = SOCK_STREAM,
-        .ai_protocol = IPPROTO_TCP
-    };
+    struct addrinfo hints{.ai_family = static_cast<int>(family),
+                          .ai_socktype = SOCK_STREAM,
+                          .ai_protocol = IPPROTO_TCP};
 
     struct addrinfo *result;
     if (int res = getaddrinfo(hostname.data(), nullptr, &hints, &result)) {

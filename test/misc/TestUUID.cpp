@@ -3,7 +3,6 @@
 #include "tools/misc/UUID.hpp"
 
 #include <algorithm>
-#include <print>
 
 namespace test {
 

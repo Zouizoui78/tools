@@ -26,7 +26,7 @@ public:
     // object it points to is valid.
     explicit IPAddr(const addrinfo *addr);
 
-    std::string str() const noexcept;
+    std::string str() const;
 
     bool is_ipv4() const noexcept;
     bool is_ipv6() const noexcept;

@@ -31,7 +31,7 @@ public:
 
 TEST_F(TestDNS, test_lookup) {
     std::string expected("1.1.1.1");
-    auto lookup_result = tools::net::dns::lookup("one.one.one.one");
+    auto lookup_result{tools::net::dns::lookup("one.one.one.one")};
     ASSERT_TRUE(lookup_result);
     for (const auto &addr : *lookup_result) {
         std::println("{}", addr.str());

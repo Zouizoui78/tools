@@ -3,7 +3,6 @@
 
 #include <cstring>
 #include <format>
-#include <print>
 #include <stdexcept>
 
 namespace tools::net {
@@ -29,13 +28,13 @@ IPAddr::IPAddr(const addrinfo *addr) {
     }
 
     if (addr->ai_family != AF_INET && addr->ai_family != AF_INET6) {
-        throw std::runtime_error("Unsupported address type");
+        throw std::invalid_argument("Unsupported address type");
     }
 
     memcpy(&_sockaddr, addr->ai_addr, addr->ai_addrlen);
 }
 
-std::string IPAddr::str() const noexcept {
+std::string IPAddr::str() const {
     std::string ret;
     const void *addr = nullptr;
 
@@ -48,18 +47,11 @@ std::string IPAddr::str() const noexcept {
         addr = &(_sockaddr_in6.sin6_addr);
     }
     else {
-        return "";
+        throw std::runtime_error("Unsupported address type");
     }
 
-    if (inet_ntop(_sockaddr.sa_family, addr, ret.data(), ret.size()) ==
-        nullptr) {
-        std::println("{}", strerror(errno));
-    }
-
-    std::erase_if(ret, [](char c) {
-        return c == '\0';
-    });
-
+    inet_ntop(_sockaddr.sa_family, addr, ret.data(), ret.size());
+    ret.erase(std::ranges::find(ret, ('\0')), ret.end());
     return ret;
 }
 
