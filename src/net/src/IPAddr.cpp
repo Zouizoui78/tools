@@ -9,12 +9,12 @@ namespace tools::net {
 
 IPAddr::IPAddr(std::string_view addr) {
     if (inet_pton(AF_INET, addr.data(), &_sockaddr_in.sin_addr)) {
-        _sockaddr.sa_family = AF_INET;
+        _sockaddr.ss_family = AF_INET;
         return;
     }
 
     if (inet_pton(AF_INET6, addr.data(), &_sockaddr_in6.sin6_addr)) {
-        _sockaddr.sa_family = AF_INET6;
+        _sockaddr.ss_family = AF_INET6;
         return;
     }
 
@@ -50,17 +50,21 @@ std::string IPAddr::str() const {
         throw std::runtime_error("Unsupported address type");
     }
 
-    inet_ntop(_sockaddr.sa_family, addr, ret.data(), ret.size());
+    inet_ntop(_sockaddr.ss_family, addr, ret.data(), ret.size());
     ret.erase(std::ranges::find(ret, ('\0')), ret.end());
     return ret;
 }
 
 bool IPAddr::is_ipv4() const noexcept {
-    return _sockaddr.sa_family == AF_INET;
+    return _sockaddr.ss_family == AF_INET;
 }
 
 bool IPAddr::is_ipv6() const noexcept {
-    return _sockaddr.sa_family == AF_INET6;
+    return _sockaddr.ss_family == AF_INET6;
+}
+
+const struct sockaddr_storage &IPAddr::addr() const noexcept {
+    return _sockaddr;
 }
 
 const struct sockaddr_in &IPAddr::addr4() const noexcept {
