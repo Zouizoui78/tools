@@ -33,13 +33,19 @@ TEST_F(TestDNS, test_lookup) {
     std::string expected("1.1.1.1");
     auto lookup_result{tools::net::dns::lookup("one.one.one.one")};
     ASSERT_TRUE(lookup_result);
-    for (const auto &addr : *lookup_result) {
-        std::println("{}", addr.str());
-    }
-    ASSERT_TRUE(
-        std::ranges::find_if(*lookup_result, [&expected](const IPAddr &addr) {
-            return addr.str() == expected;
-        }) != lookup_result->end());
+    ASSERT_NE(std::ranges::find_if(*lookup_result,
+                                   [&expected](const IPAddr &addr) {
+                                       return addr.str() == expected;
+                                   }),
+              lookup_result->end());
+}
+
+TEST_F(TestDNS, test_rlookup) {
+    IPAddr addr("1.1.1.1");
+    std::string expected("one.one.one.one");
+    auto rlookup_result{tools::net::dns::rlookup(addr)};
+    ASSERT_TRUE(rlookup_result);
+    ASSERT_EQ(*rlookup_result, expected);
 }
 
 } // namespace test

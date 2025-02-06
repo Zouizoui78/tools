@@ -35,4 +35,18 @@ std::expected<std::vector<IPAddr>, int> lookup(std::string_view hostname,
     return ret;
 }
 
+std::expected<std::string, int> rlookup(const IPAddr &addr) {
+    std::string ret(NI_MAXHOST, '\0');
+
+    if (int res =
+            getnameinfo(reinterpret_cast<const struct sockaddr *>(&addr.addr()),
+                        sizeof(addr.addr()), ret.data(), NI_MAXHOST, nullptr, 0,
+                        NI_NAMEREQD)) {
+        return std::unexpected(res);
+    }
+
+    ret.erase(std::ranges::find(ret, '\0'), ret.end());
+    return ret;
+}
+
 } // namespace tools::net::dns

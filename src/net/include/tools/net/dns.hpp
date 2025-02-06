@@ -23,6 +23,10 @@ namespace tools::net::dns {
 std::expected<std::vector<IPAddr>, int>
 lookup(std::string_view hostname, IPFamily family = IPFamily::UNSPEC);
 
+// Wrapper calling getnameinfo. For error codes and explanations, see `man
+// getnameinfo`.
+std::expected<std::string, int> rlookup(const IPAddr &addr);
+
 } // namespace tools::net::dns
 
 #endif
