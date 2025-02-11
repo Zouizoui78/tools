@@ -1,4 +1,5 @@
 set(SOURCES
+    src/AService.cpp
     src/DynamicLibrary.cpp
     src/file.cpp
     src/Stopwatch.cpp
@@ -9,6 +10,7 @@ set(SOURCES
 )
 
 set(PUBLIC_HEADERS
+    include/tools/misc/AService.hpp
     include/tools/misc/DynamicLibrary.hpp
     include/tools/misc/file.hpp
     include/tools/misc/Observable.hpp

@@ -10,52 +10,45 @@ ThreadPool::~ThreadPool() noexcept {
     stop();
 }
 
-ServiceState ThreadPool::get_state() const {
-    return _state;
-}
-
 void ThreadPool::start() {
-    {
-        std::scoped_lock lock(_mutex);
-
-        if (_state == ServiceState::RUNNING) {
-            return;
-        }
-
-        _state = ServiceState::RUNNING;
-
-        for (int i = 0; i < _thread_count; ++i) {
-            _threads.emplace_back(&ThreadPool::thread_loop, this);
-        }
+    if (this->is_running_or_starting()) {
+        return;
     }
+
+    _state = ServiceState::STARTING;
+
+    for (int i = 0; i < _thread_count; ++i) {
+        _threads.emplace_back(&ThreadPool::thread_loop, this);
+    }
+
+    _state = ServiceState::RUNNING;
 }
 
 void ThreadPool::stop() {
-    {
-        std::scoped_lock lock(_mutex);
-
-        if (_state == ServiceState::STOPPED) {
-            return;
-        }
-
-        _state = ServiceState::STOPPED;
+    if (this->is_stopped_or_stopping()) {
+        return;
     }
+
+    _state = ServiceState::STOPPING;
 
     _tasks_cv.notify_all();
     _threads.clear();
+
+    _state = ServiceState::STOPPED;
 }
 
 void ThreadPool::thread_loop() {
-    while (_state == ServiceState::RUNNING) {
-        Task task;
+    Task task;
+
+    while (this->is_running_or_starting()) {
 
         {
             std::unique_lock lock(_mutex);
             _tasks_cv.wait(lock, [this] {
-                return _state == ServiceState::STOPPED || !_tasks.empty();
+                return this->is_stopped_or_stopping() || !_tasks.empty();
             });
 
-            if (_state == ServiceState::STOPPED) {
+            if (this->is_stopped_or_stopping()) {
                 return;
             }
 
@@ -77,7 +70,7 @@ void ThreadPool::thread_loop() {
 void ThreadPool::wait() const {
     std::unique_lock lock(_mutex);
 
-    if (_state == ServiceState::STOPPED) {
+    if (this->is_stopped_or_stopping()) {
         return;
     }
 

@@ -9,11 +9,11 @@
 #include <ranges>
 #include <thread>
 
-#include "IService.hpp"
+#include "AService.hpp"
 
 namespace tools {
 
-class ThreadPool : public IService {
+class ThreadPool : public AService {
 public:
     ThreadPool(int thread_count = std::thread::hardware_concurrency());
 
@@ -26,8 +26,6 @@ public:
     ThreadPool &operator=(ThreadPool &&other) = delete;
 
     using Task = std::move_only_function<void()>;
-
-    ServiceState get_state() const override;
 
     // Starts threads waiting for tasks.
     // Does nothing is the thread pool is already running (state is STARTING or
@@ -78,8 +76,6 @@ private:
     std::queue<Task> _tasks;
     mutable std::mutex _mutex;
     mutable std::condition_variable _tasks_cv;
-
-    std::atomic<ServiceState> _state;
 };
 
 } // namespace tools
