@@ -15,7 +15,8 @@ enum class ServiceState {
 // different states from ServiceState.
 // The state sequence is as follows:
 // STOPPED (default state) -> start() -> STARTING -> RUNNING -> stop() ->
-// STOPPING -> STOPPED The FAILED state represents a state of unrecoverable
+// STOPPING -> STOPPED
+// The FAILED state represents a state of unrecoverable
 // error the service as fallen into.
 class IService {
 public:
