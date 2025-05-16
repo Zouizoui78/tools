@@ -20,7 +20,7 @@ UUID::UUID(const std::string &str) {
     parse(str);
 }
 
-const std::array<uint8_t, 16> &UUID::bin() const {
+const std::array<uint8_t, UUID::length> &UUID::bin() const {
     return this->_uuid;
 }
 

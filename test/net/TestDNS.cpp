@@ -3,7 +3,6 @@
 #include "tools/net/dns.hpp"
 
 #include <algorithm>
-#include <print>
 
 namespace test {
 
@@ -40,12 +39,20 @@ TEST_F(TestDNS, test_lookup) {
               lookup_result->end());
 }
 
+TEST_F(TestDNS, test_lookup_failure) {
+    ASSERT_FALSE(tools::net::dns::lookup("azertyuiop.test"));
+}
+
 TEST_F(TestDNS, test_rlookup) {
     IPAddr addr("1.1.1.1");
     std::string expected("one.one.one.one");
     auto rlookup_result{tools::net::dns::rlookup(addr)};
     ASSERT_TRUE(rlookup_result);
     ASSERT_EQ(*rlookup_result, expected);
+}
+TEST_F(TestDNS, test_rlookup_failure) {
+    IPAddr addr("255.255.255.255");
+    ASSERT_FALSE(tools::net::dns::rlookup(addr));
 }
 
 } // namespace test

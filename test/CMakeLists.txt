@@ -18,6 +18,11 @@ target_link_libraries(test-tools
     PRIVATE tools
 )
 
+if (UNIX)
+    target_compile_options(tools PRIVATE --coverage)
+    target_link_options(test-tools PRIVATE --coverage)
+endif (UNIX)
+
 gtest_discover_tests(test-tools
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
     PROPERTIES

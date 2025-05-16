@@ -7,17 +7,17 @@
 
 namespace tools {
 
-constexpr int uuid_length = 16;
-
 class UUID {
 public:
+    static const int length = 16;
+
     // Generate a uuid.
     UUID();
 
     // Parse the uuid represented by str.
     UUID(const std::string &str);
 
-    const std::array<uint8_t, uuid_length> &bin() const;
+    const std::array<uint8_t, length> &bin() const;
     std::string str() const;
 
     bool operator==(const UUID &other) const = default;
@@ -25,7 +25,7 @@ public:
 private:
     void generate();
     void parse(const std::string &str);
-    std::array<uint8_t, uuid_length> _uuid;
+    std::array<uint8_t, length> _uuid;
 };
 
 } // namespace tools

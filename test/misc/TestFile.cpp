@@ -4,7 +4,6 @@
 
 #include "tools/misc/Stopwatch.hpp"
 #include <deque>
-#include <iostream>
 
 namespace test {
 
