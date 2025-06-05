@@ -63,6 +63,10 @@ bool IPAddr::is_ipv6() const noexcept {
     return _sockaddr.sa_family == AF_INET6;
 }
 
+const struct sockaddr &IPAddr::addr() const noexcept {
+    return _sockaddr;
+}
+
 const struct sockaddr_in &IPAddr::addr4() const noexcept {
     return _sockaddr_in;
 }

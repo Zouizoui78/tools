@@ -31,6 +31,7 @@ public:
     bool is_ipv4() const noexcept;
     bool is_ipv6() const noexcept;
 
+    const struct sockaddr &addr() const noexcept;
     const struct sockaddr_in &addr4() const noexcept;
     const struct sockaddr_in6 &addr6() const noexcept;
 
