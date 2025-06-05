@@ -31,13 +31,12 @@ public:
     bool is_ipv4() const noexcept;
     bool is_ipv6() const noexcept;
 
-    const struct sockaddr_storage &addr() const noexcept;
     const struct sockaddr_in &addr4() const noexcept;
     const struct sockaddr_in6 &addr6() const noexcept;
 
 private:
     union {
-        struct sockaddr_storage _sockaddr;
+        struct sockaddr _sockaddr;
         struct sockaddr_in _sockaddr_in;
         struct sockaddr_in6 _sockaddr_in6;
     };
