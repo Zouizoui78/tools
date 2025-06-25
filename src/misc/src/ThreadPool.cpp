@@ -41,7 +41,6 @@ void ThreadPool::thread_loop() {
     Task task;
 
     while (this->is_running_or_starting()) {
-
         {
             std::unique_lock lock(_mutex);
             _tasks_cv.wait(lock, [this] {

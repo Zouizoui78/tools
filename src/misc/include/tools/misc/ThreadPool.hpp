@@ -40,10 +40,14 @@ public:
     void stop() override;
 
     template <std::invocable F>
-    auto enqueue(F &&f) -> std::future<decltype(f())> {
-        using return_t = decltype(f());
-
-        auto task = std::packaged_task<return_t()>(std::forward<F>(f));
+    auto enqueue(F &&f) {
+        // "decltype(f())" returns the return type of f.
+        // We need the parenthesis after "decltype(f())" because
+        // the template argument of packaged_task expects a function type,
+        // like e.g. std::function does : std::function<void()>.
+        // So for instance if f returns an int,
+        // task's type will end up being "std::package_task<int()>".
+        auto task = std::packaged_task<decltype(f())()>(std::forward<F>(f));
         auto future = task.get_future();
 
         {
