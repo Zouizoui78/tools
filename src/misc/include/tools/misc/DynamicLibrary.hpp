@@ -30,10 +30,11 @@ public:
     DynamicLibrary &operator=(DynamicLibrary &&other) = default;
 
     template <typename R, typename... Targs>
-    using Func = R (*)(Targs...);
+    using FuncPtr = R (*)(Targs...);
 
     template <typename R, typename... Targs>
-    Func<R, Targs...> get_function(const std::string &function_name) const {
+    FuncPtr<R, Targs...>
+    get_function_addr(const std::string &function_name) const {
 #ifdef _WIN32
         return reinterpret_cast<R (*)(Targs...)>(
             GetProcAddress(_lib_instance, function_name.c_str()));
@@ -44,8 +45,14 @@ public:
     }
 
     template <typename R, typename... Targs>
+    std::function<R(Targs...)>
+    get_function(const std::string &function_name) const {
+        return get_function_addr<R, Targs...>(function_name);
+    }
+
+    template <typename R, typename... Targs>
     R call(const std::string &function_name, Targs... args) const {
-        Func<R, Targs...> func = get_function<R, Targs...>(function_name);
+        auto func = get_function_addr<R, Targs...>(function_name);
         if (func == nullptr) {
             throw std::bad_function_call();
         }
