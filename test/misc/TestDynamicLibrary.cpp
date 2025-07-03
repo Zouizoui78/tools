@@ -24,14 +24,14 @@ TEST_F(TestDynamicLibrary, test_dynlib_load) {
 TEST_F(TestDynamicLibrary, test_dynlib_get_function) {
     DynamicLibrary lib(dynlib_path);
 
-    auto func_ptr = lib.get_function<bool, const std::string &>("func");
-    ASSERT_NE(func_ptr, nullptr);
+    auto func = lib.get_function<bool, const std::string &>("func");
+    ASSERT_TRUE(func);
 
-    ASSERT_TRUE(func_ptr("test"));
-    ASSERT_FALSE(func_ptr("bonjour"));
+    ASSERT_TRUE(func("test"));
+    ASSERT_FALSE(func("bonjour"));
 
     auto add_ptr(lib.get_function<int, int, int>("add"));
-    ASSERT_NE(add_ptr, nullptr);
+    ASSERT_TRUE(add_ptr);
     ASSERT_EQ(add_ptr(12, 56), 68);
 
     ASSERT_EQ(lib.get_function<void>("not_a_function"), nullptr);
