@@ -1,0 +1,8 @@
+{
+   dl_leak_reachable
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:_dl_*
+   ...
+}
