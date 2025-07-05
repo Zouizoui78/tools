@@ -2,9 +2,9 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "(ctest) Launch",
+            "name": "debug test - linux",
             "type": "cppdbg",
-            "cwd": "${workspaceFolder}",
+            "cwd": "${cmake.testWorkingDirectory}",
             "request": "launch",
             "program": "${cmake.testProgram}",
             "args": [
@@ -12,17 +12,14 @@
             ]
         },
         {
-            "name": "(Windows) Launch",
+            "name": "debug test - windows",
             "type": "cppvsdbg",
+            "cwd": "${cmake.testWorkingDirectory}",
             "request": "launch",
             "program": "${cmake.testProgram}",
             "args": [
                 "${cmake.testArgs}"
-            ],
-            "stopAtEntry": false,
-            "cwd": "${fileDirname}",
-            "environment": [],
-            "console": "externalTerminal"
+            ]
         }
     ]
 }

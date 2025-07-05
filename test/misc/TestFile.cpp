@@ -1,8 +1,9 @@
-#include "../test_tools.hpp"
 #include "tools/misc/file.hpp"
 #include "gtest/gtest.h"
 
+#include "test_paths.hpp"
 #include "tools/misc/Stopwatch.hpp"
+
 #include <deque>
 
 namespace test {
@@ -82,7 +83,7 @@ TEST(TestFile, test_read_all_binary_double) {
 }
 
 TEST(TestFile, test_dump_binary_uint8) {
-    std::string path_tmp = test::get_output_path() + "/tmp8.bin";
+    std::string path_tmp = test::get_output_path() / "tmp8.bin";
     std::filesystem::remove(path_tmp);
     std::vector<uint8_t> test{0x56, 0x20, 0x12, 0x78, 0x94, 0x65, 0x12, 0x30};
 
@@ -93,7 +94,7 @@ TEST(TestFile, test_dump_binary_uint8) {
 }
 
 TEST(TestFile, test_dump_binary_uint16) {
-    std::string path_tmp = test::get_output_path() + "/tmp16.bin";
+    std::string path_tmp = test::get_output_path() / "tmp16.bin";
     std::filesystem::remove(path_tmp);
     std::vector<uint16_t> test{0x2056, 0x7812, 0x6594, 0x3012};
 
@@ -104,7 +105,7 @@ TEST(TestFile, test_dump_binary_uint16) {
 }
 
 TEST(TestFile, test_dump_binary_uint32) {
-    std::string path_tmp = test::get_output_path() + "/tmp32.bin";
+    std::string path_tmp = test::get_output_path() / "tmp32.bin";
     std::filesystem::remove(path_tmp);
     std::vector<uint32_t> test{0x78122056, 0x30126594};
 
@@ -115,7 +116,7 @@ TEST(TestFile, test_dump_binary_uint32) {
 }
 
 TEST(TestFile, test_dump_binary_uint64) {
-    std::string path_tmp = test::get_output_path() + "/tmp64.bin";
+    std::string path_tmp = test::get_output_path() / "tmp64.bin";
     std::filesystem::remove(path_tmp);
     std::vector<uint64_t> test{0x3012659478122056};
 
@@ -126,7 +127,7 @@ TEST(TestFile, test_dump_binary_uint64) {
 }
 
 TEST(TestFile, test_dump_binary_float) {
-    std::string path_tmp = test::get_output_path() + "/tmpfloat.bin";
+    std::string path_tmp = test::get_output_path() / "tmpfloat.bin";
     std::filesystem::remove(path_tmp);
     std::vector<float> test{1.18551748762e+34, 5.32588417812e-10};
 
@@ -140,7 +141,7 @@ TEST(TestFile, test_dump_binary_float) {
 }
 
 TEST(TestFile, test_dump_binary_double) {
-    std::string path_tmp = test::get_output_path() + "/tmpdouble.bin";
+    std::string path_tmp = test::get_output_path() / "tmpdouble.bin";
     std::filesystem::remove(path_tmp);
     std::vector<double> test{3.9719459310071480e-77};
 
@@ -152,7 +153,7 @@ TEST(TestFile, test_dump_binary_double) {
 }
 
 TEST(TestFile, test_benchmark_dump_contiguous) {
-    std::string path_tmp = test::get_output_path() + "/tmpbenchmark.bin";
+    std::string path_tmp = test::get_output_path() / "tmpbenchmark.bin";
     std::filesystem::remove(path_tmp);
     std::vector<int> data;
     int size = 123456;
@@ -169,7 +170,7 @@ TEST(TestFile, test_benchmark_dump_contiguous) {
 }
 
 TEST(TestFile, test_benchmark_dump_non_contiguous) {
-    std::string path_tmp = test::get_output_path() + "/tmpnoncontiguous.bin";
+    std::string path_tmp = test::get_output_path() / "tmpnoncontiguous.bin";
     std::filesystem::remove(path_tmp);
     std::deque<int> data;
     int size = 123456;

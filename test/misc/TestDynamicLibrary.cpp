@@ -3,6 +3,8 @@
 
 #include <filesystem>
 
+#include "test_paths.hpp"
+
 namespace test {
 
 using namespace tools;
@@ -10,7 +12,7 @@ using namespace tools;
 class TestDynamicLibrary : public ::testing::Test {
 protected:
     TestDynamicLibrary() {
-        dynlib_path = std::getenv("DYNLIB_PATH");
+        dynlib_path = get_dynlib_path();
     }
 
 public:

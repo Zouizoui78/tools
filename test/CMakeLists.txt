@@ -24,9 +24,16 @@ if (UNIX)
     target_link_options(test-tools PRIVATE --coverage)
 endif (UNIX)
 
+set(TEST_OUTPUT_PATH ${CMAKE_BINARY_DIR}/test_output)
+
+configure_file(
+    ${CMAKE_SOURCE_DIR}/cmake/test_paths.hpp.in
+    test_paths.hpp
+    @ONLY
+)
+
+target_include_directories(test-tools PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
+
 gtest_discover_tests(test-tools
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
-    PROPERTIES
-        ENVIRONMENT "TEST_OUTPUT_DIR=build/test_output"
-        ENVIRONMENT "DYNLIB_PATH=$<TARGET_FILE:dynlib>"
 )
