@@ -25,6 +25,11 @@ if (UNIX)
 endif (UNIX)
 
 set(TEST_OUTPUT_PATH ${CMAKE_BINARY_DIR}/test_output)
+add_custom_command(
+    TARGET test-tools
+    PRE_BUILD
+    COMMAND ${CMAKE_COMMAND} -E make_directory ${TEST_OUTPUT_PATH}
+)
 
 configure_file(
     ${CMAKE_SOURCE_DIR}/cmake/test_paths.hpp.in

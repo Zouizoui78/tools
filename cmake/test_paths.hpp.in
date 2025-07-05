@@ -3,22 +3,12 @@
 
 #include <filesystem>
 
-namespace test {
+namespace test::paths {
 
-constexpr char TEST_OUTPUT_PATH[] = "@TEST_OUTPUT_PATH@";
-constexpr char DYNLIB_OUTPUT_PATH[] = "@DYNLIB_OUTPUT_PATH@";
-
-inline std::filesystem::path get_output_path() {
-    std::filesystem::path output_path{TEST_OUTPUT_PATH};
-    if (!std::filesystem::exists(output_path)) {
-        std::filesystem::create_directories(output_path);
-    }
-    return output_path;
-}
+const std::filesystem::path test_output_path{"@TEST_OUTPUT_PATH@"};
+const std::filesystem::path dynlib_output_path{"@DYNLIB_OUTPUT_PATH@"};
 
 inline std::filesystem::path get_dynlib_path() {
-    std::filesystem::path dynlib_output_path{DYNLIB_OUTPUT_PATH};
-
 #ifdef _WIN32
     const std::string dynlib_extension{".dll"};
 #else
@@ -40,6 +30,6 @@ inline std::filesystem::path get_dynlib_path() {
     throw std::runtime_error("Cannot find dynlib binary");
 }
 
-} // namespace test
+} // namespace test::paths
 
 #endif

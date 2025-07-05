@@ -12,7 +12,7 @@ using namespace tools;
 class TestDynamicLibrary : public ::testing::Test {
 protected:
     TestDynamicLibrary() {
-        dynlib_path = get_dynlib_path();
+        dynlib_path = paths::get_dynlib_path();
     }
 
 public:
