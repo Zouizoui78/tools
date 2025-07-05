@@ -120,10 +120,10 @@ TEST(TestThreadPool, test_task_picked_when_one_is_done) {
     auto duration_ms = sw.get_duration<milliseconds>();
 
     // If tasks are properly picked up by threads who just finished their
-    // previous tasks, all tasks should take 10ms and 11ms. If they are
-    // not picked up, the task that processes task2 would wait for the
-    // notification from the thread processing task1, so the three tasks would
-    // take at least 15ms.
+    // previous tasks, processing all tasks should take between 10ms and 11ms.
+    // If they are not picked up, the task that processes task2 would wait for
+    // the notification from the thread processing task1, so the three tasks
+    // would take at least 15ms.
     ASSERT_GT(duration_ms, 10);
     ASSERT_LT(duration_ms, 11);
 }

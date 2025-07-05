@@ -14,7 +14,7 @@ template <typename T>
 std::vector<T> read_all_binary(const std::string &path) {
     std::ifstream file(path, std::ios::binary);
     if (!file.is_open()) {
-        throw new std::runtime_error("Failed to open file {}" + path);
+        throw std::runtime_error("Failed to open file {}" + path);
     }
 
     std::vector<T> content;
@@ -43,7 +43,7 @@ size_t dump_range(const std::string &path, R &&range,
                   int64_t chunk_size = 1000000) {
     std::ofstream file(path, std::ios::binary);
     if (!file.is_open()) {
-        throw new std::runtime_error("Failed to open file {}" + path);
+        throw std::runtime_error("Failed to open file {}" + path);
     }
 
     using T = std::ranges::range_value_t<R>;
@@ -76,7 +76,7 @@ template <typename R>
 size_t dump_range(const std::string &path, R &&range) {
     std::ofstream file(path, std::ios::binary);
     if (!file.is_open()) {
-        throw new std::runtime_error("Failed to open file {}" + path);
+        throw std::runtime_error("Failed to open file {}" + path);
     }
 
     auto total_size = range.size() * sizeof(std::ranges::range_value_t<R>);
