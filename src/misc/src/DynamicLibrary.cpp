@@ -6,23 +6,23 @@ namespace tools {
 
 DynamicLibrary::DynamicLibrary(const std::string &path) {
 #ifdef _WIN32
-    _lib_instance = LoadLibraryA(path.c_str());
+    _dynlib_handle_ptr = LoadLibraryA(path.c_str());
 #else
-    _lib_instance = dlopen(path.c_str(), RTLD_LAZY);
+    void *handle = dlopen(path.c_str(), RTLD_LAZY);
+    _dynlib_handle_ptr = std::unique_ptr<dynlib_t, DynlibDeleter>(handle);
 #endif
-    if (_lib_instance == nullptr) {
+    if (_dynlib_handle_ptr == nullptr) {
         throw std::runtime_error("Failed to load library '" + path +
                                  "'. Check that this file exist.");
     }
 }
 
-DynamicLibrary::~DynamicLibrary() noexcept {
+void DynamicLibrary::DynlibDeleter::operator()(dynlib_t *lib_handle) {
 #ifdef _WIN32
-    FreeLibrary(_lib_instance);
+    FreeLibrary(lib_handle);
 #else
-    dlclose(_lib_instance);
+    dlclose(lib_handle);
 #endif
-    _lib_instance = nullptr;
 }
 
 } // namespace tools

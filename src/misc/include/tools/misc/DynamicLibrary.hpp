@@ -2,6 +2,7 @@
 #define DYNAMIC_LIBRARY_HPP
 
 #include <functional>
+#include <memory>
 #include <string>
 
 #ifdef _WIN32
@@ -15,19 +16,17 @@ namespace tools {
 class DynamicLibrary {
 private:
 #ifdef _WIN32
-    HINSTANCE _lib_instance = nullptr;
+    using dynlib_t = HINSTANCE;
 #else
-    void *_lib_instance = nullptr;
+    using dynlib_t = void;
 #endif
+    struct DynlibDeleter {
+        void operator()(dynlib_t *lib_handle);
+    };
+    std::unique_ptr<dynlib_t, DynlibDeleter> _dynlib_handle_ptr;
 
 public:
-    ~DynamicLibrary() noexcept;
-
     DynamicLibrary(const std::string &path);
-    DynamicLibrary(const DynamicLibrary &other) = delete;
-    DynamicLibrary(DynamicLibrary &&other) = default;
-    DynamicLibrary &operator=(const DynamicLibrary &other) = delete;
-    DynamicLibrary &operator=(DynamicLibrary &&other) = default;
 
     template <typename R, typename... Targs>
     using FuncPtr = R (*)(Targs...);
@@ -37,10 +36,10 @@ public:
     get_function_addr(const std::string &function_name) const {
 #ifdef _WIN32
         return reinterpret_cast<R (*)(Targs...)>(
-            GetProcAddress(_lib_instance, function_name.c_str()));
+            GetProcAddress(_dynlib_handle_ptr.get(), function_name.c_str()));
 #else
         return reinterpret_cast<R (*)(Targs...)>(
-            dlsym(_lib_instance, function_name.c_str()));
+            dlsym(_dynlib_handle_ptr.get(), function_name.c_str()));
 #endif
     }
 
