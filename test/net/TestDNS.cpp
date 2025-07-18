@@ -34,7 +34,7 @@ TEST_F(TestDNS, test_lookup) {
     ASSERT_TRUE(lookup_result);
     ASSERT_NE(std::ranges::find_if(*lookup_result,
                                    [&expected](const IPAddr &addr) {
-                                       return addr.str() == expected;
+                                       return addr.to_string() == expected;
                                    }),
               lookup_result->end());
 }

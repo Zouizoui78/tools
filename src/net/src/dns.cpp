@@ -11,7 +11,7 @@
 namespace tools::net::dns {
 
 std::expected<std::vector<IPAddr>, int> lookup(std::string_view hostname,
-                                               IPFamily family) {
+                                               AddressFamily family) {
     // Without these hints getaddrinfo returns duplicated addresses : one for
     // each socket type, doubled if an IPV6 address is found. So we filter the
     // addresses to the ones which are usable for internet sockets, which makes
@@ -38,10 +38,10 @@ std::expected<std::vector<IPAddr>, int> lookup(std::string_view hostname,
 std::expected<std::string, int> rlookup(const IPAddr &addr) {
     std::string ret(NI_MAXHOST, '\0');
 
-    if (int res =
-            getnameinfo(reinterpret_cast<const struct sockaddr *>(&addr.addr()),
-                        sizeof(addr.addr()), ret.data(), NI_MAXHOST, nullptr, 0,
-                        NI_NAMEREQD)) {
+    if (int res = getnameinfo(
+            reinterpret_cast<const struct sockaddr *>(&addr.get_sockaddr()),
+            sizeof(addr.get_sockaddr()), ret.data(), NI_MAXHOST, nullptr, 0,
+            NI_NAMEREQD)) {
         return std::unexpected(res);
     }
 

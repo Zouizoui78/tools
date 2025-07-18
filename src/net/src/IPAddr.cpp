@@ -34,7 +34,7 @@ IPAddr::IPAddr(const addrinfo *addr) {
     memcpy(&_sockaddr, addr->ai_addr, addr->ai_addrlen);
 }
 
-std::string IPAddr::str() const {
+std::string IPAddr::to_string() const {
     std::string ret;
     const void *addr = nullptr;
 
@@ -63,15 +63,15 @@ bool IPAddr::is_ipv6() const noexcept {
     return _sockaddr.sa_family == AF_INET6;
 }
 
-const struct sockaddr &IPAddr::addr() const noexcept {
+const struct sockaddr &IPAddr::get_sockaddr() const noexcept {
     return _sockaddr;
 }
 
-const struct sockaddr_in &IPAddr::addr4() const noexcept {
+const struct sockaddr_in &IPAddr::get_sockaddr_in() const noexcept {
     return _sockaddr_in;
 }
 
-const struct sockaddr_in6 &IPAddr::addr6() const noexcept {
+const struct sockaddr_in6 &IPAddr::get_sockaddr_in6() const noexcept {
     return _sockaddr_in6;
 }
 

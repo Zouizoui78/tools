@@ -1,18 +1,10 @@
 #ifndef IP_ADDR_HPP
 #define IP_ADDR_HPP
 
-#if defined(_WIN32)
-#include <WS2tcpip.h>
-#include <WinSock2.h>
-
-#elif defined(__linux__)
-#include <arpa/inet.h>
-#include <netdb.h>
-
-#endif
-
 #include <string>
 #include <vector>
+
+#include "NetIncludes.hpp"
 
 namespace tools::net {
 
@@ -26,14 +18,14 @@ public:
     // object it points to is valid.
     explicit IPAddr(const addrinfo *addr);
 
-    std::string str() const;
+    std::string to_string() const;
 
     bool is_ipv4() const noexcept;
     bool is_ipv6() const noexcept;
 
-    const struct sockaddr &addr() const noexcept;
-    const struct sockaddr_in &addr4() const noexcept;
-    const struct sockaddr_in6 &addr6() const noexcept;
+    const struct sockaddr &get_sockaddr() const noexcept;
+    const struct sockaddr_in &get_sockaddr_in() const noexcept;
+    const struct sockaddr_in6 &get_sockaddr_in6() const noexcept;
 
 private:
     union {

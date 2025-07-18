@@ -32,8 +32,8 @@ TEST_F(TestIPAddr, test_ctor_str) {
     std::string expected_4("127.0.0.1");
     std::string expected_6("::1");
 
-    std::string actual_4(IPAddr(expected_4).str());
-    std::string actual_6(IPAddr(expected_6).str());
+    std::string actual_4(IPAddr(expected_4).to_string());
+    std::string actual_6(IPAddr(expected_6).to_string());
 
     ASSERT_EQ(actual_4, expected_4);
     ASSERT_EQ(actual_6, expected_6);
