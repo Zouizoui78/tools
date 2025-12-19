@@ -24,6 +24,11 @@ public:
     virtual void stop() = 0;
 
     virtual ServiceState get_state() const = 0;
+    virtual bool is_stopped() const = 0;
+    virtual bool is_starting() const = 0;
+    virtual bool is_running() const = 0;
+    virtual bool is_stopping() const = 0;
+    virtual bool is_failed() const = 0;
     virtual bool is_running_or_starting() const = 0;
     virtual bool is_stopped_or_stopping() const = 0;
 

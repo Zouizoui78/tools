@@ -13,6 +13,11 @@ protected:
 
 public:
     ServiceState get_state() const override;
+    bool is_stopped() const override;
+    bool is_starting() const override;
+    bool is_running() const override;
+    bool is_stopping() const override;
+    bool is_failed() const override;
     bool is_running_or_starting() const override;
     bool is_stopped_or_stopping() const override;
 };
